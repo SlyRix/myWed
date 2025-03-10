@@ -1,5 +1,6 @@
 // src/components/common/LanguageSwitcher.js
 import React from 'react';
+import { useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { motion, AnimatePresence } from 'framer-motion';
 import { mdiWeb, mdiChevronDown, mdiCheck } from '@mdi/js';
@@ -8,12 +9,13 @@ import Icon from '@mdi/react';
 const LanguageSwitcher = ({ scrolled }) => {
     const { i18n } = useTranslation();
     const [isOpen, setIsOpen] = React.useState(false);
+    const location = useLocation();
+    const isHomePage = location.pathname === '/';
 
     const languages = [
         { code: 'en', name: 'English', flag: '🇺🇸' },
         { code: 'ta', name: 'தமிழ்', flag: "🇱🇰" },
         { code: 'de', name: 'Deutsch', flag: '🇩🇪' },
-
     ];
 
     const currentLanguage = languages.find(lang => lang.code === i18n.language) || languages[0];
@@ -23,15 +25,22 @@ const LanguageSwitcher = ({ scrolled }) => {
         setIsOpen(false);
     };
 
+    // Determine button styling based on scrolled state and homepage
+    const getButtonStyles = () => {
+        if (scrolled) {
+            return 'bg-white border-gray-200 text-christian-text hover:border-wedding-love';
+        } else if (isHomePage) {
+            return 'bg-white/20 backdrop-blur-sm border-white/30 text-white hover:bg-white/30';
+        } else {
+            return 'bg-white/20 backdrop-blur-sm border-christian-accent/30 text-christian-accent hover:bg-white/30';
+        }
+    };
+
     return (
         <div className="relative">
             <button
                 onClick={() => setIsOpen(!isOpen)}
-                className={`flex items-center space-x-2 py-1.5 px-3 rounded-full border transition-all duration-300 ${
-                    scrolled
-                        ? 'bg-white border-gray-200 text-christian-text hover:border-wedding-love'
-                        : 'bg-white/20 backdrop-blur-sm border-white/30 text-white hover:bg-white/30'
-                }`}
+                className={`flex items-center space-x-2 py-1.5 px-3 rounded-full border transition-all duration-300 ${getButtonStyles()}`}
                 aria-expanded={isOpen}
                 aria-haspopup="true"
             >

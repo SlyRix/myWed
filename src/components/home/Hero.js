@@ -6,6 +6,7 @@ import { mdiChevronDown } from '@mdi/js';
 import Icon from '@mdi/react';
 import { useTranslation } from 'react-i18next';
 import CountdownTimer from '../common/CountdownTimer';
+import BubbleBackground from '../common/BubbleBackground';
 
 // Fallback SVG pattern - only used if external SVG isn't available
 const FloralPatternSVG = () => (
@@ -19,6 +20,82 @@ const FloralPatternSVG = () => (
         <rect x="0" y="0" width="100%" height="100%" fill="url(#floral-pattern)" />
     </svg>
 );
+
+const ParallaxElements = () => {
+    return (
+        <>
+            {/* Floating decorative elements with parallax effect */}
+            <motion.div
+                className="absolute left-[10%] top-[20%] w-32 h-32 rounded-full bg-christian-accent opacity-10"
+                animate={{
+                    y: [0, -30, 0],
+                    scale: [1, 1.1, 1],
+                    opacity: [0.1, 0.15, 0.1]
+                }}
+                transition={{
+                    duration: 8,
+                    repeat: Infinity,
+                    ease: "easeInOut"
+                }}
+                initial="initial"
+                whileInView="animate"
+            />
+
+            <motion.div
+                className="absolute right-[15%] top-[30%] w-24 h-24 rounded-full bg-hindu-secondary opacity-10"
+                animate={{
+                    y: [0, 40, 0],
+                    scale: [1, 0.9, 1],
+                    opacity: [0.1, 0.2, 0.1]
+                }}
+                transition={{
+                    duration: 10,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                    delay: 1
+                }}
+                initial="initial"
+                whileInView="animate"
+            />
+
+            <motion.div
+                className="absolute left-[25%] bottom-[25%] w-40 h-40 rounded-full bg-wedding-love opacity-5"
+                animate={{
+                    y: [0, -20, 0],
+                    x: [0, 20, 0],
+                    scale: [1, 1.2, 1],
+                    opacity: [0.05, 0.1, 0.05]
+                }}
+                transition={{
+                    duration: 12,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                    delay: 2
+                }}
+                initial="initial"
+                whileInView="animate"
+            />
+
+            <motion.div
+                className="absolute right-[20%] bottom-[20%] w-36 h-36 rounded-full bg-wedding-gold opacity-10"
+                animate={{
+                    y: [0, 30, 0],
+                    x: [0, -30, 0],
+                    scale: [1, 0.8, 1],
+                    opacity: [0.1, 0.05, 0.1]
+                }}
+                transition={{
+                    duration: 15,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                    delay: 3
+                }}
+                initial="initial"
+                whileInView="animate"
+            />
+        </>
+    );
+};
 
 const Hero = ({ backgroundImage = null, patternImage = "/images/floral-pattern.svg" }) => {
     const { t } = useTranslation();
@@ -70,6 +147,16 @@ const Hero = ({ backgroundImage = null, patternImage = "/images/floral-pattern.s
             ) : (
                 <FloralPatternSVG />
             )}
+
+            {/* Animated Bubble Background */}
+            <BubbleBackground
+                count={15}
+                colors={['#d4b08c', '#f0b429', '#d93f0b', '#fff']}
+                opacity={{ min: 0.03, max: 0.08 }}
+            />
+
+            {/* Parallax floating elements */}
+            <ParallaxElements />
 
             <motion.div
                 className="relative z-20 text-center px-4 max-w-3xl mx-auto"

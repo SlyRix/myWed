@@ -15,69 +15,71 @@ const HinduCeremony = lazy(() => import('./components/ceremonies/HinduCeremony')
 const OurStory = lazy(() => import('./components/story/OurStory'));
 const GiftRegistry = lazy(() => import('./components/gifts/GiftRegistry'));
 const PhotoGallery = lazy(() => import('./components/gallery/PhotoGallery'));
-const RSVPPage = lazy(() => import('./components/rsvp/RSVPForm')); // New component
-const GuestbookPage = lazy(() => import('./components/guestbook/Guestbook')); // New component
+const RSVPPage = lazy(() => import('./components/rsvp/RSVPForm'));
+const GuestbookPage = lazy(() => import('./components/guestbook/Guestbook'));
+const AccommodationsPage = lazy(() => import('./components/accommodations/Accommodations')); // New import
 
 function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  // Check if user is already authenticated (e.g., from localStorage)
-  useEffect(() => {
-    const authStatus = localStorage.getItem('weddingAuth');
-    if (authStatus === 'true') {
-      setIsAuthenticated(true);
-    }
-  }, []);
+    // Check if user is already authenticated (e.g., from localStorage)
+    useEffect(() => {
+        const authStatus = localStorage.getItem('weddingAuth');
+        if (authStatus === 'true') {
+            setIsAuthenticated(true);
+        }
+    }, []);
 
-  const handleAuthentication = (password) => {
-    // In a real app, you'd verify against a secure source
-    if (password === 'wedding2026') {
-      setIsAuthenticated(true);
-      localStorage.setItem('weddingAuth', 'true');
-      return true;
-    }
-    return false;
-  };
+    const handleAuthentication = (password) => {
+        // In a real app, you'd verify against a secure source
+        if (password === 'wedding2026') {
+            setIsAuthenticated(true);
+            localStorage.setItem('weddingAuth', 'true');
+            return true;
+        }
+        return false;
+    };
 
-  // Loading fallback component with wedding-themed design
-  const PageLoader = () => (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-r from-christian-accent/10 to-hindu-secondary/10">
-        <LoadingSpinner />
-        <p className="mt-4 text-gray-600 animate-pulse">Loading our love story...</p>
-      </div>
-  );
+    // Loading fallback component with wedding-themed design
+    const PageLoader = () => (
+        <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-r from-christian-accent/10 to-hindu-secondary/10">
+            <LoadingSpinner />
+            <p className="mt-4 text-gray-600 animate-pulse">Loading our love story...</p>
+        </div>
+    );
 
-  return (
-      <AuthProvider value={{ isAuthenticated, setIsAuthenticated }}>
-        <ThemeProvider>
-          <Router>
-            {!isAuthenticated ? (
-                <PasswordProtection onAuthenticate={handleAuthentication} />
-            ) : (
-                <>
-                  <Header />
-                  <main>
-                    <Suspense fallback={<PageLoader />}>
-                      <Routes>
-                        <Route path="/" element={<HomePage />} />
-                        <Route path="/christian-ceremony" element={<ChristianCeremony />} />
-                        <Route path="/hindu-ceremony" element={<HinduCeremony />} />
-                        <Route path="/our-story" element={<OurStory />} />
-                        <Route path="/gifts" element={<GiftRegistry />} />
-                        <Route path="/gallery" element={<PhotoGallery />} />
-                        <Route path="/rsvp" element={<RSVPPage />} />
-                        <Route path="/guestbook" element={<GuestbookPage />} />
-                        <Route path="*" element={<Navigate to="/" replace />} />
-                      </Routes>
-                    </Suspense>
-                  </main>
-                  <Footer />
-                </>
-            )}
-          </Router>
-        </ThemeProvider>
-      </AuthProvider>
-  );
+    return (
+        <AuthProvider value={{ isAuthenticated, setIsAuthenticated }}>
+            <ThemeProvider>
+                <Router>
+                    {!isAuthenticated ? (
+                        <PasswordProtection onAuthenticate={handleAuthentication} />
+                    ) : (
+                        <>
+                            <Header />
+                            <main>
+                                <Suspense fallback={<PageLoader />}>
+                                    <Routes>
+                                        <Route path="/" element={<HomePage />} />
+                                        <Route path="/christian-ceremony" element={<ChristianCeremony />} />
+                                        <Route path="/hindu-ceremony" element={<HinduCeremony />} />
+                                        <Route path="/our-story" element={<OurStory />} />
+                                        <Route path="/gifts" element={<GiftRegistry />} />
+                                        <Route path="/gallery" element={<PhotoGallery />} />
+                                        <Route path="/rsvp" element={<RSVPPage />} />
+                                        <Route path="/guestbook" element={<GuestbookPage />} />
+                                        <Route path="/accommodations" element={<AccommodationsPage />} /> {/* New route */}
+                                        <Route path="*" element={<Navigate to="/" replace />} />
+                                    </Routes>
+                                </Suspense>
+                            </main>
+                            <Footer />
+                        </>
+                    )}
+                </Router>
+            </ThemeProvider>
+        </AuthProvider>
+    );
 }
 
 export default App;

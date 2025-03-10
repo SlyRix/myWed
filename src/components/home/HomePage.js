@@ -7,6 +7,7 @@ import AnimatedSection from '../common/AnimatedSection';
 import { mdiMapMarker, mdiCalendarRange, mdiHeartMultiple } from '@mdi/js';
 import Icon from '@mdi/react';
 import { Link } from 'react-router-dom';
+import ParallaxDemoSection from '../common/ParallaxSection'; // Import the new ParallaxDemoSection
 
 const HomePage = () => {
     const { t } = useTranslation();
@@ -49,7 +50,6 @@ const HomePage = () => {
         >
             {/* Pass the background image to the Hero component */}
             <Hero />
-
 
             <section id="about-section" className="py-20 bg-wedding-background">
                 <div className="container">
@@ -109,6 +109,9 @@ const HomePage = () => {
                     </AnimatedSection>
                 </div>
             </section>
+
+            {/* Add the Parallax Demo Section */}
+            <ParallaxDemoSection />
         </motion.div>
     );
 };

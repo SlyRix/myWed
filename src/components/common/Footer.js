@@ -14,6 +14,7 @@ const Footer = () => {
         { path: '/christian-ceremony', label: t('header.christianCeremony') },
         { path: '/hindu-ceremony', label: t('header.hinduCeremony') },
         { path: '/our-story', label: t('header.ourStory') },
+        { path: '/accommodations', label: t('header.accommodations') }, // New link
         { path: '/gifts', label: t('header.gifts') },
         { path: '/gallery', label: t('header.gallery') }
     ];

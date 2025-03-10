@@ -40,6 +40,7 @@ const Header = () => {
         { path: '/christian-ceremony', label: t('header.christianCeremony') },
         { path: '/hindu-ceremony', label: t('header.hinduCeremony') },
         { path: '/our-story', label: t('header.ourStory') },
+        { path: '/accommodations', label: t('header.accommodations') },
         { path: '/gifts', label: t('header.gifts') },
         { path: '/gallery', label: t('header.gallery') }
     ];
@@ -50,7 +51,7 @@ const Header = () => {
                 ? 'bg-white/95 backdrop-blur-sm shadow-md'
                 : 'bg-transparent'
         }`}>
-            <div className="container mx-auto max-w-6xl px-4">
+            <div className="container mx-auto max-w-7xl px-4"> {/* Increased max-width */}
                 <nav className="flex justify-between items-center py-4">
                     <div className="flex items-center">
                         <Link to="/" className="flex items-center">
@@ -67,12 +68,12 @@ const Header = () => {
 
                     {/* Desktop Navigation */}
                     <div className="hidden md:flex items-center">
-                        <ul className="flex space-x-8 mr-4">
+                        <ul className="flex space-x-4 mr-4"> {/* Reduced space between items */}
                             {navLinks.map((link) => (
                                 <li key={link.path}>
                                     <Link
                                         to={link.path}
-                                        className={`relative font-body tracking-wide transition-colors duration-300 ${
+                                        className={`relative font-body tracking-wide text-sm transition-colors duration-300 ${
                                             location.pathname === link.path
                                                 ? 'text-wedding-love font-medium'
                                                 : scrolled
