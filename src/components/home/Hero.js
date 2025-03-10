@@ -6,7 +6,7 @@ import { mdiChevronDown } from '@mdi/js';
 import Icon from '@mdi/react';
 import { useTranslation } from 'react-i18next';
 import CountdownTimer from '../common/CountdownTimer';
-import BubbleBackground from '../common/BubbleBackground';
+import EnhancedBubbleBackground from '../common/EnhancedBubbleBackground';
 
 // Fallback SVG pattern - only used if external SVG isn't available
 const FloralPatternSVG = () => (
@@ -149,10 +149,11 @@ const Hero = ({ backgroundImage = null, patternImage = "/images/floral-pattern.s
             )}
 
             {/* Animated Bubble Background */}
-            <BubbleBackground
+            <EnhancedBubbleBackground
                 count={15}
                 colors={['#d4b08c', '#f0b429', '#d93f0b', '#fff']}
                 opacity={{ min: 0.03, max: 0.08 }}
+                mouseStrength={25} // Adjust this value to control how much bubbles follow the mouse
             />
 
             {/* Parallax floating elements */}
