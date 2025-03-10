@@ -17,7 +17,7 @@
     "christianEvent": {
       "title": "Christliche Zeremonie",
       "date": "4. Juli 2026",
-      "location": "St. Mary's Church",
+      "location": "Kath. Pfarramt Heilig Kreuz",
       "description": "Nehmen Sie teil an einer wunderschönen Feier der Ehe mit traditionellen christlichen Bräuchen."
     },
     "hinduEvent": {
@@ -36,8 +36,8 @@
     "rsvpButton": "Jetzt zusagen",
     "location": {
       "title": "Ort",
-      "address1": "St. Mary's Church",
-      "address2": "123 Wedding Lane, Stadt",
+      "address1": "Kath. Pfarramt Heilig Kreuz",
+      "address2": "Kirchweg 1, 8853 Lachen",
       "mapLink": "Auf Karte anzeigen"
     },
     "dateTime": {
@@ -94,8 +94,8 @@
     "rsvpButton": "Jetzt zusagen",
     "location": {
       "title": "Ort",
-      "address1": "Shiva Tempel",
-      "address2": "456 Divine Road, Stadt",
+      "address1": "Sri Manonmani Ampal Tempel",
+      "address2": "Miesernweg 13, 4632 Trimbach",
       "mapLink": "Auf Karte anzeigen"
     },
     "dateTime": {

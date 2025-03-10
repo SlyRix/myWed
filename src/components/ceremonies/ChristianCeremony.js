@@ -6,6 +6,9 @@ import { mdiMapMarker, mdiCalendar, mdiTshirtCrew } from '@mdi/js';
 import Icon from '@mdi/react';
 import { useTranslation } from 'react-i18next';
 import CeremonyTimeline from './CeremonyTimeline';
+import MiniMap from '../map/MiniMap';
+import CalendarLink from '../common/CalendarLink';
+import AnimatedSection from '../common/AnimatedSection';
 
 const ChristianCeremony = () => {
     const { t } = useTranslation();
@@ -54,6 +57,11 @@ const ChristianCeremony = () => {
     const [textRef, textInView] = useInView({ triggerOnce: true, threshold: 0.1 });
     const [detailsRef, detailsInView] = useInView({ triggerOnce: true, threshold: 0.1 });
     const [timelineRef, timelineInView] = useInView({ triggerOnce: true, threshold: 0.1 });
+
+    // Parse ceremony date for calendar
+    const ceremonyDate = new Date('May 9, 2026 14:00:00');
+    const ceremonyEndDate = new Date('May 9, 2026 16:00:00');
+    const ceremonyLocation = t('christian.location.address1') + ', ' + t('christian.location.address2');
 
     return (
         <section className="pt-24 pb-16 bg-gradient-to-br from-christian-secondary to-white relative overflow-hidden">
@@ -115,7 +123,16 @@ const ChristianCeremony = () => {
                         <h3 className="text-xl font-bold mb-3">{t('christian.location.title')}</h3>
                         <p className="mb-1">{t('christian.location.address1')}</p>
                         <p className="text-gray-600 mb-1">{t('christian.location.address2')}</p>
-                        <a href="#" className="inline-block mt-3 text-sm font-medium text-christian-accent hover:underline">{t('christian.location.mapLink')}</a>
+
+                        {/* Add the mini map component */}
+                        <div className="mt-4">
+                            <MiniMap
+                                address={ceremonyLocation}
+                                title={t('christian.location.address1')}
+                                lat={47.192434}
+                                lng={8.850763}
+                            />
+                        </div>
                     </motion.div>
 
                     <motion.div
@@ -126,6 +143,17 @@ const ChristianCeremony = () => {
                         <h3 className="text-xl font-bold mb-3">{t('christian.dateTime.title')}</h3>
                         <p className="mb-1">{t('christian.dateTime.date')}</p>
                         <p className="text-gray-600 mb-1">{t('christian.dateTime.time')}</p>
+
+                        {/* Add the calendar link component */}
+                        <div className="mt-4">
+                            <CalendarLink
+                                title="Rushel & Sivanis Christian Wedding Ceremony"
+                                description="Join us for our Christian Wedding Ceremony"
+                                location={ceremonyLocation}
+                                startDate={ceremonyDate}
+                                endDate={ceremonyEndDate}
+                            />
+                        </div>
                     </motion.div>
 
                     <motion.div

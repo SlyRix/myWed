@@ -17,13 +17,13 @@
     "christianEvent": {
       "title": "கிறிஸ்தவ விழா",
       "date": "ஜூலை 4, 2026",
-      "location": "செயிண்ட் மேரிஸ் சர்ச்",
+      "location": "Kath. Pfarramt Heilig Kreuz",
       "description": "பாரம்பரிய கிறிஸ்தவ முறைகளுடன் திருமண கொண்டாட்டத்தில் எங்களுடன் இணையுங்கள்."
     },
     "hinduEvent": {
       "title": "இந்து விழா",
       "date": "ஜூலை 5, 2026",
-      "location": "சிவன் கோவில்",
+      "location": "ஸ்ரீ மனோன்மணி அம்பாள் கோவில",
       "description": "வண்ணமயமான மற்றும் பாரம்பரியமான இந்து திருமண விழாவை அனுபவியுங்கள்."
     },
     "readStory": "எங்கள் கதையைப் படியுங்கள்"
@@ -36,8 +36,8 @@
     "rsvpButton": "பதிலளிக்கவும்",
     "location": {
       "title": "இடம்",
-      "address1": "செயிண்ட் மேரிஸ் சர்ச்",
-      "address2": "123 வெட்டிங் லேன், நகரம்",
+      "address1": "Kath. Pfarramt Heilig Kreuz",
+      "address2": "Kirchpl. 10, 8853 Lachen",
       "mapLink": "வரைபடத்தில் பார்க்க"
     },
     "dateTime": {
@@ -94,8 +94,8 @@
     "rsvpButton": "பதிலளிக்கவும்",
     "location": {
       "title": "இடம்",
-      "address1": "சிவன் கோவில்",
-      "address2": "456 டிவைன் ரோடு, நகரம்",
+      "address1": "ஸ்ரீ மனோன்மணி அம்பாள் கோவில்",
+      "address2": "Miesernweg 13, 4632 Trimbach",
       "mapLink": "வரைபடத்தில் பார்க்க"
     },
     "dateTime": {

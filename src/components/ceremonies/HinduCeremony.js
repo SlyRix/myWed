@@ -6,7 +6,8 @@ import { mdiMapMarker, mdiCalendar, mdiTshirtCrew } from '@mdi/js';
 import Icon from '@mdi/react';
 import { useTranslation } from 'react-i18next';
 import CeremonyTimeline from './CeremonyTimeline';
-import CeremonyDetails from './CeremonyDetails';
+import MiniMap from '../map/MiniMap';
+import CalendarLink from '../common/CalendarLink';
 import AnimatedSection from '../common/AnimatedSection';
 
 const HinduCeremony = () => {
@@ -56,25 +57,10 @@ const HinduCeremony = () => {
         }
     ];
 
-    // Ceremony details
-    const ceremonyDetails = [
-        {
-            icon: mdiMapMarker,
-            title: t('hindu.location.title'),
-            content: [t('hindu.location.address1'), t('hindu.location.address2')],
-            link: { text: t('hindu.location.mapLink'), url: '#' }
-        },
-        {
-            icon: mdiCalendar,
-            title: t('hindu.dateTime.title'),
-            content: [t('hindu.dateTime.date'), t('hindu.dateTime.time')]
-        },
-        {
-            icon: mdiTshirtCrew,
-            title: t('hindu.dress.title'),
-            content: [t('hindu.dress.code1'), t('hindu.dress.code2')]
-        }
-    ];
+    // Parse ceremony date for calendar
+    const ceremonyDate = new Date('July 5, 2026 10:00:00');
+    const ceremonyEndDate = new Date('July 5, 2026 14:00:00');
+    const ceremonyLocation = t('hindu.location.address1') + ', ' + t('hindu.location.address2');
 
     return (
         <section className="pt-24 pb-16 bg-gradient-to-br from-yellow-50 to-amber-50 relative overflow-hidden">
@@ -118,8 +104,48 @@ const HinduCeremony = () => {
                     </AnimatedSection>
                 </div>
 
-                <AnimatedSection className="mb-16" delay={0.3}>
-                    <CeremonyDetails details={ceremonyDetails} theme="hindu" />
+                <AnimatedSection className="grid md:grid-cols-3 gap-6 mb-16" delay={0.3}>
+                    <div className="flex-1 min-w-[250px] mb-8 p-6 bg-white rounded-lg shadow-md text-center transition-all duration-300 hover:translate-y-[-10px] hover:shadow-lg border-t-4 border-hindu-secondary">
+                        <Icon path={mdiMapMarker} size={2} className="mx-auto mb-4 text-hindu-secondary" />
+                        <h3 className="text-xl font-bold mb-3">{t('hindu.location.title')}</h3>
+                        <p className="mb-1">{t('hindu.location.address1')}</p>
+                        <p className="text-gray-600 mb-1">{t('hindu.location.address2')}</p>
+
+                        {/* Add the mini map component */}
+                        <div className="mt-4">
+                            <MiniMap
+                                address={ceremonyLocation}
+                                title={t('hindu.location.address1')}
+                                lat={47.366978}  // Example coordinates for a different location
+                                lng={7.879901}  // Example coordinates for a different location
+                            />
+                        </div>
+                    </div>
+
+                    <div className="flex-1 min-w-[250px] mb-8 p-6 bg-white rounded-lg shadow-md text-center transition-all duration-300 hover:translate-y-[-10px] hover:shadow-lg border-t-4 border-hindu-secondary">
+                        <Icon path={mdiCalendar} size={2} className="mx-auto mb-4 text-hindu-secondary" />
+                        <h3 className="text-xl font-bold mb-3">{t('hindu.dateTime.title')}</h3>
+                        <p className="mb-1">{t('hindu.dateTime.date')}</p>
+                        <p className="text-gray-600 mb-1">{t('hindu.dateTime.time')}</p>
+
+                        {/* Add the calendar link component */}
+                        <div className="mt-4">
+                            <CalendarLink
+                                title="Rushel & Sivanis Hindu Wedding Ceremony"
+                                description="Join us for our traditional Hindu Wedding Ceremony"
+                                location={ceremonyLocation}
+                                startDate={ceremonyDate}
+                                endDate={ceremonyEndDate}
+                            />
+                        </div>
+                    </div>
+
+                    <div className="flex-1 min-w-[250px] mb-8 p-6 bg-white rounded-lg shadow-md text-center transition-all duration-300 hover:translate-y-[-10px] hover:shadow-lg border-t-4 border-hindu-secondary">
+                        <Icon path={mdiTshirtCrew} size={2} className="mx-auto mb-4 text-hindu-secondary" />
+                        <h3 className="text-xl font-bold mb-3">{t('hindu.dress.title')}</h3>
+                        <p className="mb-1">{t('hindu.dress.code1')}</p>
+                        <p className="text-gray-600 mb-1">{t('hindu.dress.code2')}</p>
+                    </div>
                 </AnimatedSection>
 
                 <AnimatedSection className="mt-20" delay={0.4}>

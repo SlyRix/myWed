@@ -17,13 +17,13 @@
     "christianEvent": {
       "title": "Christian Ceremony",
       "date": "July 4, 2026",
-      "location": "St. Mary's Church",
+      "location": "Kath. Pfarramt Heilig Kreuz",
       "description": "Join us for a beautiful celebration of marriage with traditional Christian customs."
     },
     "hinduEvent": {
       "title": "Hindu Ceremony",
       "date": "July 5, 2026",
-      "location": "Shiva Temple",
+      "location": "Sri Manonmani Ampal Tempel",
       "description": "Experience a vibrant Hindu wedding ceremony full of color and tradition."
     },
     "readStory": "Read Our Story"
@@ -36,8 +36,8 @@
     "rsvpButton": "RSVP Now",
     "location": {
       "title": "Location",
-      "address1": "St. Mary's Church",
-      "address2": "123 Wedding Lane, City",
+      "address1": "Kath. Pfarramt Heilig Kreuz",
+      "address2": "Kirchpl. 10, 8853 Lachen",
       "mapLink": "View on Map"
     },
     "dateTime": {
@@ -94,8 +94,8 @@
     "rsvpButton": "RSVP Now",
     "location": {
       "title": "Location",
-      "address1": "Shiva Temple",
-      "address2": "456 Divine Road, City",
+      "address1": "Sri Manonmani Ampal Tempel",
+      "address2": "Miesernweg 13, 4632 Trimbach",
       "mapLink": "View on Map"
     },
     "dateTime": {

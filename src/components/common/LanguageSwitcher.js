@@ -11,7 +11,7 @@ const LanguageSwitcher = ({ scrolled }) => {
 
     const languages = [
         { code: 'en', name: 'English', flag: '🇺🇸' },
-        { code: 'ta', name: 'தமிழ்', flag: '🇮🇳' },
+        { code: 'ta', name: 'தமிழ்', flag: "🇱🇰" },
         { code: 'de', name: 'Deutsch', flag: '🇩🇪' },
 
     ];

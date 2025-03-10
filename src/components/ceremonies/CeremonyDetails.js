@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import Icon from '@mdi/react';
+import CalendarLink from '../common/CalendarLink';
 
 const CeremonyDetails = ({ details, theme }) => {
     // Animation variants
@@ -28,6 +29,49 @@ const CeremonyDetails = ({ details, theme }) => {
     const borderColor = theme === 'christian' ? 'border-christian-accent' : 'border-hindu-secondary';
     const textColor = theme === 'christian' ? 'text-christian-accent' : 'text-hindu-secondary';
 
+    // Parse date string for calendar (assuming details contain properly formatted data)
+    const getEventDate = () => {
+        // Find the date detail item
+        const dateDetail = details.find(item => item.title.includes('Date'));
+        if (dateDetail && dateDetail.content && dateDetail.content.length >= 2) {
+            const dateString = dateDetail.content[0]; // e.g., "July 4, 2026"
+            const timeString = dateDetail.content[1]; // e.g., "2:00 PM - 4:00 PM"
+
+            // Extract and parse date
+            const startDate = new Date(dateString);
+
+            // Extract and parse time
+            if (timeString) {
+                const timeMatch = timeString.match(/(\d+):(\d+)\s*(AM|PM)/i);
+                if (timeMatch) {
+                    let hours = parseInt(timeMatch[1]);
+                    const minutes = parseInt(timeMatch[2]);
+                    const period = timeMatch[3].toUpperCase();
+
+                    // Convert to 24-hour format
+                    if (period === 'PM' && hours < 12) hours += 12;
+                    if (period === 'AM' && hours === 12) hours = 0;
+
+                    startDate.setHours(hours, minutes);
+                }
+            }
+
+            return startDate;
+        }
+
+        // Fallback to a future date if parsing fails
+        return new Date('July 4, 2026 14:00:00');
+    };
+
+    const getEventLocation = () => {
+        // Find the location detail item
+        const locationDetail = details.find(item => item.title.includes('Location'));
+        if (locationDetail && locationDetail.content && locationDetail.content.length >= 2) {
+            return locationDetail.content.join(', ');
+        }
+        return '';
+    };
+
     return (
         <motion.div
             className="grid md:grid-cols-3 gap-6"
@@ -47,9 +91,28 @@ const CeremonyDetails = ({ details, theme }) => {
                         className={`mx-auto mb-4 ${textColor}`}
                     />
                     <h3 className="text-xl font-bold mb-3">{detail.title}</h3>
+
                     {detail.content.map((item, i) => (
                         <p key={i} className={i === 0 ? "mb-1" : "text-gray-600 mb-1"}>{item}</p>
                     ))}
+
+                    {/* Special features based on detail type */}
+                    {detail.title.includes('Location') && (
+                        <div className="mt-4">
+                        </div>
+                    )}
+
+                    {detail.title.includes('Date') && (
+                        <div className="mt-4">
+                            <CalendarLink
+                                title={`${theme === 'christian' ? 'Christian' : 'Hindu'} Wedding Ceremony`}
+                                description={`${theme === 'christian' ? 'Christian' : 'Hindu'} Wedding Ceremony`}
+                                location={getEventLocation()}
+                                startDate={getEventDate()}
+                            />
+                        </div>
+                    )}
+
                     {detail.link && (
                         <a
                             href={detail.link.url}

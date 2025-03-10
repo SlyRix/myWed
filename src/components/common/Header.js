@@ -12,6 +12,7 @@ const Header = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
     const location = useLocation();
+    const isHomePage = location.pathname === '/';
 
     useEffect(() => {
         const handleScroll = () => {
@@ -57,10 +58,10 @@ const Header = () => {
                                 <Icon path={mdiHeart} size={0.9} className="text-wedding-love" />
                             </div>
                             <span className="ml-2 text-lg font-display font-bold tracking-wide">
-                {scrolled ? 'R & S Wedding' : (
-                    <span className="text-white text-shadow">R & S Wedding</span>
-                )}
-              </span>
+                                {scrolled ? 'R & S Wedding' : (
+                                    <span className={isHomePage ? "text-white text-shadow" : "text-christian-accent"}>R & S Wedding</span>
+                                )}
+                            </span>
                         </Link>
                     </div>
 
@@ -76,7 +77,9 @@ const Header = () => {
                                                 ? 'text-wedding-love font-medium'
                                                 : scrolled
                                                     ? 'text-christian-text hover:text-wedding-love'
-                                                    : 'text-white text-shadow hover:text-wedding-love'
+                                                    : isHomePage
+                                                        ? 'text-white text-shadow hover:text-wedding-love'
+                                                        : 'text-christian-accent font-medium hover:text-wedding-love'
                                         }`}
                                     >
                                         {link.label}
@@ -93,6 +96,19 @@ const Header = () => {
 
                         <LanguageSwitcher scrolled={scrolled} />
                     </div>
+
+                    {/* Mobile Navigation Button */}
+                    <button
+                        className="md:hidden z-50 text-2xl focus:outline-none"
+                        aria-label="Toggle menu"
+                        onClick={() => setIsOpen(!isOpen)}
+                    >
+                        <Icon
+                            path={isOpen ? mdiClose : mdiMenu}
+                            size={1.2}
+                            className={scrolled ? "text-wedding-gray" : isHomePage ? "text-white" : "text-christian-accent"}
+                        />
+                    </button>
 
                     {/* Mobile Navigation */}
                     {isOpen && (
@@ -113,6 +129,11 @@ const Header = () => {
                                         </Link>
                                     </li>
                                 ))}
+
+                                {/* Add Language Switcher in mobile menu */}
+                                <li className="mt-6">
+                                    <LanguageSwitcher scrolled={true} />
+                                </li>
                             </ul>
                         </motion.div>
                     )}

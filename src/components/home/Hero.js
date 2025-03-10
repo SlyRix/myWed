@@ -24,7 +24,7 @@ const Hero = ({ backgroundImage = null, patternImage = "/images/floral-pattern.s
     const { t } = useTranslation();
 
     // Wedding date - July 4, 2026
-    const weddingDate = new Date('July 4, 2026 14:00:00').getTime();
+    const weddingDate = new Date('May 9, 2026 14:00:00').getTime();
 
     // Check if pattern image exists by creating an image object
     const [patternExists, setPatternExists] = React.useState(false);
