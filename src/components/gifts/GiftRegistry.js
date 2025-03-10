@@ -1,34 +1,38 @@
+// src/components/gifts/GiftRegistry.js
 import React from 'react';
 import { motion } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 import GiftCard from './GiftCard';
 import AnimatedSection from '../common/AnimatedSection';
 import { mdiHome, mdiAirplane, mdiStore, mdiCashMultiple } from '@mdi/js';
 import Icon from '@mdi/react';
 
 const GiftRegistry = () => {
+    const { t } = useTranslation();
+
     const giftOptions = [
         {
             icon: mdiHome,
-            title: 'Home Fund',
-            description: 'Help us build our dream home',
+            title: t('gifts.options.homeFund.title'),
+            description: t('gifts.options.homeFund.description'),
             color: 'bg-christian-accent'
         },
         {
             icon: mdiAirplane,
-            title: 'Honeymoon Fund',
-            description: 'Contribute to our adventure',
+            title: t('gifts.options.honeymoonFund.title'),
+            description: t('gifts.options.honeymoonFund.description'),
             color: 'bg-hindu-secondary'
         },
         {
             icon: mdiStore,
-            title: 'Registry',
-            description: 'View our wish list',
+            title: t('gifts.options.registry.title'),
+            description: t('gifts.options.registry.description'),
             color: 'bg-blue-500'
         },
         {
             icon: mdiCashMultiple,
-            title: 'Charity Donation',
-            description: 'Give in our honor',
+            title: t('gifts.options.charity.title'),
+            description: t('gifts.options.charity.description'),
             color: 'bg-green-500'
         }
     ];
@@ -37,9 +41,9 @@ const GiftRegistry = () => {
         <section className="pt-24 pb-20 bg-gray-50">
             <div className="container mx-auto max-w-6xl px-4">
                 <AnimatedSection className="text-center mb-16">
-                    <h1 className="text-4xl font-bold mb-6">Wedding Gifts</h1>
+                    <h1 className="text-4xl font-bold mb-6">{t('gifts.title')}</h1>
                     <p className="text-gray-700 max-w-2xl mx-auto">
-                        Your presence at our wedding is the greatest gift of all. However, if you wish to honor us with a gift, we have created a registry for your convenience.
+                        {t('gifts.description')}
                     </p>
                 </AnimatedSection>
 
@@ -68,12 +72,12 @@ const GiftRegistry = () => {
                 </div>
 
                 <AnimatedSection className="mt-16 max-w-3xl mx-auto text-center p-8 bg-white rounded-lg shadow-md">
-                    <h2 className="text-2xl font-bold mb-4">A Note About Gifts</h2>
+                    <h2 className="text-2xl font-bold mb-4">{t('gifts.note.title')}</h2>
                     <p className="text-gray-700 mb-4">
-                        We're truly honored that you will be celebrating our special day with us. Your presence is what matters most, and we're grateful for your love and support.
+                        {t('gifts.note.description1')}
                     </p>
                     <p className="text-gray-700">
-                        If you'd like to give a gift, we hope our registry provides some helpful guidance. We've created options that would be meaningful to us as we start this new chapter together.
+                        {t('gifts.note.description2')}
                     </p>
                 </AnimatedSection>
             </div>

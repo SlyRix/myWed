@@ -1,0 +1,310 @@
+{
+  "header": {
+    "home": "Startseite",
+    "christianCeremony": "Christliche Zeremonie",
+    "hinduCeremony": "Hinduistische Zeremonie",
+    "ourStory": "Unsere Geschichte",
+    "gifts": "Geschenke",
+    "gallery": "Galerie",
+    "rsvp": "Zusagen",
+    "guestbook": "Gästebuch"
+  },
+  "home": {
+    "title": "Rushel & Sivani Heiraten",
+    "date": "Sommer 2026",
+    "welcomeTitle": "Willkommen zu unserer Hochzeit",
+    "welcomeText": "Wir freuen uns, unseren besonderen Tag mit unseren geliebten Familien und Freunden zu feiern. Unsere Hochzeit wird eine wunderschöne Mischung aus christlichen und hinduistischen Traditionen sein, die unsere einzigartige Reise und gemeinsame Liebe widerspiegelt.",
+    "christianEvent": {
+      "title": "Christliche Zeremonie",
+      "date": "4. Juli 2026",
+      "location": "St. Mary's Church",
+      "description": "Nehmen Sie teil an einer wunderschönen Feier der Ehe mit traditionellen christlichen Bräuchen."
+    },
+    "hinduEvent": {
+      "title": "Hinduistische Zeremonie",
+      "date": "5. Juli 2026",
+      "location": "Shiva Tempel",
+      "description": "Erleben Sie eine lebendige hinduistische Hochzeitszeremonie voller Farben und Tradition."
+    },
+    "readStory": "Unsere Geschichte lesen"
+  },
+  "christian": {
+    "title": "Christliche Zeremonie",
+    "headline": "Nehmen Sie an unserer christlichen Hochzeitszeremonie teil",
+    "description": "Wir freuen uns, Sie zu unserer christlichen Hochzeitszeremonie einzuladen. Diese heilige Gelegenheit wird eine Feier unserer Liebe und Verpflichtung zueinander sein, geleitet von christlichen Traditionen und Werten.",
+    "description2": "Die Zeremonie findet in einer wunderschönen Kirchenumgebung statt, wo wir Gelübde und Ringe vor Gott und unseren Lieben austauschen werden. Wir wären geehrt, wenn Sie diesen besonderen Moment in unserem Leben miterleben würden.",
+    "rsvpButton": "Jetzt zusagen",
+    "location": {
+      "title": "Ort",
+      "address1": "St. Mary's Church",
+      "address2": "123 Wedding Lane, Stadt",
+      "mapLink": "Auf Karte anzeigen"
+    },
+    "dateTime": {
+      "title": "Datum & Uhrzeit",
+      "date": "4. Juli 2026",
+      "time": "14:00 - 16:00 Uhr"
+    },
+    "dress": {
+      "title": "Dresscode",
+      "code1": "Formelle Kleidung",
+      "code2": "Helle Farben bevorzugt"
+    },
+    "schedule": {
+      "title": "Zeitplan der Zeremonie",
+      "events": {
+        "arrival": {
+          "time": "13:30 Uhr",
+          "title": "Ankunft der Gäste",
+          "description": "Bitte kommen Sie 30 Minuten vor Beginn der Zeremonie in der Kirche an."
+        },
+        "begins": {
+          "time": "14:00 Uhr",
+          "title": "Beginn der Zeremonie",
+          "description": "Die Braut geht den Gang entlang, begleitet von ihrem Vater."
+        },
+        "vows": {
+          "time": "14:45 Uhr",
+          "title": "Austausch der Gelübde",
+          "description": "Das Paar tauscht seine Gelübde und Ringe aus."
+        },
+        "pronouncement": {
+          "time": "15:15 Uhr",
+          "title": "Verkündung",
+          "description": "Das Paar wird zu Mann und Frau erklärt."
+        },
+        "recessional": {
+          "time": "15:30 Uhr",
+          "title": "Auszug",
+          "description": "Die Frischvermählten verlassen die Kirche, gefolgt von der Hochzeitsgesellschaft."
+        },
+        "photos": {
+          "time": "15:45 Uhr",
+          "title": "Fotos",
+          "description": "Gruppenfotos vor der Kirche."
+        }
+      }
+    }
+  },
+  "hindu": {
+    "title": "Hinduistische Zeremonie",
+    "headline": "Feiern Sie unsere hinduistische Hochzeitszeremonie",
+    "description": "Wir laden Sie herzlich zu unserer traditionellen hinduistischen Hochzeitszeremonie ein. Diese lebendige Feier wird alte Bräuche und Rituale ehren, die die heilige Vereinigung zweier Seelen symbolisieren.",
+    "description2": "Die Zeremonie findet in einem wunderschön dekorierten Mandap statt, wo wir verschiedene Rituale unter der Anleitung eines hinduistischen Priesters durchführen werden. Ihre Anwesenheit würde diesen glückverheißenden Anlass noch besonderer machen.",
+    "rsvpButton": "Jetzt zusagen",
+    "location": {
+      "title": "Ort",
+      "address1": "Shiva Tempel",
+      "address2": "456 Divine Road, Stadt",
+      "mapLink": "Auf Karte anzeigen"
+    },
+    "dateTime": {
+      "title": "Datum & Uhrzeit",
+      "date": "5. Juli 2026",
+      "time": "10:00 - 14:00 Uhr"
+    },
+    "dress": {
+      "title": "Dresscode",
+      "code1": "Traditionelle indische Kleidung",
+      "code2": "Lebendige Farben erwünscht"
+    },
+    "schedule": {
+      "title": "Zeitplan der Zeremonie",
+      "events": {
+        "baraat": {
+          "time": "9:00 Uhr",
+          "title": "Baraat",
+          "description": "Die Prozession des Bräutigams kommt am Veranstaltungsort an."
+        },
+        "milni": {
+          "time": "9:30 Uhr",
+          "title": "Milni",
+          "description": "Die Begrüßungszeremonie zwischen beiden Familien."
+        },
+        "ganeshPuja": {
+          "time": "10:00 Uhr",
+          "title": "Ganesh Puja",
+          "description": "Gebet zu Lord Ganesh, um Hindernisse zu beseitigen."
+        },
+        "mandap": {
+          "time": "10:30 Uhr",
+          "title": "Mandap Zeremonie",
+          "description": "Die Haupthochzeitsrituale beginnen unter dem Mandap."
+        },
+        "saptapadi": {
+          "time": "11:30 Uhr",
+          "title": "Saptapadi",
+          "description": "Das Paar macht sieben gemeinsame Schritte und gibt Gelübde ab."
+        },
+        "mangalsutra": {
+          "time": "12:30 Uhr",
+          "title": "Mangalsutra",
+          "description": "Der Bräutigam bindet die heilige Halskette um den Hals der Braut."
+        },
+        "ashirwad": {
+          "time": "13:00 Uhr",
+          "title": "Ashirwad",
+          "description": "Segen von den Älteren."
+        },
+        "lunch": {
+          "time": "13:30 Uhr",
+          "title": "Mittagessen",
+          "description": "Traditionelles indisches Festmahl."
+        }
+      }
+    },
+    "rituals": {
+      "title": "Wichtige hinduistische Hochzeitsrituale",
+      "description": "Unsere hinduistische Hochzeitszeremonie wird mehrere bedeutungsvolle Rituale umfassen, die unsere Verpflichtung und die Verbindung unserer Familien symbolisieren.",
+      "items": {
+        "mandap": {
+          "title": "Mandap",
+          "description": "Eine überdachte Struktur, in der die Zeremonie stattfindet"
+        },
+        "kanyadaan": {
+          "title": "Kanyadaan",
+          "description": "Die Übergabe der Braut durch ihren Vater"
+        },
+        "mangalPhera": {
+          "title": "Mangal Phera",
+          "description": "Das Paar umkreist das heilige Feuer viermal"
+        }
+      }
+    }
+  },
+  "story": {
+    "title": "Unsere Geschichte",
+    "description": "Jede Liebesgeschichte ist schön, aber unsere ist unsere liebste. Hier ist ein Einblick in unsere Reise von Fremden zu Seelenverwandten.",
+    "events": {
+      "met": {
+        "date": "Juni 2020",
+        "title": "Wie wir uns kennenlernten",
+        "description": "Wir trafen uns zum ersten Mal auf der Geburtstagsfeier eines gemeinsamen Freundes. Was als beiläufiges Gespräch über Kuchen begann, entwickelte sich zu stundenlangen Gesprächen über unsere gemeinsamen Interessen und Träume."
+      },
+      "firstDate": {
+        "date": "Dezember 2020",
+        "title": "Erstes Date",
+        "description": "Nach Monaten der Freundschaft gingen wir endlich auf unser erstes offizielles Date in ein lokales Café. Wir unterhielten uns stundenlang und verloren völlig das Zeitgefühl."
+      },
+      "families": {
+        "date": "August 2021",
+        "title": "Treffen der Familien",
+        "description": "Wir stellten einander unseren Familien vor. Trotz unserer unterschiedlichen kulturellen Hintergründe begrüßten beide Familien uns mit offenen Armen und offenen Herzen."
+      },
+      "proposal": {
+        "date": "Juli 2023",
+        "title": "Der Heiratsantrag",
+        "description": "Während einer Wanderung zum Sonnenuntergang zu unserem Lieblingsaussichtspunkt, umgeben von Natur und dem goldenen Glanz der untergehenden Sonne, wurde die Frage gestellt und mit Freudentränen beantwortet."
+      },
+      "engagement": {
+        "date": "Januar 2024",
+        "title": "Verlobungsfeier",
+        "description": "Wir feierten unsere Verlobung mit einer wunderschönen Zeremonie, die beide Traditionen vereinte, eine perfekte Darstellung unserer gemeinsamen Zukunft."
+      },
+      "wedding": {
+        "date": "Sommer 2026",
+        "title": "Unsere Hochzeit",
+        "description": "Und jetzt freuen wir uns darauf, das nächste Kapitel unserer Reise mit all unseren Lieben zu feiern. Wir können es kaum erwarten, gemeinsam weitere schöne Erinnerungen zu schaffen."
+      }
+    },
+    "cultures": {
+      "title": "Eine Vereinigung von Kulturen",
+      "description1": "Unsere Beziehung war eine wunderschöne Reise der Überbrückung zweier verschiedener Kulturen und Traditionen. Wir haben voneinander gelernt, sind zusammen gewachsen und haben Harmonie in unserer Vielfalt gefunden.",
+      "description2": "Unsere Hochzeit wird eine Feier dieser Vereinigung sein, die sowohl christliche als auch hinduistische Traditionen ehrt. Wir laden Sie ein, sich uns bei dieser freudigen Feier von Liebe, Familie und kultureller Harmonie anzuschließen."
+    }
+  },
+  "gifts": {
+    "title": "Hochzeitsgeschenke",
+    "description": "Ihre Anwesenheit bei unserer Hochzeit ist das größte Geschenk. Wenn Sie uns jedoch mit einem Geschenk ehren möchten, haben wir für Ihre Bequemlichkeit eine Geschenkliste erstellt.",
+    "options": {
+      "homeFund": {
+        "title": "Haus-Fonds",
+        "description": "Helfen Sie uns, unser Traumhaus zu bauen"
+      },
+      "honeymoonFund": {
+        "title": "Flitterwochen-Fonds",
+        "description": "Tragen Sie zu unserem Abenteuer bei"
+      },
+      "registry": {
+        "title": "Geschenkliste",
+        "description": "Sehen Sie unsere Wunschliste an"
+      },
+      "charity": {
+        "title": "Wohltätigkeitsspende",
+        "description": "Spenden Sie in unserem Namen"
+      }
+    },
+    "note": {
+      "title": "Eine Notiz zu Geschenken",
+      "description1": "Wir fühlen uns wirklich geehrt, dass Sie unseren besonderen Tag mit uns feiern werden. Ihre Anwesenheit ist das Wichtigste, und wir sind dankbar für Ihre Liebe und Unterstützung.",
+      "description2": "Wenn Sie ein Geschenk machen möchten, hoffen wir, dass unsere Geschenkliste einige hilfreiche Orientierung bietet. Wir haben Optionen erstellt, die für uns bedeutungsvoll wären, während wir dieses neue Kapitel gemeinsam beginnen."
+    }
+  },
+  "gallery": {
+    "title": "Fotogalerie",
+    "description": "Teilen Sie unsere Freude, indem Sie Fotos von unserem besonderen Tag ansehen. Nach der Hochzeit wird dieser Bereich mit kostbaren Momenten von beiden Zeremonien gefüllt sein. Wir laden Sie auch ein, Ihre eigenen Fotos hier zu teilen.",
+    "uploadButton": "Laden Sie Ihre Fotos hoch"
+  },
+  "rsvp": {
+    "title": "Zusagen",
+    "form": {
+      "name": "Vollständiger Name",
+      "email": "E-Mail-Adresse",
+      "phone": "Telefonnummer",
+      "attending": "Werden Sie teilnehmen?",
+      "yes": "Ja, ich werde da sein!",
+      "no": "Es tut mir leid, ich kann nicht kommen",
+      "guests": "Anzahl zusätzlicher Gäste",
+      "ceremonies": "An welchen Zeremonien werden Sie teilnehmen?",
+      "christianCeremony": "Christliche Zeremonie (4. Juli)",
+      "hinduCeremony": "Hinduistische Zeremonie (5. Juli)",
+      "dietary": "Ernährungseinschränkungen",
+      "dietaryPlaceholder": "Gibt es Nahrungsmittelallergien oder Vorlieben, die wir wissen sollten?",
+      "message": "Nachricht an das Paar",
+      "messagePlaceholder": "Teilen Sie Ihre Wünsche oder eine Nachricht für das Paar...",
+      "submit": "Zusage abschicken",
+      "submitting": "Wird gesendet..."
+    },
+    "thankYou": {
+      "title": "Vielen Dank!",
+      "message": "Wir haben Ihre Zusage erhalten und können es kaum erwarten, mit Ihnen zu feiern!",
+      "button": "Eine weitere Antwort senden"
+    }
+  },
+  "guestbook": {
+    "title": "Gästebuch",
+    "form": {
+      "name": "Ihr Name",
+      "message": "Ihre Nachricht",
+      "placeholder": "Hinterlassen Sie eine Nachricht für das Paar...",
+      "submit": "Nachricht senden",
+      "submitting": "Wird gesendet..."
+    },
+    "filter": {
+      "all": "Alle",
+      "recent": "Neueste",
+      "popular": "Beliebteste"
+    },
+    "empty": "Noch keine Nachrichten. Seien Sie der Erste, der eine Nachricht hinterlässt!"
+  },
+  "footer": {
+    "copyright": "© 2026 Christliche & Hinduistische Hochzeit. Alle Rechte vorbehalten."
+  },
+  "passwordProtection": {
+    "title": "Unsere Hochzeit",
+    "subtitle": "Bitte geben Sie das Passwort ein, um unsere Hochzeitswebsite anzusehen",
+    "placeholder": "Passwort eingeben",
+    "submit": "Absenden",
+    "checking": "Wird überprüft...",
+    "error": "Falsches Passwort. Bitte versuchen Sie es erneut."
+  },
+  "countdown": {
+    "days": "Tage",
+    "hours": "Stunden",
+    "minutes": "Minuten",
+    "seconds": "Sekunden"
+  },
+  "common": {
+    "loading": "Unsere Liebesgeschichte wird geladen..."
+  }
+}

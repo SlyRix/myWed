@@ -1,17 +1,21 @@
+// src/components/common/Footer.js
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { mdiHeart, mdiFacebook, mdiInstagram, mdiTwitter } from '@mdi/js';
 import Icon from '@mdi/react';
+import { useTranslation } from 'react-i18next';
 
 const Footer = () => {
+    const { t } = useTranslation();
+
     const footerLinks = [
-        { path: '/', label: 'Home' },
-        { path: '/christian-ceremony', label: 'Christian Ceremony' },
-        { path: '/hindu-ceremony', label: 'Hindu Ceremony' },
-        { path: '/our-story', label: 'Our Story' },
-        { path: '/gifts', label: 'Gifts' },
-        { path: '/gallery', label: 'Gallery' }
+        { path: '/', label: t('header.home') },
+        { path: '/christian-ceremony', label: t('header.christianCeremony') },
+        { path: '/hindu-ceremony', label: t('header.hinduCeremony') },
+        { path: '/our-story', label: t('header.ourStory') },
+        { path: '/gifts', label: t('header.gifts') },
+        { path: '/gallery', label: t('header.gallery') }
     ];
 
     const socialLinks = [
@@ -55,7 +59,7 @@ const Footer = () => {
                         ))}
                     </ul>
 
-                    <p className="text-sm text-white/60">© 2026 Christian & Hindu Wedding. All Rights Reserved.</p>
+                    <p className="text-sm text-white/60">{t('footer.copyright')}</p>
                 </div>
             </div>
         </footer>

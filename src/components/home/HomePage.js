@@ -1,5 +1,7 @@
+// src/components/home/HomePage.js
 import React from 'react';
 import { motion } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 import Hero from './Hero';
 import AnimatedSection from '../common/AnimatedSection';
 import { mdiMapMarker, mdiCalendarRange, mdiHeartMultiple } from '@mdi/js';
@@ -7,13 +9,15 @@ import Icon from '@mdi/react';
 import { Link } from 'react-router-dom';
 
 const HomePage = () => {
+    const { t } = useTranslation();
+
     const events = [
         {
             id: 'christian',
-            title: 'Christian Ceremony',
-            date: 'July 4, 2026',
-            location: 'St. Mary\'s Church',
-            description: 'Join us for a beautiful celebration of marriage with traditional Christian customs.',
+            title: t('home.christianEvent.title'),
+            date: t('home.christianEvent.date'),
+            location: t('home.christianEvent.location'),
+            description: t('home.christianEvent.description'),
             icon: mdiHeartMultiple,
             color: 'bg-christian-accent',
             textColor: 'text-christian-accent',
@@ -21,10 +25,10 @@ const HomePage = () => {
         },
         {
             id: 'hindu',
-            title: 'Hindu Ceremony',
-            date: 'July 5, 2026',
-            location: 'Shiva Temple',
-            description: 'Experience a vibrant Hindu wedding ceremony full of color and tradition.',
+            title: t('home.hinduEvent.title'),
+            date: t('home.hinduEvent.date'),
+            location: t('home.hinduEvent.location'),
+            description: t('home.hinduEvent.description'),
             icon: mdiHeartMultiple,
             color: 'bg-hindu-secondary',
             textColor: 'text-hindu-secondary',
@@ -43,9 +47,9 @@ const HomePage = () => {
             <section id="about-section" className="py-20 bg-gray-50">
                 <div className="container">
                     <AnimatedSection className="text-center max-w-2xl mx-auto mb-12">
-                        <h2 className="text-3xl md:text-4xl mb-6">Welcome to Our Wedding</h2>
+                        <h2 className="text-3xl md:text-4xl mb-6">{t('home.welcomeTitle')}</h2>
                         <p className="text-lg text-gray-600">
-                            We are thrilled to celebrate our special day with our beloved family and friends. Our wedding will be a beautiful blend of Christian and Hindu traditions, reflecting our unique journey and shared love.
+                            {t('home.welcomeText')}
                         </p>
                     </AnimatedSection>
 
@@ -85,7 +89,7 @@ const HomePage = () => {
 
                     <AnimatedSection className="text-center mt-16 mb-6">
                         <Link to="/our-story" className="btn christian-btn">
-                            Read Our Story
+                            {t('home.readStory')}
                         </Link>
                     </AnimatedSection>
                 </div>

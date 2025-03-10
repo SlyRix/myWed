@@ -1,0 +1,310 @@
+{
+  "header": {
+    "home": "Home",
+    "christianCeremony": "Christian Ceremony",
+    "hinduCeremony": "Hindu Ceremony",
+    "ourStory": "Our Story",
+    "gifts": "Gifts",
+    "gallery": "Gallery",
+    "rsvp": "RSVP",
+    "guestbook": "Guestbook"
+  },
+  "home": {
+    "title": "Rushel & Sivani are getting married",
+    "date": "Summer 2026",
+    "welcomeTitle": "Welcome to Our Wedding",
+    "welcomeText": "We are thrilled to celebrate our special day with our beloved family and friends. Our wedding will be a beautiful blend of Christian and Hindu traditions, reflecting our unique journey and shared love.",
+    "christianEvent": {
+      "title": "Christian Ceremony",
+      "date": "July 4, 2026",
+      "location": "St. Mary's Church",
+      "description": "Join us for a beautiful celebration of marriage with traditional Christian customs."
+    },
+    "hinduEvent": {
+      "title": "Hindu Ceremony",
+      "date": "July 5, 2026",
+      "location": "Shiva Temple",
+      "description": "Experience a vibrant Hindu wedding ceremony full of color and tradition."
+    },
+    "readStory": "Read Our Story"
+  },
+  "christian": {
+    "title": "Christian Ceremony",
+    "headline": "Join Us for Our Christian Wedding Ceremony",
+    "description": "We are delighted to invite you to our Christian wedding ceremony. This sacred occasion will be a celebration of our love and commitment to each other, guided by Christian traditions and values.",
+    "description2": "The ceremony will take place in a beautiful church setting, where we will exchange vows and rings before God and our loved ones. We would be honored to have you witness this special moment in our lives.",
+    "rsvpButton": "RSVP Now",
+    "location": {
+      "title": "Location",
+      "address1": "St. Mary's Church",
+      "address2": "123 Wedding Lane, City",
+      "mapLink": "View on Map"
+    },
+    "dateTime": {
+      "title": "Date & Time",
+      "date": "July 4, 2026",
+      "time": "2:00 PM - 4:00 PM"
+    },
+    "dress": {
+      "title": "Dress Code",
+      "code1": "Formal Attire",
+      "code2": "Light colors preferred"
+    },
+    "schedule": {
+      "title": "Ceremony Schedule",
+      "events": {
+        "arrival": {
+          "time": "1:30 PM",
+          "title": "Guest Arrival",
+          "description": "Please arrive at the church 30 minutes before the ceremony begins."
+        },
+        "begins": {
+          "time": "2:00 PM",
+          "title": "Ceremony Begins",
+          "description": "The bride walks down the aisle, accompanied by her father."
+        },
+        "vows": {
+          "time": "2:45 PM",
+          "title": "Exchange of Vows",
+          "description": "The couple exchange their vows and rings."
+        },
+        "pronouncement": {
+          "time": "3:15 PM",
+          "title": "Pronouncement",
+          "description": "The couple is pronounced husband and wife."
+        },
+        "recessional": {
+          "time": "3:30 PM",
+          "title": "Recessional",
+          "description": "The newlyweds exit the church, followed by the wedding party."
+        },
+        "photos": {
+          "time": "3:45 PM",
+          "title": "Photos",
+          "description": "Group photos outside the church."
+        }
+      }
+    }
+  },
+  "hindu": {
+    "title": "Hindu Ceremony",
+    "headline": "Celebrate Our Hindu Wedding Ceremony",
+    "description": "We warmly invite you to our traditional Hindu wedding ceremony. This vibrant celebration will honor ancient customs and rituals that symbolize the sacred union of two souls.",
+    "description2": "The ceremony will take place in a beautifully decorated mandap, where we will perform various rituals guided by a Hindu priest. Your presence would make this auspicious occasion even more special.",
+    "rsvpButton": "RSVP Now",
+    "location": {
+      "title": "Location",
+      "address1": "Shiva Temple",
+      "address2": "456 Divine Road, City",
+      "mapLink": "View on Map"
+    },
+    "dateTime": {
+      "title": "Date & Time",
+      "date": "July 5, 2026",
+      "time": "10:00 AM - 2:00 PM"
+    },
+    "dress": {
+      "title": "Dress Code",
+      "code1": "Traditional Indian Attire",
+      "code2": "Vibrant colors encouraged"
+    },
+    "schedule": {
+      "title": "Ceremony Schedule",
+      "events": {
+        "baraat": {
+          "time": "9:00 AM",
+          "title": "Baraat",
+          "description": "The groom's procession arrives at the venue."
+        },
+        "milni": {
+          "time": "9:30 AM",
+          "title": "Milni",
+          "description": "The greeting ceremony between both families."
+        },
+        "ganeshPuja": {
+          "time": "10:00 AM",
+          "title": "Ganesh Puja",
+          "description": "Prayer to Lord Ganesh to remove obstacles."
+        },
+        "mandap": {
+          "time": "10:30 AM",
+          "title": "Mandap Ceremony",
+          "description": "The main wedding rituals begin under the mandap."
+        },
+        "saptapadi": {
+          "time": "11:30 AM",
+          "title": "Saptapadi",
+          "description": "The couple takes seven steps together, making vows."
+        },
+        "mangalsutra": {
+          "time": "12:30 PM",
+          "title": "Mangalsutra",
+          "description": "The groom ties the sacred necklace around the bride's neck."
+        },
+        "ashirwad": {
+          "time": "1:00 PM",
+          "title": "Ashirwad",
+          "description": "Blessings from elders."
+        },
+        "lunch": {
+          "time": "1:30 PM",
+          "title": "Lunch",
+          "description": "Traditional Indian feast."
+        }
+      }
+    },
+    "rituals": {
+      "title": "Important Hindu Wedding Rituals",
+      "description": "Our Hindu wedding ceremony will include several meaningful rituals that symbolize our commitment and the joining of our families.",
+      "items": {
+        "mandap": {
+          "title": "Mandap",
+          "description": "A covered structure where the ceremony takes place"
+        },
+        "kanyadaan": {
+          "title": "Kanyadaan",
+          "description": "The giving away of the bride by her father"
+        },
+        "mangalPhera": {
+          "title": "Mangal Phera",
+          "description": "The couple circles the sacred fire four times"
+        }
+      }
+    }
+  },
+  "story": {
+    "title": "Our Story",
+    "description": "Every love story is beautiful, but ours is our favorite. Here's a glimpse into our journey from strangers to soulmates.",
+    "events": {
+      "met": {
+        "date": "June 2020",
+        "title": "How We Met",
+        "description": "We first met at a mutual friend's birthday party. What started as a casual conversation over cake turned into hours of talking about our shared interests and dreams."
+      },
+      "firstDate": {
+        "date": "December 2020",
+        "title": "First Date",
+        "description": "After months of friendship, we finally went on our first official date to a local coffee shop. We talked for hours, completely losing track of time."
+      },
+      "families": {
+        "date": "August 2021",
+        "title": "Meeting the Families",
+        "description": "We introduced each other to our families. Despite our different cultural backgrounds, both families welcomed us with open arms and open hearts."
+      },
+      "proposal": {
+        "date": "July 2023",
+        "title": "The Proposal",
+        "description": "During a sunset hike to our favorite viewpoint, surrounded by nature and the golden glow of the setting sun, the question was asked and answered with tears of joy."
+      },
+      "engagement": {
+        "date": "January 2024",
+        "title": "Engagement Ceremony",
+        "description": "We celebrated our engagement with a beautiful ceremony that blended both our traditions, a perfect representation of our future together."
+      },
+      "wedding": {
+        "date": "Summer 2026",
+        "title": "Our Wedding",
+        "description": "And now, we're excited to celebrate the next chapter of our journey with all our loved ones. We can't wait to create more beautiful memories together."
+      }
+    },
+    "cultures": {
+      "title": "A Union of Cultures",
+      "description1": "Our relationship has been a beautiful journey of bridging two different cultures and traditions. We've learned from each other, grown together, and found harmony in our diversity.",
+      "description2": "Our wedding will be a celebration of this union, honoring both Christian and Hindu traditions. We invite you to join us in this joyous celebration of love, family, and cultural harmony."
+    }
+  },
+  "gifts": {
+    "title": "Wedding Gifts",
+    "description": "Your presence at our wedding is the greatest gift of all. However, if you wish to honor us with a gift, we have created a registry for your convenience.",
+    "options": {
+      "homeFund": {
+        "title": "Home Fund",
+        "description": "Help us build our dream home"
+      },
+      "honeymoonFund": {
+        "title": "Honeymoon Fund",
+        "description": "Contribute to our adventure"
+      },
+      "registry": {
+        "title": "Registry",
+        "description": "View our wish list"
+      },
+      "charity": {
+        "title": "Charity Donation",
+        "description": "Give in our honor"
+      }
+    },
+    "note": {
+      "title": "A Note About Gifts",
+      "description1": "We're truly honored that you will be celebrating our special day with us. Your presence is what matters most, and we're grateful for your love and support.",
+      "description2": "If you'd like to give a gift, we hope our registry provides some helpful guidance. We've created options that would be meaningful to us as we start this new chapter together."
+    }
+  },
+  "gallery": {
+    "title": "Photo Gallery",
+    "description": "Share in our joy by viewing photos from our special day. After the wedding, this section will be filled with cherished moments from both ceremonies. We also invite you to share your own photos here.",
+    "uploadButton": "Upload Your Photos"
+  },
+  "rsvp": {
+    "title": "RSVP",
+    "form": {
+      "name": "Full Name",
+      "email": "Email Address",
+      "phone": "Phone Number",
+      "attending": "Will you be attending?",
+      "yes": "Yes, I'll be there!",
+      "no": "Sorry, I can't make it",
+      "guests": "Number of Additional Guests",
+      "ceremonies": "Which ceremonies will you attend?",
+      "christianCeremony": "Christian Ceremony (July 4)",
+      "hinduCeremony": "Hindu Ceremony (July 5)",
+      "dietary": "Dietary Restrictions",
+      "dietaryPlaceholder": "Any food allergies or preferences we should know about?",
+      "message": "Message to the Couple",
+      "messagePlaceholder": "Share your wishes or any message for the couple...",
+      "submit": "Submit RSVP",
+      "submitting": "Submitting..."
+    },
+    "thankYou": {
+      "title": "Thank You!",
+      "message": "We've received your RSVP and can't wait to celebrate with you!",
+      "button": "Submit Another Response"
+    }
+  },
+  "guestbook": {
+    "title": "Guestbook",
+    "form": {
+      "name": "Your Name",
+      "message": "Your Message",
+      "placeholder": "Leave a message for the couple...",
+      "submit": "Post Message",
+      "submitting": "Posting..."
+    },
+    "filter": {
+      "all": "All",
+      "recent": "Recent",
+      "popular": "Popular"
+    },
+    "empty": "No messages yet. Be the first to leave a message!"
+  },
+  "footer": {
+    "copyright": "© 2026 Christian & Hindu Wedding. All Rights Reserved."
+  },
+  "passwordProtection": {
+    "title": "Our Wedding",
+    "subtitle": "Please enter the password to view our wedding website",
+    "placeholder": "Enter password",
+    "submit": "Submit",
+    "checking": "Checking...",
+    "error": "Incorrect password. Please try again."
+  },
+  "countdown": {
+    "days": "Days",
+    "hours": "Hours",
+    "minutes": "Minutes",
+    "seconds": "Seconds"
+  },
+  "common": {
+    "loading": "Loading our love story..."
+  }
+}

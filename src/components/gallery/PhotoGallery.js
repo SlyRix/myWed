@@ -1,9 +1,12 @@
+// src/components/gallery/PhotoGallery.js
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 import PhotoUpload from './PhotoUpload';
 import GalleryItem from './GalleryItem';
 
 const PhotoGallery = () => {
+    const { t } = useTranslation();
     const [photos, setPhotos] = useState([]);
     const [selectedPhoto, setSelectedPhoto] = useState(null);
 
@@ -27,14 +30,14 @@ const PhotoGallery = () => {
     return (
         <section className="pt-24 pb-20 bg-gray-50">
             <div className="container mx-auto max-w-6xl px-4">
-                <h2 className="text-3xl md:text-4xl text-center mb-8 font-bold">Photo Gallery</h2>
+                <h2 className="text-3xl md:text-4xl text-center mb-8 font-bold">{t('gallery.title')}</h2>
 
                 <div className="max-w-3xl mx-auto text-center mb-10">
                     <p className="text-gray-700 mb-8">
-                        Share in our joy by viewing photos from our special day. After the wedding, this section will be filled with cherished moments from both ceremonies. We also invite you to share your own photos here.
+                        {t('gallery.description')}
                     </p>
 
-                    <PhotoUpload onPhotoUpload={handlePhotoUpload} />
+                    <PhotoUpload onPhotoUpload={handlePhotoUpload} uploadButtonText={t('gallery.uploadButton')} />
                 </div>
 
                 <motion.div

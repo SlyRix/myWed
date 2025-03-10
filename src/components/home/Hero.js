@@ -1,11 +1,15 @@
+// src/components/home/Hero.js
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { mdiChevronDown } from '@mdi/js';
 import Icon from '@mdi/react';
+import { useTranslation } from 'react-i18next';
 import CountdownTimer from '../common/CountdownTimer';
 
 const Hero = () => {
+    const { t } = useTranslation();
+
     // Wedding date - July 4, 2026
     const weddingDate = new Date('July 4, 2026 14:00:00').getTime();
 
@@ -20,10 +24,9 @@ const Hero = () => {
                 transition={{ duration: 1 }}
             >
                 <h1 className="text-4xl md:text-6xl font-bold mb-4 font-primary">
-
-                    Rushel & Sivani<br />are getting married
+                    {t('home.title')}
                 </h1>
-                <p className="text-xl md:text-2xl mb-8 opacity-90">Summer 2026</p>
+                <p className="text-xl md:text-2xl mb-8 opacity-90">{t('home.date')}</p>
 
                 <div className="mb-10">
                     <CountdownTimer targetDate={weddingDate} />
@@ -34,14 +37,14 @@ const Hero = () => {
                         to="/christian-ceremony"
                         className="inline-block py-3 px-6 rounded-full font-semibold bg-christian-accent text-white transition-all duration-300 relative overflow-hidden z-10 hover:shadow-lg"
                     >
-                        Christian Ceremony
+                        {t('header.christianCeremony')}
                         <span className="absolute bottom-0 left-0 w-full h-0 bg-white/20 transition-all duration-300 -z-10 hover:h-full"></span>
                     </Link>
                     <Link
                         to="/hindu-ceremony"
                         className="inline-block py-3 px-6 rounded-full font-semibold bg-hindu-secondary text-white transition-all duration-300 relative overflow-hidden z-10 hover:shadow-lg"
                     >
-                        Hindu Ceremony
+                        {t('header.hinduCeremony')}
                         <span className="absolute bottom-0 left-0 w-full h-0 bg-white/20 transition-all duration-300 -z-10 hover:h-full"></span>
                     </Link>
                 </div>
