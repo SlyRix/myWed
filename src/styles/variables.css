@@ -1,0 +1,23 @@
+
+:root {
+  /* Christian ceremony theme */
+--christian-primary: #fff;
+--christian-secondary: #f0f4f8;
+--christian-accent: #d4b08c;
+--christian-text: #2d3748;
+
+/* Hindu ceremony theme */
+--hindu-primary: #ffcb05;
+--hindu-secondary: #ff5722;
+--hindu-accent: #9c27b0;
+--hindu-text: #2d3748;
+
+/* Shared colors */
+--dark-text: #2d3748;
+--light-text: #fff;
+--transition-duration: 0.4s;
+
+/* Font family */
+--font-primary: 'Cormorant Garamond', Georgia, serif;
+--font-secondary: 'Montserrat', sans-serif;
+}
