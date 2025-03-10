@@ -22,10 +22,10 @@ const Footer = () => {
 
     return (
         <footer className="bg-gray-800 text-white py-12">
-            <div className="container">
+            <div className="container mx-auto max-w-6xl px-4">
                 <div className="max-w-2xl mx-auto text-center">
-                    <div className="mb-8">
-                        <Icon path={mdiHeart} size={2} />
+                    <div className="mb-8 flex justify-center">
+                        <Icon path={mdiHeart} size={2} className="text-christian-accent" />
                     </div>
 
                     <ul className="flex flex-wrap justify-center mb-8 gap-4 md:gap-8">

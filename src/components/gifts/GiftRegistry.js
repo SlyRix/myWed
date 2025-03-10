@@ -35,7 +35,7 @@ const GiftRegistry = () => {
 
     return (
         <section className="pt-24 pb-20 bg-gray-50">
-            <div className="container">
+            <div className="container mx-auto max-w-6xl px-4">
                 <AnimatedSection className="text-center mb-16">
                     <h1 className="text-4xl font-bold mb-6">Wedding Gifts</h1>
                     <p className="text-gray-700 max-w-2xl mx-auto">

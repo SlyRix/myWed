@@ -46,29 +46,34 @@ const PhotoUpload = ({ onPhotoUpload }) => {
     };
 
     return (
-        <div className="gallery-upload">
+        <div className="mb-10">
             <input
                 type="file"
                 id="photo-upload"
-                className="upload-input"
+                className="hidden"
                 multiple
                 accept="image/*"
                 onChange={handleFileChange}
                 ref={fileInputRef}
             />
-            <label htmlFor="photo-upload" className="upload-label">
+            <label
+                htmlFor="photo-upload"
+                className="flex items-center justify-center gap-2 cursor-pointer bg-gradient-to-r from-christian-accent to-hindu-secondary text-white py-3 px-6 rounded-lg hover:shadow-md transition-shadow duration-300 mb-4"
+            >
                 <Icon path={mdiCloudUpload} size={1} />
                 <span>Upload Your Photos</span>
             </label>
 
             {isUploading && (
-                <motion.div
-                    className="upload-progress"
-                    initial={{ width: 0 }}
-                    animate={{ width: `${uploadProgress}%` }}
-                >
-                    <span className="progress-text">{uploadProgress}%</span>
-                </motion.div>
+                <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
+                    <motion.div
+                        className="h-full bg-gradient-to-r from-christian-accent to-hindu-secondary"
+                        initial={{ width: 0 }}
+                        animate={{ width: `${uploadProgress}%` }}
+                    >
+                        <span className="sr-only">{uploadProgress}%</span>
+                    </motion.div>
+                </div>
             )}
         </div>
     );

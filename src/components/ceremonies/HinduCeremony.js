@@ -40,25 +40,20 @@ const HinduCeremony = () => {
         }
     ];
 
-    // Pattern divs for decoration
-    const PatternDecoration = () => {
-        return (
-            <>
-                <div className="hidden md:block absolute top-24 left-6 w-32 h-32 bg-hindu-primary/10 rounded-full blur-lg"></div>
-                <div className="hidden md:block absolute bottom-24 right-6 w-32 h-32 bg-hindu-secondary/10 rounded-full blur-lg"></div>
-                <div className="hidden md:block absolute top-1/2 left-1/4 w-4 h-24 bg-hindu-secondary/20 rounded-full rotate-45"></div>
-                <div className="hidden md:block absolute bottom-1/3 right-1/3 w-4 h-24 bg-hindu-primary/20 rounded-full -rotate-45"></div>
-            </>
-        );
-    };
-
     return (
-        <section className="ceremony-section pt-20 md:pt-24 pb-16 bg-gradient-to-br from-yellow-50 to-amber-50 relative overflow-hidden">
-            <PatternDecoration />
+        <section className="pt-24 pb-16 bg-gradient-to-br from-yellow-50 to-amber-50 relative overflow-hidden">
+            {/* Decorative elements */}
+            <div className="hidden md:block absolute top-24 left-6 w-32 h-32 bg-hindu-primary/10 rounded-full blur-lg"></div>
+            <div className="hidden md:block absolute bottom-24 right-6 w-32 h-32 bg-hindu-secondary/10 rounded-full blur-lg"></div>
+            <div className="hidden md:block absolute top-1/2 left-1/4 w-4 h-24 bg-hindu-secondary/20 rounded-full rotate-45"></div>
+            <div className="hidden md:block absolute bottom-1/3 right-1/3 w-4 h-24 bg-hindu-primary/20 rounded-full -rotate-45"></div>
 
-            <div className="container relative z-10">
+            <div className="container mx-auto max-w-6xl px-4 relative z-10">
                 <AnimatedSection className="text-center mb-16">
-                    <h1 className="section-title hindu-title text-hindu-secondary">Hindu Ceremony</h1>
+                    <h1 className="text-3xl md:text-4xl font-bold mb-6 relative pb-4 text-hindu-secondary">
+                        Hindu Ceremony
+                        <span className="absolute bottom-0 left-1/2 w-20 h-1 -translate-x-1/2 bg-hindu-secondary"></span>
+                    </h1>
                 </AnimatedSection>
 
                 <div className="grid md:grid-cols-2 gap-12 items-center mb-16">
@@ -80,7 +75,10 @@ const HinduCeremony = () => {
                         <p className="text-gray-700 mb-6">
                             The ceremony will take place in a beautifully decorated mandap, where we will perform various rituals guided by a Hindu priest. Your presence would make this auspicious occasion even more special.
                         </p>
-                        <button className="btn hindu-btn">RSVP Now</button>
+                        <button className="inline-block py-3 px-6 rounded-full font-semibold bg-hindu-secondary text-white transition-all duration-300 relative overflow-hidden z-10 hover:shadow-md">
+                            RSVP Now
+                            <span className="absolute bottom-0 left-0 w-full h-0 bg-white/20 transition-all duration-300 -z-10 group-hover:h-full"></span>
+                        </button>
                     </AnimatedSection>
                 </div>
 

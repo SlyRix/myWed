@@ -32,19 +32,19 @@ const CountdownTimer = ({ targetDate }) => {
     return (
         <div className="flex justify-center space-x-4">
             <div className="text-center">
-                <span className="block text-3xl font-bold bg-white/20 rounded p-2 mb-1">{timeLeft.days}</span>
+                <span className="block text-3xl font-bold bg-white/20 rounded p-2 mb-1 min-w-16">{timeLeft.days}</span>
                 <span className="text-sm uppercase tracking-wide">Days</span>
             </div>
             <div className="text-center">
-                <span className="block text-3xl font-bold bg-white/20 rounded p-2 mb-1">{timeLeft.hours}</span>
+                <span className="block text-3xl font-bold bg-white/20 rounded p-2 mb-1 min-w-16">{timeLeft.hours}</span>
                 <span className="text-sm uppercase tracking-wide">Hours</span>
             </div>
             <div className="text-center">
-                <span className="block text-3xl font-bold bg-white/20 rounded p-2 mb-1">{timeLeft.minutes}</span>
+                <span className="block text-3xl font-bold bg-white/20 rounded p-2 mb-1 min-w-16">{timeLeft.minutes}</span>
                 <span className="text-sm uppercase tracking-wide">Minutes</span>
             </div>
             <div className="text-center">
-                <span className="block text-3xl font-bold bg-white/20 rounded p-2 mb-1">{timeLeft.seconds}</span>
+                <span className="block text-3xl font-bold bg-white/20 rounded p-2 mb-1 min-w-16">{timeLeft.seconds}</span>
                 <span className="text-sm uppercase tracking-wide">Seconds</span>
             </div>
         </div>

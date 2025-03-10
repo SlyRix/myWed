@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { mdiHeart } from '@mdi/js';
 import Icon from '@mdi/react';
-import '../../styles/components/passwordProtection.css';
 
 const PasswordProtection = ({ onAuthenticate }) => {
     const [password, setPassword] = useState('');
@@ -26,36 +25,46 @@ const PasswordProtection = ({ onAuthenticate }) => {
     };
 
     return (
-        <div className="password-screen">
+        <div className="fixed inset-0 flex items-center justify-center min-h-screen bg-gradient-to-r from-christian-accent/20 to-hindu-secondary/20 bg-white p-4">
             <motion.div
-                className="password-container"
+                className="w-full max-w-md bg-white rounded-xl shadow-xl overflow-hidden"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8 }}
             >
-                <div className="password-logo">
-                    <Icon path={mdiHeart} size={2} color="#d4b08c" />
+                <div className="p-8">
+                    <div className="flex justify-center mb-6">
+                        <div className="w-16 h-16 rounded-full bg-christian-accent/10 flex items-center justify-center">
+                            <Icon path={mdiHeart} size={2} className="text-christian-accent" />
+                        </div>
+                    </div>
+
+                    <h2 className="text-2xl font-bold text-center mb-2 text-gray-800">Our Wedding</h2>
+                    <p className="text-center text-gray-600 mb-8">
+                        Please enter the password to view our wedding website
+                    </p>
+
+                    <form onSubmit={handleSubmit}>
+                        <input
+                            type="password"
+                            className="w-full p-3 border-2 border-gray-200 rounded-full text-base mb-5 transition-all duration-300 outline-none focus:border-christian-accent"
+                            placeholder="Enter password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            required
+                        />
+
+                        <button
+                            type="submit"
+                            className="w-full bg-gradient-to-r from-christian-accent to-hindu-secondary text-white py-3 rounded-full font-semibold transition-all duration-300 hover:shadow-lg disabled:opacity-70"
+                            disabled={isLoading}
+                        >
+                            {isLoading ? 'Checking...' : 'Submit'}
+                        </button>
+
+                        {error && <p className="mt-4 text-red-500 text-center">{error}</p>}
+                    </form>
                 </div>
-                <h2>Our Wedding</h2>
-                <p>Please enter the password to view our wedding website</p>
-                <form className="password-form" onSubmit={handleSubmit}>
-                    <input
-                        type="password"
-                        className="password-input"
-                        placeholder="Enter password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        required
-                    />
-                    <button
-                        type="submit"
-                        className="password-button"
-                        disabled={isLoading}
-                    >
-                        {isLoading ? 'Checking...' : 'Submit'}
-                    </button>
-                    {error && <p className="password-error">{error}</p>}
-                </form>
             </motion.div>
         </div>
     );

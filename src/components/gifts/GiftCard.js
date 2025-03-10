@@ -9,8 +9,8 @@ const GiftCard = () => {
             {/* Gradient background */}
             <div className="absolute inset-0 bg-gradient-to-r from-christian-accent to-hindu-secondary"></div>
 
-            {/* Pattern overlay */}
-            <div className="absolute inset-0 opacity-10 bg-[url('/images/pattern.png')]"></div>
+            {/* Pattern overlay - removed reference to image */}
+            <div className="absolute inset-0 opacity-10 bg-gradient-to-b from-white/20 to-transparent"></div>
 
             {/* Card content */}
             <div className="relative z-10 text-white h-full flex flex-col justify-between p-6">

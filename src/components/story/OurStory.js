@@ -1,8 +1,6 @@
 import React from 'react';
-import { motion } from 'framer-motion';
 import StoryTimeline from './StoryTimeline';
 import AnimatedSection from '../common/AnimatedSection';
-import { fadeIn } from '../../utils/animations';
 
 const OurStory = () => {
     const storyEvents = [
@@ -46,7 +44,7 @@ const OurStory = () => {
 
     return (
         <section className="pt-24 pb-20 bg-gradient-to-r from-christian-secondary/30 to-hindu-primary/20 overflow-hidden">
-            <div className="container">
+            <div className="container mx-auto max-w-6xl px-4">
                 <AnimatedSection className="text-center mb-16">
                     <h1 className="text-4xl font-bold mb-6">Our Story</h1>
                     <p className="text-gray-700 max-w-2xl mx-auto">

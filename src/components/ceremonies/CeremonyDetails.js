@@ -24,6 +24,10 @@ const CeremonyDetails = ({ details, theme }) => {
         }
     };
 
+    // Determine theme-based styling
+    const borderColor = theme === 'christian' ? 'border-christian-accent' : 'border-hindu-secondary';
+    const textColor = theme === 'christian' ? 'text-christian-accent' : 'text-hindu-secondary';
+
     return (
         <motion.div
             className="grid md:grid-cols-3 gap-6"
@@ -34,13 +38,13 @@ const CeremonyDetails = ({ details, theme }) => {
             {details.map((detail, index) => (
                 <motion.div
                     key={index}
-                    className={`detail-card ${theme === 'christian' ? 'hover:border-christian-accent' : 'hover:border-hindu-secondary'} border-2 border-transparent`}
+                    className={`flex-1 min-w-[250px] mb-8 p-6 bg-white rounded-lg shadow-md text-center transition-all duration-300 hover:-translate-y-2 hover:shadow-lg border-t-4 ${borderColor}`}
                     variants={itemVariants}
                 >
                     <Icon
                         path={detail.icon}
                         size={2}
-                        className={`mx-auto ${theme === 'christian' ? 'text-christian-accent' : 'text-hindu-secondary'}`}
+                        className={`mx-auto mb-4 ${textColor}`}
                     />
                     <h3 className="text-xl font-bold mb-3">{detail.title}</h3>
                     {detail.content.map((item, i) => (
@@ -49,7 +53,7 @@ const CeremonyDetails = ({ details, theme }) => {
                     {detail.link && (
                         <a
                             href={detail.link.url}
-                            className={`inline-block mt-3 text-sm font-medium ${theme === 'christian' ? 'text-christian-accent' : 'text-hindu-secondary'} hover:underline`}
+                            className={`inline-block mt-3 text-sm font-medium ${textColor} hover:underline`}
                         >
                             {detail.link.text}
                         </a>

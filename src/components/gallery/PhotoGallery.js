@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import PhotoUpload from './PhotoUpload';
 import GalleryItem from './GalleryItem';
-import '../../styles/components/gallery.css';
 
 const PhotoGallery = () => {
     const [photos, setPhotos] = useState([]);
@@ -26,18 +25,20 @@ const PhotoGallery = () => {
     };
 
     return (
-        <section className="photo-gallery">
-            <div className="container">
-                <h2 className="section-title">Photo Gallery</h2>
+        <section className="pt-24 pb-20 bg-gray-50">
+            <div className="container mx-auto max-w-6xl px-4">
+                <h2 className="text-3xl md:text-4xl text-center mb-8 font-bold">Photo Gallery</h2>
 
-                <div className="gallery-intro">
-                    <p>Share in our joy by viewing photos from our special day. After the wedding, this section will be filled with cherished moments from both ceremonies. We also invite you to share your own photos here.</p>
+                <div className="max-w-3xl mx-auto text-center mb-10">
+                    <p className="text-gray-700 mb-8">
+                        Share in our joy by viewing photos from our special day. After the wedding, this section will be filled with cherished moments from both ceremonies. We also invite you to share your own photos here.
+                    </p>
+
+                    <PhotoUpload onPhotoUpload={handlePhotoUpload} />
                 </div>
 
-                <PhotoUpload onPhotoUpload={handlePhotoUpload} />
-
                 <motion.div
-                    className="gallery-grid"
+                    className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ duration: 0.8, delay: 0.2 }}
@@ -51,20 +52,35 @@ const PhotoGallery = () => {
                     ))}
                 </motion.div>
 
-                {selectedPhoto && (
-                    <motion.div
-                        className="photo-lightbox"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ duration: 0.3 }}
-                        onClick={() => setSelectedPhoto(null)}
-                    >
-                        <div className="lightbox-content" onClick={e => e.stopPropagation()}>
-                            <img src={selectedPhoto.src} alt={selectedPhoto.alt} />
-                            <button className="close-lightbox" onClick={() => setSelectedPhoto(null)}>×</button>
-                        </div>
-                    </motion.div>
-                )}
+                <AnimatePresence>
+                    {selectedPhoto && (
+                        <motion.div
+                            className="fixed inset-0 bg-black bg-opacity-80 z-50 flex items-center justify-center p-4"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            transition={{ duration: 0.3 }}
+                            onClick={() => setSelectedPhoto(null)}
+                        >
+                            <div
+                                className="relative max-w-4xl w-full bg-white rounded-lg overflow-hidden shadow-2xl"
+                                onClick={e => e.stopPropagation()}
+                            >
+                                <img
+                                    src={selectedPhoto.src}
+                                    alt={selectedPhoto.alt}
+                                    className="w-full h-auto max-h-[80vh] object-contain"
+                                />
+                                <button
+                                    className="absolute top-4 right-4 w-10 h-10 rounded-full bg-black bg-opacity-50 text-white flex items-center justify-center hover:bg-opacity-70 transition-colors"
+                                    onClick={() => setSelectedPhoto(null)}
+                                >
+                                    ×
+                                </button>
+                            </div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
             </div>
         </section>
     );

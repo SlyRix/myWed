@@ -29,11 +29,12 @@ const StoryTimeline = ({ events }) => {
                     </div>
 
                     {/* Timeline nodes - visible only on medium screens and up */}
-                    <div className="hidden md:block absolute top-6 w-5 h-5 rounded-full bg-white border-4 border-christian-accent z-10">
+                    <div className="hidden md:block absolute top-6 w-5 h-5 rounded-full bg-white border-4 border-christian-accent z-10
+                        ${index % 2 === 0 ? 'right-0 -translate-x-14' : 'left-0 translate-x-14'}">
                         {index % 2 === 0 ? (
-                            <div className="absolute top-1/2 -translate-y-1/2 left-full ml-1 w-10 h-1 bg-christian-accent"></div>
+                            <div className="absolute top-1/2 -translate-y-1/2 right-0 w-14 h-1 bg-christian-accent"></div>
                         ) : (
-                            <div className="absolute top-1/2 -translate-y-1/2 right-full mr-1 w-10 h-1 bg-christian-accent"></div>
+                            <div className="absolute top-1/2 -translate-y-1/2 left-0 w-14 h-1 bg-christian-accent"></div>
                         )}
                     </div>
                 </AnimatedSection>
