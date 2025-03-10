@@ -11,6 +11,11 @@ import { Link } from 'react-router-dom';
 const HomePage = () => {
     const { t } = useTranslation();
 
+    // If you have a background image in public/images, use it here
+    // Otherwise, set to null to use the gradient
+    const heroBackgroundImage = "/images/floral-pattern.svg" ? null : null;
+    const heroBackgroundImage2 = "/images/placeholder.jpg";
+
     const events = [
         {
             id: 'christian',
@@ -30,8 +35,8 @@ const HomePage = () => {
             location: t('home.hinduEvent.location'),
             description: t('home.hinduEvent.description'),
             icon: mdiHeartMultiple,
-            color: 'bg-hindu-secondary',
-            textColor: 'text-hindu-secondary',
+            color: 'bg-hindu-accent',  // Updated to use our new color scheme
+            textColor: 'text-hindu-accent',  // Updated to use our new color scheme
             path: '/hindu-ceremony'
         }
     ];
@@ -42,13 +47,23 @@ const HomePage = () => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
         >
+            {/* Pass the background image to the Hero component */}
             <Hero />
 
-            <section id="about-section" className="py-20 bg-gray-50">
+
+            <section id="about-section" className="py-20 bg-wedding-background">
                 <div className="container">
                     <AnimatedSection className="text-center max-w-2xl mx-auto mb-12">
-                        <h2 className="text-3xl md:text-4xl mb-6">{t('home.welcomeTitle')}</h2>
-                        <p className="text-lg text-gray-600">
+                        <h2 className="text-3xl md:text-4xl mb-6 font-display">{t('home.welcomeTitle')}</h2>
+
+                        {/* Decorative divider */}
+                        <div className="flex items-center justify-center mb-6">
+                            <div className="h-px w-20 bg-wedding-gold/30"></div>
+                            <span className="mx-4 text-wedding-gold">♥</span>
+                            <div className="h-px w-20 bg-wedding-gold/30"></div>
+                        </div>
+
+                        <p className="text-lg text-wedding-gray leading-relaxed">
                             {t('home.welcomeText')}
                         </p>
                     </AnimatedSection>
@@ -57,28 +72,28 @@ const HomePage = () => {
                         {events.map((event, index) => (
                             <AnimatedSection
                                 key={event.id}
-                                className="bg-white rounded-lg shadow-lg overflow-hidden"
+                                className="elegant-card overflow-hidden"
                                 delay={index * 0.2}
                             >
-                                <div className={`h-2 ${event.color}`}></div>
+                                <div className={`h-1 w-full ${event.color} -mt-6 mb-6`}></div>
                                 <div className="p-6">
-                                    <h3 className={`text-2xl font-bold mb-4 ${event.textColor}`}>{event.title}</h3>
+                                    <h3 className={`text-2xl font-bold mb-4 font-display ${event.textColor}`}>{event.title}</h3>
 
                                     <div className="flex items-center mb-4">
-                                        <Icon path={mdiCalendarRange} size={1} className={`mr-2 ${event.textColor}`} />
-                                        <span>{event.date}</span>
+                                        <Icon path={mdiCalendarRange} size={1} className={`mr-3 ${event.textColor}`} />
+                                        <span className="text-christian-text">{event.date}</span>
                                     </div>
 
                                     <div className="flex items-center mb-4">
-                                        <Icon path={mdiMapMarker} size={1} className={`mr-2 ${event.textColor}`} />
-                                        <span>{event.location}</span>
+                                        <Icon path={mdiMapMarker} size={1} className={`mr-3 ${event.textColor}`} />
+                                        <span className="text-christian-text">{event.location}</span>
                                     </div>
 
-                                    <p className="text-gray-600 mb-6">{event.description}</p>
+                                    <p className="text-wedding-gray mb-6 leading-relaxed">{event.description}</p>
 
                                     <Link
                                         to={event.path}
-                                        className={`inline-block py-2 px-4 rounded ${event.color} text-white transition-transform duration-300 hover:translate-y-[-2px] hover:shadow-md`}
+                                        className={index === 0 ? "btn btn-christian" : "btn btn-hindu"}
                                     >
                                         Learn More
                                     </Link>
@@ -88,7 +103,7 @@ const HomePage = () => {
                     </div>
 
                     <AnimatedSection className="text-center mt-16 mb-6">
-                        <Link to="/our-story" className="btn christian-btn">
+                        <Link to="/our-story" className="btn btn-outline btn-christian-outline">
                             {t('home.readStory')}
                         </Link>
                     </AnimatedSection>

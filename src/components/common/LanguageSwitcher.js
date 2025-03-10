@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { mdiWeb, mdiChevronDown, mdiCheck } from '@mdi/js';
 import Icon from '@mdi/react';
 
-const LanguageSwitcher = () => {
+const LanguageSwitcher = ({ scrolled }) => {
     const { i18n } = useTranslation();
     const [isOpen, setIsOpen] = React.useState(false);
 
@@ -27,7 +27,11 @@ const LanguageSwitcher = () => {
         <div className="relative">
             <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="flex items-center space-x-2 py-2 px-3 rounded-full bg-white/10 text-white hover:bg-white/20 transition-colors"
+                className={`flex items-center space-x-2 py-1.5 px-3 rounded-full border transition-all duration-300 ${
+                    scrolled
+                        ? 'bg-white border-gray-200 text-christian-text hover:border-wedding-love'
+                        : 'bg-white/20 backdrop-blur-sm border-white/30 text-white hover:bg-white/30'
+                }`}
                 aria-expanded={isOpen}
                 aria-haspopup="true"
             >

@@ -8,11 +8,27 @@
   }
 
   body {
-    @apply font-primary text-gray-800 overflow-x-hidden;
+    @apply font-body text-wedding-gray overflow-x-hidden bg-wedding-background;
   }
 
-  h1, h2, h3, h4, h5, h6 {
-    @apply font-bold leading-tight;
+  h1, h2, h3, h4 {
+    @apply font-display leading-tight text-christian-text;
+  }
+
+  h1 {
+    @apply text-4xl md:text-5xl;
+  }
+
+  h2 {
+    @apply text-3xl md:text-4xl;
+  }
+
+  h3 {
+    @apply text-2xl md:text-3xl;
+  }
+
+  h4 {
+    @apply text-xl md:text-2xl;
   }
 }
 
@@ -22,64 +38,108 @@
   }
 
   .section-title {
-    @apply text-3xl md:text-4xl text-center mb-12 relative pb-4;
+    @apply text-3xl md:text-4xl text-center mb-12 relative pb-4 font-display;
   }
 
   .section-title::after {
-    @apply content-[''] absolute bottom-0 left-1/2 w-20 h-1 -translate-x-1/2;
+    @apply content-[''] absolute bottom-0 left-1/2 w-28 h-0.5 -translate-x-1/2;
+  }
+
+  .christian-title {
+    @apply text-christian-text;
   }
 
   .christian-title::after {
     @apply bg-christian-accent;
   }
 
+  .hindu-title {
+    @apply text-hindu-text;
+  }
+
   .hindu-title::after {
-    @apply bg-hindu-secondary;
+    @apply bg-hindu-accent;
   }
 
+  .elegant-card {
+    @apply bg-white rounded-lg shadow-card p-6 transition-all duration-300 hover:shadow-lg;
+  }
+
+  /* Elegant buttons */
   .btn {
-    @apply inline-block py-3 px-6 rounded-full font-semibold transition-all duration-300 relative overflow-hidden z-10;
+    @apply inline-block py-3 px-8 rounded-full font-semibold transition-all duration-300 relative overflow-hidden z-10 font-body tracking-wide;
   }
 
-  .btn::after {
-    @apply content-[''] absolute bottom-0 left-0 w-full h-0 bg-white/20 transition-all duration-300 -z-10;
+  .btn-primary {
+    @apply bg-gradient-to-r text-white shadow-md hover:shadow-lg transform hover:-translate-y-0.5;
   }
 
-  .btn:hover::after {
-    @apply h-full;
+  .btn-christian {
+    @apply from-christian-accent to-christian-accent/90 text-white;
   }
 
-  .christian-btn {
-    @apply bg-christian-accent text-white;
+  .btn-hindu {
+    @apply from-hindu-accent to-hindu-accent/90 text-white;
   }
 
-  .hindu-btn {
-    @apply bg-hindu-secondary text-white;
+  .btn-outline {
+    @apply border-2 bg-transparent shadow-none;
   }
 
-  .password-input {
-    @apply w-full p-3 border-2 border-gray-200 rounded-full text-base mb-5 transition-all duration-300 outline-none focus:border-christian-accent;
+  .btn-christian-outline {
+    @apply border-christian-accent text-christian-accent hover:bg-christian-accent hover:text-white;
   }
 
-  .detail-card {
-    @apply flex-1 min-w-[250px] mb-8 p-6 bg-white rounded-lg shadow-md text-center transition-all duration-300 hover:translate-y-[-10px] hover:shadow-lg;
+  .btn-hindu-outline {
+    @apply border-hindu-accent text-hindu-accent hover:bg-hindu-accent hover:text-white;
   }
 
-  .detail-icon {
-    @apply text-5xl mb-4;
+  /* Wedding Decorative Elements */
+  .ornamental-divider {
+    @apply flex items-center justify-center my-10;
   }
 
-  .timeline-item {
-    @apply p-6 relative mb-8 w-[45%];
+  .ornamental-divider::before,
+  .ornamental-divider::after {
+    @apply content-[''] h-px bg-wedding-gold/30 flex-grow;
   }
 
-  .timeline-item:nth-child(odd) {
-    @apply ml-auto;
+  .ornamental-divider::before {
+    @apply mr-4;
   }
 
-  @media (max-width: 768px) {
-    .timeline-item {
-      @apply w-full ml-0 pl-20;
-    }
+  .ornamental-divider::after {
+    @apply ml-4;
   }
+
+  .ornamental-divider-icon {
+    @apply text-wedding-gold text-xl;
+  }
+
+  /* Page sections */
+  .christian-section {
+    @apply bg-gradient-to-br from-christian-primary to-christian-secondary/70;
+  }
+
+  .hindu-section {
+    @apply bg-gradient-to-br from-hindu-primary to-hindu-secondary/70;
+  }
+
+  /* Pattern backgrounds - No external files needed */
+  .bg-floral-pattern {
+    @apply bg-[radial-gradient(#000_1px,transparent_1px)] [background-size:20px_20px];
+  }
+
+  .bg-ornament {
+    @apply bg-[repeating-linear-gradient(45deg,#c19a5b,#c19a5b_1px,transparent_1px,transparent_15px),repeating-linear-gradient(-45deg,#c19a5b,#c19a5b_1px,transparent_1px,transparent_15px)];
+  }
+}
+
+/* Text shadow utilities */
+.text-shadow {
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.text-shadow-lg {
+  text-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
 }

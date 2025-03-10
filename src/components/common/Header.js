@@ -44,47 +44,45 @@ const Header = () => {
     ];
 
     return (
-        <header className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${scrolled ? 'bg-white shadow-md' : 'bg-transparent'}`}>
+        <header className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
+            scrolled
+                ? 'bg-white/95 backdrop-blur-sm shadow-md'
+                : 'bg-transparent'
+        }`}>
             <div className="container mx-auto max-w-6xl px-4">
                 <nav className="flex justify-between items-center py-4">
                     <div className="flex items-center">
                         <Link to="/" className="flex items-center">
-                            <Icon path={mdiHeart} size={1.2} className="text-christian-accent mr-2" />
-                            <span className="text-xl font-bold">R&S Wedding</span>
+                            <div className="w-10 h-10 rounded-full bg-wedding-love/10 flex items-center justify-center">
+                                <Icon path={mdiHeart} size={0.9} className="text-wedding-love" />
+                            </div>
+                            <span className="ml-2 text-lg font-display font-bold tracking-wide">
+                {scrolled ? 'R & S Wedding' : (
+                    <span className="text-white text-shadow">R & S Wedding</span>
+                )}
+              </span>
                         </Link>
                     </div>
 
-                    {/* Language Switcher - Mobile */}
-                    <div className="md:hidden order-2 z-50 ml-2">
-                        <LanguageSwitcher />
-                    </div>
-
-                    {/* Mobile Menu Button */}
-                    <button
-                        className="md:hidden z-50 p-2 order-3"
-                        onClick={() => setIsOpen(!isOpen)}
-                        aria-label="Toggle menu"
-                    >
-                        <Icon path={isOpen ? mdiClose : mdiMenu} size={1} className={scrolled || isOpen ? 'text-gray-800' : 'text-white'} />
-                    </button>
-
-                    {/* Desktop Navigation with Language Switcher */}
+                    {/* Desktop Navigation */}
                     <div className="hidden md:flex items-center">
                         <ul className="flex space-x-8 mr-4">
                             {navLinks.map((link) => (
                                 <li key={link.path}>
                                     <Link
                                         to={link.path}
-                                        className={`relative font-semibold transition-colors duration-300 ${
+                                        className={`relative font-body tracking-wide transition-colors duration-300 ${
                                             location.pathname === link.path
-                                                ? 'text-christian-accent'
-                                                : scrolled ? 'text-gray-800 hover:text-christian-accent' : 'text-white hover:text-christian-accent'
+                                                ? 'text-wedding-love font-medium'
+                                                : scrolled
+                                                    ? 'text-christian-text hover:text-wedding-love'
+                                                    : 'text-white text-shadow hover:text-wedding-love'
                                         }`}
                                     >
                                         {link.label}
                                         {location.pathname === link.path && (
                                             <motion.span
-                                                className="absolute -bottom-1 left-0 w-full h-0.5 bg-christian-accent"
+                                                className="absolute -bottom-1 left-0 w-full h-0.5 bg-wedding-love"
                                                 layoutId="underline"
                                             />
                                         )}
@@ -93,7 +91,7 @@ const Header = () => {
                             ))}
                         </ul>
 
-                        <LanguageSwitcher />
+                        <LanguageSwitcher scrolled={scrolled} />
                     </div>
 
                     {/* Mobile Navigation */}

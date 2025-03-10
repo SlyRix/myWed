@@ -1,23 +1,30 @@
-
 :root {
-  /* Christian ceremony theme */
---christian-primary: #fff;
---christian-secondary: #f0f4f8;
---christian-accent: #d4b08c;
---christian-text: #2d3748;
+    /* Christian ceremony theme */
+    --christian-primary: #f9f7f5;
+    --christian-secondary: #e8e6e1;
+    --christian-accent: #b08968;
+    --christian-accent2: #d4c1a9;
+    --christian-text: #3d3d3d;
 
-/* Hindu ceremony theme */
---hindu-primary: #ffcb05;
---hindu-secondary: #ff5722;
---hindu-accent: #9c27b0;
---hindu-text: #2d3748;
+    /* Hindu ceremony theme */
+    --hindu-primary: #fff9e6;
+    --hindu-secondary: #ffe0b5;
+    --hindu-accent: #d93f0b;
+    --hindu-accent2: #f0b429;
+    --hindu-text: #3d3d3d;
 
-/* Shared colors */
---dark-text: #2d3748;
---light-text: #fff;
---transition-duration: 0.4s;
+    /* Shared colors */
+    --wedding-background: #f9f7f7;
+    --wedding-love: #d8315b;
+    --wedding-gold: #c19a5b;
+    --wedding-cream: #fff8e7;
+    --wedding-gray: #6b7280;
 
-/* Font family */
---font-primary: 'Cormorant Garamond', Georgia, serif;
---font-secondary: 'Montserrat', sans-serif;
+    /* Font family */
+    --font-display: 'Cormorant Garamond', Georgia, serif;
+    --font-body: 'Montserrat', sans-serif;
+    --font-script: 'Tangerine', cursive;
+
+    /* Other variables */
+    --transition-duration: 0.4s;
 }

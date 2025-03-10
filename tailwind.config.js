@@ -5,30 +5,54 @@ module.exports = {
     theme: {
         extend: {
             colors: {
+                // Christian theme - elegant soft palette with sufficient contrast
                 'christian': {
-                    primary: '#ffffff',
-                    secondary: '#f0f4f8',
-                    accent: '#d4b08c',
-                    text: '#2d3748'
+                    primary: '#f9f7f5',       // Soft cream background
+                    secondary: '#e8e6e1',     // Light taupe secondary
+                    accent: '#b08968',        // Rich golden brown with good contrast
+                    accent2: '#d4c1a9',       // Secondary accent - warm beige
+                    text: '#3d3d3d',          // Dark gray text (not pure black)
                 },
+                // Hindu theme - vibrant celebratory colors with good contrast
                 'hindu': {
-                    primary: '#ffcb05',
-                    secondary: '#ff5722',
-                    accent: '#9c27b0',
-                    text: '#2d3748'
-                }
+                    primary: '#fff9e6',       // Warm light gold background
+                    secondary: '#ffe0b5',     // Soft pastel orange
+                    accent: '#d93f0b',        // Deep vermilion red - traditional wedding color
+                    accent2: '#f0b429',       // Rich gold accent
+                    text: '#3d3d3d',          // Dark gray text
+                },
+                // Shared colors
+                'wedding': {
+                    background: '#f9f7f7',    // Near-white background
+                    love: '#d8315b',          // Love/heart color (deep pink)
+                    gold: '#c19a5b',          // Gold for decorative elements
+                    cream: '#fff8e7',         // Cream color for sections
+                    gray: '#6b7280',          // Neutral gray
+                },
             },
             fontFamily: {
-                'primary': ['"Cormorant Garamond"', 'Georgia', 'serif'],
-                'secondary': ['"Montserrat"', 'sans-serif']
+                'display': ['Cormorant Garamond', 'Georgia', 'serif'],
+                'body': ['Montserrat', 'sans-serif'],
+                'script': ['Tangerine', 'cursive'],
             },
+            boxShadow: {
+                'elegant': '0 4px 20px rgba(0, 0, 0, 0.05)',
+                'card': '0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.03)',
+            },
+            // REMOVED svg background images
+            // backgroundImage: {
+            //   'floral-pattern': "url('/images/floral-pattern.svg')",
+            //   'ornament': "url('/images/ornament.svg')",
+            // },
             animation: {
-                'bounce-slow': 'bounce 2s infinite',
-                'pulse-slow': 'pulse 3s infinite'
+                'float': 'float 6s ease-in-out infinite',
             },
-            transitionDuration: {
-                '2000': '2000ms',
-            }
+            keyframes: {
+                float: {
+                    '0%, 100%': { transform: 'translateY(0)' },
+                    '50%': { transform: 'translateY(-10px)' },
+                }
+            },
         },
     },
     plugins: [],

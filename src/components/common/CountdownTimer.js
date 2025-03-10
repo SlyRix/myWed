@@ -34,22 +34,21 @@ const CountdownTimer = ({ targetDate }) => {
 
     return (
         <div className="flex justify-center space-x-4">
-            <div className="text-center">
-                <span className="block text-3xl font-bold bg-white/20 rounded p-2 mb-1 min-w-16">{timeLeft.days}</span>
-                <span className="text-sm uppercase tracking-wide">{t('countdown.days')}</span>
-            </div>
-            <div className="text-center">
-                <span className="block text-3xl font-bold bg-white/20 rounded p-2 mb-1 min-w-16">{timeLeft.hours}</span>
-                <span className="text-sm uppercase tracking-wide">{t('countdown.hours')}</span>
-            </div>
-            <div className="text-center">
-                <span className="block text-3xl font-bold bg-white/20 rounded p-2 mb-1 min-w-16">{timeLeft.minutes}</span>
-                <span className="text-sm uppercase tracking-wide">{t('countdown.minutes')}</span>
-            </div>
-            <div className="text-center">
-                <span className="block text-3xl font-bold bg-white/20 rounded p-2 mb-1 min-w-16">{timeLeft.seconds}</span>
-                <span className="text-sm uppercase tracking-wide">{t('countdown.seconds')}</span>
-            </div>
+            {[
+                { value: timeLeft.days, label: t('countdown.days') },
+                { value: timeLeft.hours, label: t('countdown.hours') },
+                { value: timeLeft.minutes, label: t('countdown.minutes') },
+                { value: timeLeft.seconds, label: t('countdown.seconds') }
+            ].map((item, i) => (
+                <div key={i} className="text-center">
+          <span className="block text-3xl font-bold bg-black/30 backdrop-blur-sm rounded-lg p-3 min-w-16 border border-white/20">
+            {item.value}
+          </span>
+                    <span className="text-sm uppercase tracking-wider mt-1 block font-medium">
+            {item.label}
+          </span>
+                </div>
+            ))}
         </div>
     );
 };
