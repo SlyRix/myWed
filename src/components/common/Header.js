@@ -6,13 +6,33 @@ import { mdiHeart, mdiMenu, mdiClose } from '@mdi/js';
 import Icon from '@mdi/react';
 import { useTranslation } from 'react-i18next';
 import LanguageSwitcher from './LanguageSwitcher';
+import { guestList } from '../../data/guestAccess'; // Import the guest list
 
 const Header = () => {
     const { t } = useTranslation();
     const [isOpen, setIsOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
+    const [accessibleCeremonies, setAccessibleCeremonies] = useState([]); // Store accessible ceremonies
     const location = useLocation();
     const isHomePage = location.pathname === '/';
+
+    // Check localStorage for invitation code and determine accessible ceremonies
+    useEffect(() => {
+        const invitationCode = localStorage.getItem('invitationCode');
+
+        if (invitationCode && guestList[invitationCode]) {
+            // Set ceremonies this guest has access to
+            setAccessibleCeremonies(guestList[invitationCode].ceremonies);
+        } else {
+            // Admin access or no access code - show all ceremonies
+            const adminAccess = localStorage.getItem('adminAccess') === 'true';
+            if (adminAccess) {
+                setAccessibleCeremonies(['christian', 'hindu']);
+            } else {
+                setAccessibleCeremonies([]);
+            }
+        }
+    }, [location]); // Re-check when location changes
 
     useEffect(() => {
         const handleScroll = () => {
@@ -37,13 +57,23 @@ const Header = () => {
 
     const navLinks = [
         { path: '/', label: t('header.home') },
-        { path: '/christian-ceremony', label: t('header.christianCeremony') },
-        { path: '/hindu-ceremony', label: t('header.hinduCeremony') },
+        { path: '/christian-ceremony', label: t('header.christianCeremony'), ceremonyType: 'christian' },
+        { path: '/hindu-ceremony', label: t('header.hinduCeremony'), ceremonyType: 'hindu' },
         { path: '/our-story', label: t('header.ourStory') },
         { path: '/accommodations', label: t('header.accommodations') },
         { path: '/gifts', label: t('header.gifts') },
         { path: '/gallery', label: t('header.gallery') }
     ];
+
+    // Filter links based on ceremony access
+    const filteredNavLinks = navLinks.filter(link => {
+        // If link has ceremonyType property, check if user has access
+        if (link.ceremonyType) {
+            return accessibleCeremonies.includes(link.ceremonyType);
+        }
+        // Always show non-ceremony links
+        return true;
+    });
 
     return (
         <header className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
@@ -51,7 +81,7 @@ const Header = () => {
                 ? 'bg-white/95 backdrop-blur-sm shadow-md'
                 : 'bg-transparent'
         }`}>
-            <div className="container mx-auto max-w-7xl px-4"> {/* Increased max-width */}
+            <div className="container mx-auto max-w-7xl px-4">
                 <nav className="flex justify-between items-center py-4">
                     <div className="flex items-center">
                         <Link to="/" className="flex items-center">
@@ -66,10 +96,10 @@ const Header = () => {
                         </Link>
                     </div>
 
-                    {/* Desktop Navigation */}
+                    {/* Desktop Navigation - NOW FILTERED */}
                     <div className="hidden md:flex items-center">
-                        <ul className="flex space-x-4 mr-4"> {/* Reduced space between items */}
-                            {navLinks.map((link) => (
+                        <ul className="flex space-x-4 mr-4">
+                            {filteredNavLinks.map((link) => (
                                 <li key={link.path}>
                                     <Link
                                         to={link.path}
@@ -111,7 +141,7 @@ const Header = () => {
                         />
                     </button>
 
-                    {/* Mobile Navigation */}
+                    {/* Mobile Navigation - ALSO FILTERED */}
                     {isOpen && (
                         <motion.div
                             className="fixed inset-0 bg-white z-40 flex items-center justify-center md:hidden"
@@ -120,7 +150,7 @@ const Header = () => {
                             transition={{ duration: 0.3 }}
                         >
                             <ul className="flex flex-col items-center space-y-6">
-                                {navLinks.map((link) => (
+                                {filteredNavLinks.map((link) => (
                                     <li key={link.path}>
                                         <Link
                                             to={link.path}

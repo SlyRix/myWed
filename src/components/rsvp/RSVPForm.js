@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { mdiCheck, mdiClose } from '@mdi/js';
 import Icon from '@mdi/react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { sendRSVPEmail } from '../../utils/emailService'; // Make sure this import is correct
 
@@ -140,27 +140,12 @@ const RSVPForm = () => {
                 <p className="text-gray-700 mb-4">
                     {t('rsvp.thankYou.message')}
                 </p>
-                <button
-                    onClick={() => {
-                        setFormData({
-                            firstName: '',
-                            lastName: '',
-                            email: '',
-                            phone: '',
-                            attending: 'yes',
-                            guests: 0,
-                            dietaryRestrictions: '',
-                            message: '',
-                            source: ceremonySrc || 'direct'
-                        });
-                        setSubmitted(false);
-                        setShowThankYou(false);
-                        setErrors({});
-                    }}
-                    className="px-6 py-2 bg-christian-accent text-white rounded-full hover:shadow-md transition-shadow"
+                <Link
+                    to="/"
+                    className="px-6 py-2 bg-christian-accent text-white rounded-full hover:shadow-md transition-shadow inline-block"
                 >
-                    {t('rsvp.thankYou.button')}
-                </button>
+                    Return to Home
+                </Link>
             </motion.div>
         );
     }

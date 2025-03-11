@@ -2,7 +2,7 @@
 import emailjs from '@emailjs/browser';
 
 // Replace these with your actual values from EmailJS dashboard
-const SERVICE_ID = 'service_hi2xr8f';  // service_xxxxxx
+const SERVICE_ID = 'service_zwmh9m3';  // service_xxxxxx
 const TEMPLATE_ID = 'template_qq4oalp'; // template_xxxxxx
 const PUBLIC_KEY = '-aL2Rd-N2QdzeUs5Q';  // Found in Integration tab
 

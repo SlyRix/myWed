@@ -9,7 +9,7 @@ import CeremonyTimeline from './CeremonyTimeline';
 import MiniMap from '../map/MiniMap';
 import CalendarLink from '../common/CalendarLink';
 import { Link } from 'react-router-dom';
-import AnimatedSection from '../common/AnimatedSection';
+import CeremonyAccessCheck from '../common/CeremonyAccessCheck';
 
 const ChristianCeremony = () => {
     const { t } = useTranslation();
@@ -65,7 +65,9 @@ const ChristianCeremony = () => {
     const ceremonyLocation = t('christian.location.address1') + ', ' + t('christian.location.address2');
 
     return (
-        <section className="pt-24 pb-16 bg-gradient-to-br from-christian-secondary to-white relative overflow-hidden">
+        <>
+            <CeremonyAccessCheck ceremony="christian" />
+            <section className="pt-24 pb-16 bg-gradient-to-br from-christian-secondary to-white relative overflow-hidden">
             <div className="container mx-auto px-4 max-w-6xl">
                 <h2 className="text-3xl md:text-4xl text-center mb-12 relative pb-4 font-bold text-christian-text">
                     {t('christian.title')}
@@ -183,6 +185,8 @@ const ChristianCeremony = () => {
                 </motion.div>
             </div>
         </section>
+        </>
+
     );
 };
 
