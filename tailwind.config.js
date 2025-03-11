@@ -16,7 +16,7 @@ module.exports = {
                 // Hindu theme - vibrant celebratory colors with good contrast
                 'hindu': {
                     primary: '#fff9e6',       // Warm light gold background
-                    secondary: '#ffe0b5',     // Soft pastel orange
+                    secondary: '#bc863c',     // Soft pastel orange
                     accent: '#d93f0b',        // Deep vermilion red - traditional wedding color
                     accent2: '#f0b429',       // Rich gold accent
                     text: '#3d3d3d',          // Dark gray text
