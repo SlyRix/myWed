@@ -1,12 +1,14 @@
+// src/App.js
 import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Header from './components/common/Header';
 import Footer from './components/common/Footer';
 import PasswordProtection from './components/common/PasswordProtection';
-import LoadingSpinner from './components/common/LoadingSpinner'; // You'll need to create this component
+import LoadingSpinner from './components/common/LoadingSpinner';
 import { AuthProvider } from './contexts/AuthContext';
 import { ThemeProvider } from './contexts/ThemeContext';
 import './styles/global.css';
+import emailjs from '@emailjs/browser';
 
 // Lazy load components to reduce initial bundle size
 const HomePage = lazy(() => import('./components/home/HomePage'));
@@ -15,9 +17,9 @@ const HinduCeremony = lazy(() => import('./components/ceremonies/HinduCeremony')
 const OurStory = lazy(() => import('./components/story/OurStory'));
 const GiftRegistry = lazy(() => import('./components/gifts/GiftRegistry'));
 const PhotoGallery = lazy(() => import('./components/gallery/PhotoGallery'));
-const RSVPPage = lazy(() => import('./components/rsvp/RSVPForm'));
+const RSVPPage = lazy(() => import('./components/rsvp/RSVPPage')); // Updated import
 const GuestbookPage = lazy(() => import('./components/guestbook/Guestbook'));
-const AccommodationsPage = lazy(() => import('./components/accommodations/Accommodations')); // New import
+const AccommodationsPage = lazy(() => import('./components/accommodations/Accommodations'));
 
 function App() {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -66,9 +68,9 @@ function App() {
                                         <Route path="/our-story" element={<OurStory />} />
                                         <Route path="/gifts" element={<GiftRegistry />} />
                                         <Route path="/gallery" element={<PhotoGallery />} />
-                                        <Route path="/rsvp" element={<RSVPPage />} />
+                                        <Route path="/rsvp" element={<RSVPPage />} /> {/* Keep the route */}
                                         <Route path="/guestbook" element={<GuestbookPage />} />
-                                        <Route path="/accommodations" element={<AccommodationsPage />} /> {/* New route */}
+                                        <Route path="/accommodations" element={<AccommodationsPage />} />
                                         <Route path="*" element={<Navigate to="/" replace />} />
                                     </Routes>
                                 </Suspense>

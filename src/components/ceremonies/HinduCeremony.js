@@ -9,6 +9,7 @@ import CeremonyTimeline from './CeremonyTimeline';
 import MiniMap from '../map/MiniMap';
 import CalendarLink from '../common/CalendarLink';
 import AnimatedSection from '../common/AnimatedSection';
+import { Link } from 'react-router-dom';
 
 const HinduCeremony = () => {
     const { t } = useTranslation();
@@ -97,10 +98,13 @@ const HinduCeremony = () => {
                         <p className="text-gray-700 mb-6">
                             {t('hindu.description2')}
                         </p>
-                        <button className="inline-block py-3 px-6 rounded-full font-semibold bg-hindu-secondary text-white transition-all duration-300 relative overflow-hidden z-10 hover:shadow-md">
+                        <Link
+                            to="/rsvp?ceremony=hindu"
+                            className="inline-block py-3 px-6 rounded-full font-semibold bg-hindu-secondary text-white transition-all duration-300 relative overflow-hidden z-10 hover:shadow-md"
+                        >
                             {t('hindu.rsvpButton')}
                             <span className="absolute bottom-0 left-0 w-full h-0 bg-white/20 transition-all duration-300 -z-10 group-hover:h-full"></span>
-                        </button>
+                        </Link>
                     </AnimatedSection>
                 </div>
 

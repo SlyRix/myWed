@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next';
 import CeremonyTimeline from './CeremonyTimeline';
 import MiniMap from '../map/MiniMap';
 import CalendarLink from '../common/CalendarLink';
+import { Link } from 'react-router-dom';
 import AnimatedSection from '../common/AnimatedSection';
 
 const ChristianCeremony = () => {
@@ -86,10 +87,13 @@ const ChristianCeremony = () => {
                         <p className="text-gray-700 mb-6">
                             {t('christian.description2')}
                         </p>
-                        <button className="inline-block py-3 px-6 rounded-full font-semibold transition-all duration-300 relative overflow-hidden z-10 bg-christian-accent text-white hover:shadow-md">
+                        <Link
+                            to="/rsvp?ceremony=christian"
+                            className="inline-block py-3 px-6 rounded-full font-semibold transition-all duration-300 relative overflow-hidden z-10 bg-christian-accent text-white hover:shadow-md"
+                        >
                             {t('christian.rsvpButton')}
                             <span className="absolute bottom-0 left-0 w-full h-0 bg-white/20 transition-all duration-300 -z-10 group-hover:h-full"></span>
-                        </button>
+                        </Link>
                     </motion.div>
 
                     <motion.div

@@ -21,7 +21,7 @@ const Accommodations = () => {
             description: 'This elegant hotel is just a short walk from the Christian ceremony venue, offering beautiful lake views and comfortable rooms.',
             address: 'Seestrasse 8, 8853 Lachen',
             priceRange: 'mid', // budget, mid, luxury
-            priceIndicator: '€€',
+            priceIndicator: '$$',
             stars: 4,
             amenities: ['wifi', 'parking', 'breakfast'],
             imageUrl: '/images/placeholder.jpg',
@@ -41,7 +41,7 @@ const Accommodations = () => {
             description: 'A family-run guesthouse with cozy rooms and authentic Swiss ambiance, convenient to the Christian ceremony.',
             address: 'Seestrasse 38, 8853 Lachen',
             priceRange: 'budget',
-            priceIndicator: '€',
+            priceIndicator: '$',
             stars: 3,
             amenities: ['wifi', 'parking', 'breakfast'],
             imageUrl: '/images/placeholder.jpg',
@@ -61,7 +61,7 @@ const Accommodations = () => {
             description: 'Located in Olten, offering easy access to the Hindu ceremony venue with comfortable accommodations.',
             address: 'Bahnhofquai 3, 4600 Olten',
             priceRange: 'mid',
-            priceIndicator: '€€',
+            priceIndicator: '$$',
             stars: 3,
             amenities: ['wifi', 'parking', 'breakfast', 'restaurant'],
             imageUrl: '/images/placeholder.jpg',
@@ -81,7 +81,7 @@ const Accommodations = () => {
             description: 'Modern hotel with contemporary design close to the Hindu venue, offering comfort and convenience.',
             address: 'Riggenbachstrasse 10, 4600 Olten',
             priceRange: 'luxury',
-            priceIndicator: '€€€',
+            priceIndicator: '$$$',
             stars: 4,
             amenities: ['wifi', 'parking', 'breakfast', 'restaurant', 'spa'],
             imageUrl: '/images/placeholder.jpg',
@@ -101,7 +101,7 @@ const Accommodations = () => {
             description: 'Located in Zürich, this hotel offers a convenient midpoint between both ceremony venues with excellent transportation options.',
             address: 'Flughofstrasse 75, 8152 Glattbrugg, Zürich',
             priceRange: 'mid',
-            priceIndicator: '€€',
+            priceIndicator: '$$',
             stars: 4,
             amenities: ['wifi', 'parking', 'breakfast', 'restaurant', 'shuttle'],
             imageUrl: '/images/placeholder.jpg',
@@ -121,7 +121,7 @@ const Accommodations = () => {
             description: 'For guests who prefer a homelier stay or are traveling with family, we recommend checking Airbnb options in Lachen or Trimbach areas.',
             address: 'Various locations',
             priceRange: 'all', // covers all price ranges
-            priceIndicator: '€-€€€',
+            priceIndicator: '$-$$$',
             stars: null,
             amenities: ['variable'],
             imageUrl: '/images/placeholder.jpg',
@@ -304,7 +304,7 @@ const Accommodations = () => {
                                                 : 'bg-white text-gray-700 hover:bg-gray-50'
                                         }`}
                                     >
-                                        Budget (€)
+                                        Budget ($)
                                     </button>
                                     <button
                                         onClick={() => setPriceFilter('mid')}
@@ -314,7 +314,7 @@ const Accommodations = () => {
                                                 : 'bg-white text-gray-700 hover:bg-gray-50'
                                         }`}
                                     >
-                                        Mid-Range (€€)
+                                        Mid-Range ($$)
                                     </button>
                                     <button
                                         onClick={() => setPriceFilter('luxury')}
@@ -324,7 +324,7 @@ const Accommodations = () => {
                                                 : 'bg-white text-gray-700 hover:bg-gray-50'
                                         }`}
                                     >
-                                        Luxury (€€€)
+                                        Luxury ($$$)
                                     </button>
                                 </div>
                             </div>
@@ -429,7 +429,7 @@ const Accommodations = () => {
                             We're happy to help you find the perfect place to stay during our wedding celebrations.
                         </p>
                         <a
-                            href="mailto:wedding@example.com"
+                            href="mailto:slyrajah@gmail.com"
                             className="inline-block py-2 px-6 bg-gray-800 text-white rounded-full font-semibold hover:bg-gray-700 transition-colors"
                         >
                             Email Us for Assistance

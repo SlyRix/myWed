@@ -1,37 +1,76 @@
-import React, { useState } from 'react';
+// src/components/rsvp/RSVPForm.js
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { mdiCheck, mdiClose } from '@mdi/js';
 import Icon from '@mdi/react';
+import { useLocation } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { sendRSVPEmail } from '../../utils/emailService'; // Make sure this import is correct
 
 const RSVPForm = () => {
+    const { t } = useTranslation();
+    const location = useLocation();
+    const queryParams = new URLSearchParams(location.search);
+    const ceremonySrc = queryParams.get('ceremony');
+
     const [formData, setFormData] = useState({
-        name: '',
+        firstName: '',
+        lastName: '',
         email: '',
         phone: '',
         attending: 'yes',
         guests: 0,
         dietaryRestrictions: '',
-        attendingChristian: true,
-        attendingHindu: true,
-        message: ''
+        message: '',
+        // Track which ceremony they came from
+        source: ceremonySrc || 'direct'
     });
 
     const [submitted, setSubmitted] = useState(false);
     const [showThankYou, setShowThankYou] = useState(false);
     const [errors, setErrors] = useState({});
+    const [submitError, setSubmitError] = useState('');
+
+    // Load saved form data from localStorage on component mount
+    useEffect(() => {
+        const savedFormData = localStorage.getItem('weddingRSVPFormData');
+        if (savedFormData) {
+            try {
+                const parsedData = JSON.parse(savedFormData);
+                setFormData(prev => ({
+                    ...prev,
+                    ...parsedData,
+                    // Make sure we keep the ceremony source if it was just passed
+                    source: ceremonySrc || parsedData.source || 'direct'
+                }));
+            } catch (error) {
+                console.error('Error parsing saved form data:', error);
+                // If there's an error parsing, clear the localStorage item
+                localStorage.removeItem('weddingRSVPFormData');
+            }
+        } else if (ceremonySrc) {
+            // If no saved data but we have a ceremony source, update the source
+            setFormData(prev => ({
+                ...prev,
+                source: ceremonySrc
+            }));
+        }
+    }, [ceremonySrc]);
 
     const validateForm = () => {
         const newErrors = {};
 
-        if (!formData.name.trim()) newErrors.name = 'Name is required';
+        if (!formData.firstName.trim()) newErrors.firstName = 'Vorname ist erforderlich';
+        if (!formData.lastName.trim()) newErrors.lastName = 'Nachname ist erforderlich';
+
         if (!formData.email.trim()) {
-            newErrors.email = 'Email is required';
+            newErrors.email = 'Email ist erforderlich';
         } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-            newErrors.email = 'Email is invalid';
+            newErrors.email = 'Email ist ungültig';
         }
 
         if (formData.attending === 'yes' && formData.guests < 0) {
-            newErrors.guests = 'Number of guests cannot be negative';
+            newErrors.guests = 'Anzahl der Gäste kann nicht negativ sein';
         }
 
         return newErrors;
@@ -39,29 +78,51 @@ const RSVPForm = () => {
 
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
-        setFormData(prev => ({
-            ...prev,
+        const newFormData = {
+            ...formData,
             [name]: type === 'checkbox' ? checked : value
-        }));
+        };
+
+        // Update state
+        setFormData(newFormData);
+
+        // Save to localStorage
+        localStorage.setItem('weddingRSVPFormData', JSON.stringify(newFormData));
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
+        setSubmitError('');
+        console.log('Form submission started');
 
         const formErrors = validateForm();
         if (Object.keys(formErrors).length > 0) {
             setErrors(formErrors);
+            console.log('Form validation failed:', formErrors);
             return;
         }
 
         setSubmitted(true);
+        console.log('Form validated successfully, attempting to send email');
 
-        // Simulate API call
-        setTimeout(() => {
-            // Here you would normally send the data to your backend
-            console.log('Form submitted with data:', formData);
-            setShowThankYou(true);
-        }, 1500);
+        try {
+            // Actually call the email service
+            const result = await sendRSVPEmail(formData);
+
+            if (result.success) {
+                console.log('Email sent successfully!');
+                setShowThankYou(true);
+                localStorage.removeItem('weddingRSVPFormData');
+            } else {
+                console.error('Failed to send email:', result.error);
+                setSubmitted(false);
+                setSubmitError(`Failed to send your RSVP. Error: ${result.error?.text || 'Unknown error'}`);
+            }
+        } catch (error) {
+            console.error('Unexpected error sending email:', error);
+            setSubmitted(false);
+            setSubmitError(`An unexpected error occurred: ${error.message}`);
+        }
     };
 
     if (showThankYou) {
@@ -75,22 +136,22 @@ const RSVPForm = () => {
                 <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-green-100 flex items-center justify-center">
                     <Icon path={mdiCheck} size={1.5} className="text-green-600" />
                 </div>
-                <h3 className="text-2xl font-bold mb-2">Thank You!</h3>
+                <h3 className="text-2xl font-bold mb-2">{t('rsvp.thankYou.title')}</h3>
                 <p className="text-gray-700 mb-4">
-                    We've received your RSVP and can't wait to celebrate with you!
+                    {t('rsvp.thankYou.message')}
                 </p>
                 <button
                     onClick={() => {
                         setFormData({
-                            name: '',
+                            firstName: '',
+                            lastName: '',
                             email: '',
                             phone: '',
                             attending: 'yes',
                             guests: 0,
                             dietaryRestrictions: '',
-                            attendingChristian: true,
-                            attendingHindu: true,
-                            message: ''
+                            message: '',
+                            source: ceremonySrc || 'direct'
                         });
                         setSubmitted(false);
                         setShowThankYou(false);
@@ -98,7 +159,7 @@ const RSVPForm = () => {
                     }}
                     className="px-6 py-2 bg-christian-accent text-white rounded-full hover:shadow-md transition-shadow"
                 >
-                    Submit Another Response
+                    {t('rsvp.thankYou.button')}
                 </button>
             </motion.div>
         );
@@ -111,29 +172,54 @@ const RSVPForm = () => {
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5 }}
         >
-            <h2 className="text-2xl font-bold mb-6 text-center">RSVP</h2>
+            <h2 className="text-2xl font-bold mb-6 text-center">{t('rsvp.title')}</h2>
+
+            {submitError && (
+                <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg text-red-600">
+                    {submitError}
+                </div>
+            )}
 
             <form onSubmit={handleSubmit}>
-                <div className="mb-4">
-                    <label className="block text-gray-700 mb-2" htmlFor="name">
-                        Full Name*
-                    </label>
-                    <input
-                        id="name"
-                        name="name"
-                        type="text"
-                        className={`w-full p-3 border rounded-lg focus:outline-none focus:ring-2 ${errors.name ? 'border-red-500 focus:ring-red-200' : 'border-gray-300 focus:ring-christian-accent/20'}`}
-                        placeholder="Your name"
-                        value={formData.name}
-                        onChange={handleChange}
-                        disabled={submitted}
-                    />
-                    {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name}</p>}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    <div>
+                        <label className="block text-gray-700 mb-2" htmlFor="firstName">
+                            Vorname*
+                        </label>
+                        <input
+                            id="firstName"
+                            name="firstName"
+                            type="text"
+                            className={`w-full p-3 border rounded-lg focus:outline-none focus:ring-2 ${errors.firstName ? 'border-red-500 focus:ring-red-200' : 'border-gray-300 focus:ring-christian-accent/20'}`}
+                            placeholder="Vorname"
+                            value={formData.firstName}
+                            onChange={handleChange}
+                            disabled={submitted}
+                        />
+                        {errors.firstName && <p className="text-red-500 text-sm mt-1">{errors.firstName}</p>}
+                    </div>
+
+                    <div>
+                        <label className="block text-gray-700 mb-2" htmlFor="lastName">
+                            Nachname*
+                        </label>
+                        <input
+                            id="lastName"
+                            name="lastName"
+                            type="text"
+                            className={`w-full p-3 border rounded-lg focus:outline-none focus:ring-2 ${errors.lastName ? 'border-red-500 focus:ring-red-200' : 'border-gray-300 focus:ring-christian-accent/20'}`}
+                            placeholder="Nachname"
+                            value={formData.lastName}
+                            onChange={handleChange}
+                            disabled={submitted}
+                        />
+                        {errors.lastName && <p className="text-red-500 text-sm mt-1">{errors.lastName}</p>}
+                    </div>
                 </div>
 
                 <div className="mb-4">
                     <label className="block text-gray-700 mb-2" htmlFor="email">
-                        Email Address*
+                        {t('rsvp.form.email')}*
                     </label>
                     <input
                         id="email"
@@ -150,7 +236,7 @@ const RSVPForm = () => {
 
                 <div className="mb-4">
                     <label className="block text-gray-700 mb-2" htmlFor="phone">
-                        Phone Number
+                        {t('rsvp.form.phone')}
                     </label>
                     <input
                         id="phone"
@@ -166,7 +252,7 @@ const RSVPForm = () => {
 
                 <div className="mb-4">
                     <label className="block text-gray-700 mb-2">
-                        Will you be attending?*
+                        {t('rsvp.form.attending')}*
                     </label>
                     <div className="flex space-x-4">
                         <label className="inline-flex items-center">
@@ -179,7 +265,7 @@ const RSVPForm = () => {
                                 disabled={submitted}
                                 className="form-radio text-christian-accent"
                             />
-                            <span className="ml-2">Yes, I'll be there!</span>
+                            <span className="ml-2">{t('rsvp.form.yes')}</span>
                         </label>
                         <label className="inline-flex items-center">
                             <input
@@ -191,7 +277,7 @@ const RSVPForm = () => {
                                 disabled={submitted}
                                 className="form-radio text-christian-accent"
                             />
-                            <span className="ml-2">Sorry, I can't make it</span>
+                            <span className="ml-2">{t('rsvp.form.no')}</span>
                         </label>
                     </div>
                 </div>
@@ -200,7 +286,7 @@ const RSVPForm = () => {
                     <>
                         <div className="mb-4">
                             <label className="block text-gray-700 mb-2" htmlFor="guests">
-                                Number of Additional Guests
+                                {t('rsvp.form.guests')}
                             </label>
                             <input
                                 id="guests"
@@ -217,45 +303,15 @@ const RSVPForm = () => {
                         </div>
 
                         <div className="mb-4">
-                            <label className="block text-gray-700 mb-2">
-                                Which ceremonies will you attend?
-                            </label>
-                            <div className="flex flex-col space-y-2">
-                                <label className="inline-flex items-center">
-                                    <input
-                                        type="checkbox"
-                                        name="attendingChristian"
-                                        checked={formData.attendingChristian}
-                                        onChange={handleChange}
-                                        disabled={submitted}
-                                        className="form-checkbox text-christian-accent"
-                                    />
-                                    <span className="ml-2">Christian Ceremony (July 4)</span>
-                                </label>
-                                <label className="inline-flex items-center">
-                                    <input
-                                        type="checkbox"
-                                        name="attendingHindu"
-                                        checked={formData.attendingHindu}
-                                        onChange={handleChange}
-                                        disabled={submitted}
-                                        className="form-checkbox text-hindu-secondary"
-                                    />
-                                    <span className="ml-2">Hindu Ceremony (July 5)</span>
-                                </label>
-                            </div>
-                        </div>
-
-                        <div className="mb-4">
                             <label className="block text-gray-700 mb-2" htmlFor="dietaryRestrictions">
-                                Dietary Restrictions
+                                {t('rsvp.form.dietary')}
                             </label>
                             <textarea
                                 id="dietaryRestrictions"
                                 name="dietaryRestrictions"
                                 className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-christian-accent/20"
                                 rows="2"
-                                placeholder="Any food allergies or preferences we should know about?"
+                                placeholder={t('rsvp.form.dietaryPlaceholder')}
                                 value={formData.dietaryRestrictions}
                                 onChange={handleChange}
                                 disabled={submitted}
@@ -266,14 +322,14 @@ const RSVPForm = () => {
 
                 <div className="mb-6">
                     <label className="block text-gray-700 mb-2" htmlFor="message">
-                        Message to the Couple
+                        {t('rsvp.form.message')}
                     </label>
                     <textarea
                         id="message"
                         name="message"
                         className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-christian-accent/20"
                         rows="3"
-                        placeholder="Share your wishes or any message for the couple..."
+                        placeholder={t('rsvp.form.messagePlaceholder')}
                         value={formData.message}
                         onChange={handleChange}
                         disabled={submitted}
@@ -296,10 +352,10 @@ const RSVPForm = () => {
                                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                                 </svg>
-                                Submitting...
+                                {t('rsvp.form.submitting')}
                             </span>
                         ) : (
-                            'Submit RSVP'
+                            t('rsvp.form.submit')
                         )}
                     </button>
                 </div>

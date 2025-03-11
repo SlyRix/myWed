@@ -5,7 +5,7 @@ import { mdiHome, mdiAirplane, mdiSilverwareFork, mdiBed, mdiCashMultiple, mdiCa
 import Icon from '@mdi/react';
 import { useTranslation } from 'react-i18next';
 import AnimatedSection from '../common/AnimatedSection';
-import BubbleBackground from '../common/BubbleBackground';
+import BubbleBackground from "../common/BubbleBackground";
 
 const GiftRegistry = () => {
     const { t } = useTranslation();
@@ -139,7 +139,13 @@ const GiftRegistry = () => {
     return (
         <section className="pt-24 pb-20 relative overflow-hidden">
             {/* Animated Bubble Background */}
-            <BubbleBackground />
+            {/* Bubble Background */}
+            <BubbleBackground
+                count={20}
+                colors={['#d4b08c', '#f0b429', '#b08968']}
+                opacity={{ min: 0.02, max: 0.06 }}
+                size={{ min: 80, max: 250 }}
+            />
 
             <div className="container mx-auto max-w-6xl px-4 relative z-10">
                 <AnimatedSection className="text-center mb-16">
@@ -289,21 +295,6 @@ const GiftRegistry = () => {
                                 >
                                     <div className={`h-2 ${cashGift.color}`}></div>
                                     <div className="p-6 relative">
-                                        {/* Animated bubbles */}
-                                        <motion.div
-                                            className="absolute top-1/4 right-0 w-24 h-24 rounded-full bg-gray-200 opacity-10"
-                                            animate={{
-                                                scale: [1, 1.2, 1],
-                                                x: [0, 10, 0],
-                                                opacity: [0.05, 0.1, 0.05]
-                                            }}
-                                            transition={{
-                                                duration: 5,
-                                                repeat: Infinity,
-                                                repeatType: "reverse"
-                                            }}
-                                        />
-
                                         <div className="flex items-center mb-4">
                                             <div className={`w-12 h-12 rounded-full ${cashGift.color} flex items-center justify-center text-white`}>
                                                 <Icon path={cashGift.icon} size={1} />

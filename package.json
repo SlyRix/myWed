@@ -3,8 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@emailjs/browser": "^4.4.1",
     "@mdi/js": "^7.4.47",
     "@mdi/react": "^1.6.1",
+    "emailjs-com": "^3.2.0",
     "firebase": "^10.6.0",
     "framer-motion": "^10.18.0",
     "i18next": "^24.2.2",

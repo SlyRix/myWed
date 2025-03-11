@@ -25,8 +25,8 @@ const BubbleBackground = ({
             const yPos = Math.random() * 100; // % of container height
 
             // Random movement range
-            const xRange = 20 + Math.random() * 20; // move 20-40% of container
-            const yRange = 20 + Math.random() * 20; // move 20-40% of container
+            const xRange = 10 + Math.random() * 15; // Reduced range to 10-25% (was 20-40%)
+            const yRange = 10 + Math.random() * 15; // Reduced range to 10-25% (was 20-40%)
 
             // Random delays so they don't all move at once
             const delay = Math.random() * 5;
@@ -65,8 +65,14 @@ const BubbleBackground = ({
                     animate={{
                         x: [0, bubble.xRange, 0, -bubble.xRange, 0],
                         y: [0, -bubble.yRange, 0, bubble.yRange, 0],
-                        scale: [1, 1.1, 1, 0.9, 1],
-                        opacity: [bubble.opacity, bubble.opacity * 1.5, bubble.opacity, bubble.opacity * 0.8, bubble.opacity]
+                        scale: [1, 1.05, 1, 0.95, 1], // Reduced scale changes (was 1.1, 0.9)
+                        opacity: [
+                            bubble.opacity,
+                            bubble.opacity * 1.2, // Reduced opacity fluctuation (was 1.5)
+                            bubble.opacity,
+                            bubble.opacity * 0.9, // Reduced opacity fluctuation (was 0.8)
+                            bubble.opacity
+                        ]
                     }}
                     transition={{
                         repeat: Infinity,
