@@ -1,10 +1,11 @@
 // src/components/rsvp/RSVPPage.js
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import RSVPForm from './RSVPForm';
 import BubbleBackground from '../common/BubbleBackground';
+import { guestList } from '../../data/guestAccess'; // Import the guest list
 
 const RSVPPage = () => {
     const { t } = useTranslation();
@@ -12,31 +13,79 @@ const RSVPPage = () => {
     const navigate = useNavigate();
     const queryParams = new URLSearchParams(location.search);
     const ceremony = queryParams.get('ceremony');
+    const [accessibleCeremonies, setAccessibleCeremonies] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
 
-    // If accessed directly without a ceremony parameter, redirect to home
+    // Check if the user has access to any ceremonies
     useEffect(() => {
-        if (!ceremony && location.pathname === '/rsvp') {
-            // Could redirect to home or another page instead
-            // navigate('/');
+        const invitationCode = localStorage.getItem('invitationCode');
+
+        if (invitationCode && guestList[invitationCode]) {
+            // Set ceremonies this guest has access to
+            setAccessibleCeremonies(guestList[invitationCode].ceremonies);
+        } else {
+            // Admin access or no access code
+            const adminAccess = localStorage.getItem('adminAccess') === 'true';
+            if (adminAccess) {
+                setAccessibleCeremonies(['christian', 'hindu']);
+            } else {
+                setAccessibleCeremonies([]);
+            }
         }
-    }, [ceremony, location.pathname, navigate]);
 
-    // Determine gradient based on ceremony source
-    const bgGradient = ceremony === 'hindu'
-        ? 'from-hindu-primary to-hindu-secondary/30'
-        : 'from-christian-primary to-christian-secondary/30';
+        setIsLoading(false);
+    }, []);
 
-    // Determine colors for bubbles based on ceremony source
-    const bubbleColors = ceremony === 'hindu'
-        ? ['#ffcb05', '#ff5722', '#9c27b0']  // Hindu colors
-        : ['#fff', '#d4b08c', '#8c6c55'];    // Christian colors
+    // If they don't have access to any ceremonies, redirect to home
+    useEffect(() => {
+        if (!isLoading && accessibleCeremonies.length === 0) {
+            navigate('/');
+        }
+
+        // If they have access but specified a ceremony they don't have access to, redirect
+        if (!isLoading && ceremony && !accessibleCeremonies.includes(ceremony)) {
+            navigate('/rsvp');
+        }
+    }, [isLoading, accessibleCeremonies, ceremony, navigate]);
+
+    // Determine gradient based on ceremony source or use blended gradient if not specified
+    const getBgGradient = () => {
+        if (ceremony === 'hindu') {
+            return 'from-hindu-primary to-hindu-secondary/30';
+        } else if (ceremony === 'christian') {
+            return 'from-christian-primary to-christian-secondary/30';
+        } else {
+            // Blended gradient for general RSVP page
+            return 'from-christian-primary via-white to-hindu-primary/30';
+        }
+    };
+
+    // Determine colors for bubbles based on ceremony source or use mixed colors if not specified
+    const getBubbleColors = () => {
+        if (ceremony === 'hindu') {
+            return ['#ffcb05', '#ff5722', '#9c27b0'];  // Hindu colors
+        } else if (ceremony === 'christian') {
+            return ['#fff', '#d4b08c', '#8c6c55'];    // Christian colors
+        } else {
+            // Mixed colors for general RSVP page
+            return ['#fff', '#d4b08c', '#ffcb05', '#d93f0b'];
+        }
+    };
+
+    if (isLoading) {
+        return (
+            <div className="min-h-screen flex items-center justify-center">
+                <div className="animate-spin h-8 w-8 border-4 border-christian-accent rounded-full border-t-transparent"></div>
+            </div>
+        );
+    }
 
     return (
-        <section className={`pt-24 pb-20 bg-gradient-to-br ${bgGradient} relative overflow-hidden min-h-screen`}>
+        <section className={`pt-24 pb-20 bg-gradient-to-br ${getBgGradient()} relative overflow-hidden min-h-screen`}>
             {/* Decorative elements */}
             <BubbleBackground
                 count={12}
-                colors={bubbleColors}
+                colors={getBubbleColors()}
                 opacity={{ min: 0.03, max: 0.08 }}
             />
 

@@ -1,6 +1,6 @@
 // src/App.js
 import React, { useState, useEffect, lazy, Suspense } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import Header from './components/common/Header';
 import Footer from './components/common/Footer';
 import PasswordProtection from './components/common/PasswordProtection';
@@ -26,6 +26,16 @@ const AccommodationsPage = lazy(() => import('./components/accommodations/Accomm
 const AdminLogin = lazy(() => import('./components/admin/AdminLogin'));
 const AdminDashboard = lazy(() => import('./components/admin/AdminDashboard'));
 const AdminRoute = lazy(() => import('./components/admin/AdminRoute'));
+
+// Conditional Footer component that only shows on non-homepage routes
+const ConditionalFooter = () => {
+    const location = useLocation();
+    // Don't show footer on homepage
+    if (location.pathname === '/') {
+        return null;
+    }
+    return <Footer />;
+};
 
 function App() {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -114,7 +124,8 @@ function App() {
                                     </Routes>
                                 </Suspense>
                             </main>
-                            <Footer />
+                            {/* Use the conditional footer instead of always showing it */}
+                            <ConditionalFooter />
                         </>
                     )}
                 </Router>

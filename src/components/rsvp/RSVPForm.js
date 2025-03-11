@@ -5,7 +5,7 @@ import { mdiCheck, mdiClose } from '@mdi/js';
 import Icon from '@mdi/react';
 import { useLocation, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { sendRSVPEmail } from '../../utils/emailService'; // Make sure this import is correct
+import { sendRSVPEmail } from '../../utils/emailService';
 
 const RSVPForm = () => {
     const { t } = useTranslation();
@@ -13,14 +13,20 @@ const RSVPForm = () => {
     const queryParams = new URLSearchParams(location.search);
     const ceremonySrc = queryParams.get('ceremony');
 
+    // State to track which ceremonies the user has access to
+    const [accessibleCeremonies, setAccessibleCeremonies] = useState([]);
+
     const [formData, setFormData] = useState({
         firstName: '',
         lastName: '',
         email: '',
         phone: '',
         attending: 'yes',
-        guests: 0,
-        dietaryRestrictions: '',
+        // Number of guests for each ceremony
+        christianGuests: 0,
+        hinduGuests: 0,
+        // Dietary preference - vegetarian checkbox
+        isVegetarian: false,
         message: '',
         // Track which ceremony they came from
         source: ceremonySrc || 'direct'
@@ -30,6 +36,39 @@ const RSVPForm = () => {
     const [showThankYou, setShowThankYou] = useState(false);
     const [errors, setErrors] = useState({});
     const [submitError, setSubmitError] = useState('');
+
+    // Load accessible ceremonies from localStorage
+    useEffect(() => {
+        const invitationCode = localStorage.getItem('invitationCode');
+
+        // If there's an invitation code, check which ceremonies they have access to
+        if (invitationCode) {
+            try {
+                // This requires importing guestList from data/guestAccess.js
+                const guestList = require('../../data/guestAccess').guestList;
+                const ceremonies = guestList[invitationCode]?.ceremonies || [];
+                setAccessibleCeremonies(ceremonies);
+
+                // If they came from a specific ceremony, set initial count to 1
+                if (ceremonySrc === 'christian' && ceremonies.includes('christian')) {
+                    setFormData(prev => ({ ...prev, christianGuests: 1 }));
+                } else if (ceremonySrc === 'hindu' && ceremonies.includes('hindu')) {
+                    setFormData(prev => ({ ...prev, hinduGuests: 1 }));
+                }
+            } catch (error) {
+                console.error('Error accessing guest list:', error);
+                setAccessibleCeremonies([]);
+            }
+        } else {
+            // Check if admin
+            const adminAccess = localStorage.getItem('adminAccess') === 'true';
+            if (adminAccess) {
+                setAccessibleCeremonies(['christian', 'hindu']);
+            } else {
+                setAccessibleCeremonies([]);
+            }
+        }
+    }, [ceremonySrc]);
 
     // Load saved form data from localStorage on component mount
     useEffect(() => {
@@ -60,17 +99,32 @@ const RSVPForm = () => {
     const validateForm = () => {
         const newErrors = {};
 
-        if (!formData.firstName.trim()) newErrors.firstName = 'Vorname ist erforderlich';
-        if (!formData.lastName.trim()) newErrors.lastName = 'Nachname ist erforderlich';
+        if (!formData.firstName.trim()) newErrors.firstName = 'First name is required';
+        if (!formData.lastName.trim()) newErrors.lastName = 'Last name is required';
 
         if (!formData.email.trim()) {
-            newErrors.email = 'Email ist erforderlich';
+            newErrors.email = 'Email is required';
         } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-            newErrors.email = 'Email ist ungültig';
+            newErrors.email = 'Email is invalid';
         }
 
-        if (formData.attending === 'yes' && formData.guests < 0) {
-            newErrors.guests = 'Anzahl der Gäste kann nicht negativ sein';
+        if (formData.attending === 'yes') {
+            // Make sure they've entered guests for at least one ceremony they have access to
+            const totalGuests = (accessibleCeremonies.includes('christian') ? formData.christianGuests : 0) +
+                (accessibleCeremonies.includes('hindu') ? formData.hinduGuests : 0);
+
+            if (totalGuests < 1) {
+                newErrors.guests = 'Please enter at least 1 guest for at least one ceremony';
+            }
+
+            // Validate guest counts are not negative
+            if (formData.christianGuests < 0) {
+                newErrors.christianGuests = 'Guest count cannot be negative';
+            }
+
+            if (formData.hinduGuests < 0) {
+                newErrors.hinduGuests = 'Guest count cannot be negative';
+            }
         }
 
         return newErrors;
@@ -80,7 +134,8 @@ const RSVPForm = () => {
         const { name, value, type, checked } = e.target;
         const newFormData = {
             ...formData,
-            [name]: type === 'checkbox' ? checked : value
+            [name]: type === 'checkbox' ? checked :
+                (type === 'number' ? parseInt(value) || 0 : value)
         };
 
         // Update state
@@ -169,14 +224,14 @@ const RSVPForm = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                     <div>
                         <label className="block text-gray-700 mb-2" htmlFor="firstName">
-                            Vorname*
+                            First Name*
                         </label>
                         <input
                             id="firstName"
                             name="firstName"
                             type="text"
                             className={`w-full p-3 border rounded-lg focus:outline-none focus:ring-2 ${errors.firstName ? 'border-red-500 focus:ring-red-200' : 'border-gray-300 focus:ring-christian-accent/20'}`}
-                            placeholder="Vorname"
+                            placeholder="First Name"
                             value={formData.firstName}
                             onChange={handleChange}
                             disabled={submitted}
@@ -186,14 +241,14 @@ const RSVPForm = () => {
 
                     <div>
                         <label className="block text-gray-700 mb-2" htmlFor="lastName">
-                            Nachname*
+                            Last Name*
                         </label>
                         <input
                             id="lastName"
                             name="lastName"
                             type="text"
                             className={`w-full p-3 border rounded-lg focus:outline-none focus:ring-2 ${errors.lastName ? 'border-red-500 focus:ring-red-200' : 'border-gray-300 focus:ring-christian-accent/20'}`}
-                            placeholder="Nachname"
+                            placeholder="Last Name"
                             value={formData.lastName}
                             onChange={handleChange}
                             disabled={submitted}
@@ -269,38 +324,81 @@ const RSVPForm = () => {
 
                 {formData.attending === 'yes' && (
                     <>
-                        <div className="mb-4">
-                            <label className="block text-gray-700 mb-2" htmlFor="guests">
-                                {t('rsvp.form.guests')}
+                        <div className="mb-6">
+                            <label className="block text-gray-700 font-medium mb-3">
+                                How many people will attend each ceremony?
                             </label>
-                            <input
-                                id="guests"
-                                name="guests"
-                                type="number"
-                                min="0"
-                                max="5"
-                                className={`w-full p-3 border rounded-lg focus:outline-none focus:ring-2 ${errors.guests ? 'border-red-500 focus:ring-red-200' : 'border-gray-300 focus:ring-christian-accent/20'}`}
-                                value={formData.guests}
-                                onChange={handleChange}
-                                disabled={submitted}
-                            />
-                            {errors.guests && <p className="text-red-500 text-sm mt-1">{errors.guests}</p>}
+
+                            <div className="space-y-4">
+                                {accessibleCeremonies.includes('christian') && (
+                                    <div className="p-4 border border-gray-200 rounded-lg bg-christian-primary/20">
+                                        <div className="mb-2">
+                                            <label className="font-medium text-gray-700">
+                                                Christian Ceremony - {t('christian.dateTime.date')}
+                                            </label>
+                                        </div>
+
+                                        <div className="flex items-center gap-3">
+                                            <input
+                                                type="number"
+                                                name="christianGuests"
+                                                min="0"
+                                                max="10"
+                                                value={formData.christianGuests}
+                                                onChange={handleChange}
+                                                disabled={submitted}
+                                                className={`w-20 p-2 border rounded-lg focus:outline-none focus:ring-2 ${errors.christianGuests ? 'border-red-500 focus:ring-red-200' : 'border-gray-300 focus:ring-christian-accent/20'}`}
+                                            />
+                                            <span className="text-sm text-gray-600">people (enter 0 if not attending)</span>
+                                        </div>
+                                        {errors.christianGuests && <p className="text-red-500 text-sm mt-1">{errors.christianGuests}</p>}
+                                    </div>
+                                )}
+
+                                {accessibleCeremonies.includes('hindu') && (
+                                    <div className="p-4 border border-gray-200 rounded-lg bg-hindu-primary/20">
+                                        <div className="mb-2">
+                                            <label className="font-medium text-gray-700">
+                                                Hindu Ceremony - {t('hindu.dateTime.date')}
+                                            </label>
+                                        </div>
+
+                                        <div className="flex items-center gap-3">
+                                            <input
+                                                type="number"
+                                                name="hinduGuests"
+                                                min="0"
+                                                max="10"
+                                                value={formData.hinduGuests}
+                                                onChange={handleChange}
+                                                disabled={submitted}
+                                                className={`w-20 p-2 border rounded-lg focus:outline-none focus:ring-2 ${errors.hinduGuests ? 'border-red-500 focus:ring-red-200' : 'border-gray-300 focus:ring-christian-accent/20'}`}
+                                            />
+                                            <span className="text-sm text-gray-600">people (enter 0 if not attending)</span>
+                                        </div>
+                                        {errors.hinduGuests && <p className="text-red-500 text-sm mt-1">{errors.hinduGuests}</p>}
+                                    </div>
+                                )}
+                            </div>
+
+                            {errors.guests && <p className="text-red-500 text-sm mt-2">{errors.guests}</p>}
                         </div>
 
-                        <div className="mb-4">
-                            <label className="block text-gray-700 mb-2" htmlFor="dietaryRestrictions">
-                                {t('rsvp.form.dietary')}
-                            </label>
-                            <textarea
-                                id="dietaryRestrictions"
-                                name="dietaryRestrictions"
-                                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-christian-accent/20"
-                                rows="2"
-                                placeholder={t('rsvp.form.dietaryPlaceholder')}
-                                value={formData.dietaryRestrictions}
-                                onChange={handleChange}
-                                disabled={submitted}
-                            ></textarea>
+                        <div className="mb-6">
+                            <div className="flex items-center">
+                                <input
+                                    id="isVegetarian"
+                                    name="isVegetarian"
+                                    type="checkbox"
+                                    checked={formData.isVegetarian}
+                                    onChange={handleChange}
+                                    disabled={submitted}
+                                    className="h-5 w-5 text-christian-accent border-gray-300 rounded focus:ring-christian-accent"
+                                />
+                                <label htmlFor="isVegetarian" className="ml-2 block text-gray-700">
+                                    Vegetarian meal preference
+                                </label>
+                            </div>
                         </div>
                     </>
                 )}

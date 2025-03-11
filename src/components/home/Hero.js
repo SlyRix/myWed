@@ -1,5 +1,5 @@
 // src/components/home/Hero.js
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { mdiChevronDown } from '@mdi/js';
@@ -7,6 +7,7 @@ import Icon from '@mdi/react';
 import { useTranslation } from 'react-i18next';
 import CountdownTimer from '../common/CountdownTimer';
 import BubbleBackground from '../common/BubbleBackground';
+import { guestList } from '../../data/guestAccess';
 
 // Fallback SVG pattern - only used if external SVG isn't available
 const FloralPatternSVG = () => (
@@ -99,12 +100,24 @@ const ParallaxElements = () => {
 
 const Hero = ({ backgroundImage = null, patternImage = "/images/floral-pattern.svg" }) => {
     const { t } = useTranslation();
+    const [accessibleCeremonies, setAccessibleCeremonies] = useState([]);
 
     // Wedding date - July 4, 2026
     const weddingDate = new Date('May 9, 2026 14:00:00').getTime();
 
     // Check if pattern image exists by creating an image object
     const [patternExists, setPatternExists] = React.useState(false);
+
+    // Get accessible ceremonies
+    useEffect(() => {
+        const invitationCode = localStorage.getItem('invitationCode');
+        if (invitationCode && guestList[invitationCode]) {
+            setAccessibleCeremonies(guestList[invitationCode].ceremonies);
+        } else {
+            const adminAccess = localStorage.getItem('adminAccess') === 'true';
+            setAccessibleCeremonies(adminAccess ? ['christian', 'hindu'] : []);
+        }
+    }, []);
 
     React.useEffect(() => {
         if (patternImage) {
@@ -167,32 +180,57 @@ const Hero = ({ backgroundImage = null, patternImage = "/images/floral-pattern.s
                 <h1 className="font-script text-5xl md:text-7xl mb-3 text-white text-shadow-lg">
                     {t('home.title')}
                 </h1>
-                <p className="text-xl md:text-2xl mb-8 text-white/90 font-display italic tracking-wide">
+                <p className="text-xl md:text-2xl mb-6 text-white/90 font-display italic tracking-wide">
                     {t('home.date')}
                 </p>
+
+                {/* Welcome text moved from about section to hero */}
+                <div className="mb-8 text-white max-w-2xl mx-auto">
+                    <h2 className="text-2xl md:text-3xl font-bold mb-3 text-white text-shadow">{t('home.welcomeTitle')}</h2>
+                    <p className="text-white/90 leading-relaxed text-shadow-sm">
+                        {t('home.welcomeText')}
+                    </p>
+                </div>
 
                 <div className="mb-10">
                     <CountdownTimer targetDate={weddingDate} />
                 </div>
 
-                <div className="flex flex-col sm:flex-row justify-center gap-4">
-                    <Link to="/christian-ceremony" className="btn btn-primary btn-christian">
-                        {t('header.christianCeremony')}
+                {/* Dynamic ceremony buttons based on user access */}
+                {accessibleCeremonies.length > 0 && (
+                    <div className="flex flex-col sm:flex-row justify-center gap-4">
+                        {accessibleCeremonies.includes('christian') && (
+                            <Link to="/christian-ceremony" className="btn btn-primary btn-christian">
+                                {t('header.christianCeremony')}
+                            </Link>
+                        )}
+                        {accessibleCeremonies.includes('hindu') && (
+                            <Link to="/hindu-ceremony" className="btn btn-primary btn-hindu">
+                                {t('header.hinduCeremony')}
+                            </Link>
+                        )}
+                    </div>
+                )}
+
+                {/* If no ceremonies are accessible, show alternative button */}
+                {accessibleCeremonies.length === 0 && (
+                    <Link to="/our-story" className="btn btn-primary btn-christian">
+                        {t('home.readStory')}
                     </Link>
-                    <Link to="/hindu-ceremony" className="btn btn-primary btn-hindu">
-                        {t('header.hinduCeremony')}
-                    </Link>
-                </div>
+                )}
             </motion.div>
 
-            <motion.a
-                href="#about-section"
-                className="absolute bottom-8 left-1/2 -translate-x-1/2 text-white opacity-80 hover:opacity-100 transition-opacity w-10 h-10 flex items-center justify-center z-20"
-                animate={{ y: [0, 10, 0] }}
-                transition={{ repeat: Infinity, duration: 1.5 }}
-            >
-                <Icon path={mdiChevronDown} size={1.5} />
-            </motion.a>
+            {/* Only show the scroll down indicator if there's content below */}
+            {false && (
+                <motion.a
+                    href="#about-section"
+                    className="absolute bottom-8 left-1/2 -translate-x-1/2 text-white opacity-80 hover:opacity-100 transition-opacity w-10 h-10 flex items-center justify-center z-20"
+                    animate={{ y: [0, 10, 0] }}
+                    transition={{ repeat: Infinity, duration: 1.5 }}
+                >
+                    <Icon path={mdiChevronDown} size={1.5} />
+                </motion.a>
+            )}
         </section>
     );
 };

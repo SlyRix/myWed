@@ -10,12 +10,35 @@ const PUBLIC_KEY = '-aL2Rd-N2QdzeUs5Q';  // Found in Integration tab
 console.log('Initializing EmailJS with PUBLIC_KEY:', PUBLIC_KEY);
 emailjs.init(PUBLIC_KEY);
 
-
 // Function to send RSVP email with comprehensive error handling
 export const sendRSVPEmail = async (formData) => {
     console.log('⚠️ SEND ATTEMPT: Sending email with data:', formData);
 
     try {
+        // Format the attendance information for better readability in the email
+        let attendanceInfo = '';
+
+        if (formData.attending === 'yes') {
+            attendanceInfo = 'Yes';
+
+            // Add ceremony-specific attendance
+            const christianAttending = formData.christianGuests > 0;
+            const hinduAttending = formData.hinduGuests > 0;
+
+            if (christianAttending) {
+                attendanceInfo += `\nChristian Ceremony: ${formData.christianGuests} ${formData.christianGuests > 1 ? 'people' : 'person'}`;
+            }
+
+            if (hinduAttending) {
+                attendanceInfo += `\nHindu Ceremony: ${formData.hinduGuests} ${formData.hinduGuests > 1 ? 'people' : 'person'}`;
+            }
+
+            // Add vegetarian preference
+            attendanceInfo += `\nVegetarian: ${formData.isVegetarian ? 'Yes' : 'No'}`;
+        } else {
+            attendanceInfo = 'No - Unable to attend';
+        }
+
         // Add all form data fields without filtering to ensure nothing is missing
         const templateParams = {
             ...formData,
@@ -24,14 +47,15 @@ export const sendRSVPEmail = async (formData) => {
             lastName: formData.lastName || 'No last name provided',
             email: formData.email || 'No email provided',
             phone: formData.phone || 'No phone provided',
-            attending: formData.attending || 'No response',
-            guests: formData.guests || '0',
-            dietary: formData.dietaryRestrictions || 'None specified',
+            attending: attendanceInfo,
+            // For compatibility with existing template
+            guests: (formData.christianGuests || 0) + (formData.hinduGuests || 0),
+            dietary: formData.isVegetarian ? 'Vegetarian' : 'Non-vegetarian',
             message: formData.message || 'No message',
             source: formData.source || 'direct',
-            // Include all potential variables your template might expect
-            christian: 'Not asked', // Provide fallback values
-            hindu: 'Not asked'      // Provide fallback values
+            // Ceremony-specific attendance flags for template
+            christianAttending: formData.christianGuests > 0 ? 'Yes' : 'No',
+            hinduAttending: formData.hinduGuests > 0 ? 'Yes' : 'No'
         };
 
         console.log('⚠️ TEMPLATE PARAMS: About to send with parameters:', templateParams);
