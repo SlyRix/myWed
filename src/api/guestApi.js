@@ -1,5 +1,5 @@
 // src/api/guestApi.js
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3001/api';
+const API_URL = process.env.REACT_APP_API_URL || 'https://rswed-api.slyrix.com/api';
 
 // Fetch all guests
 export const fetchAllGuests = async () => {
