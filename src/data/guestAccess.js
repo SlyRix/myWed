@@ -1,16 +1,20 @@
 // src/data/guestAccess.js
 export const guestList = {
     // Format: [invitationCode]: {name, ceremonies}
-    "SIVA123": {
+    "SIVA": {
         name: "Sivani Family",
         ceremonies: ["christian", "hindu"]  // Access to both ceremonies
     },
-    "RUSH456": {
+    "RUSH": {
         name: "Rushel Family",
         ceremonies: ["christian"]  // Only Christian ceremony
     },
-    "TEST789": {
+    "TEST": {
         name: "TEST Family",
         ceremonies: ["hindu"]  // Only Hindu ceremony
+    },
+    "NONE": {
+        name: "NONE Family",
+        ceremonies: [""] // NONE
     }
 };

@@ -164,9 +164,9 @@ const GiftRegistry = () => {
                     >
                         <div className="flex flex-col md:flex-row items-center justify-between">
                             <div className="mb-6 md:mb-0 md:mr-6">
-                                <h2 className="text-2xl font-bold mb-2">View Our Amazon Wishlist</h2>
+                                <h2 className="text-2xl font-bold mb-2">{t('gifts.wishlist.title')}</h2>
                                 <p className="text-gray-700 max-w-xl">
-                                    We've created an Amazon wishlist with items we'd love to receive. When you purchase from this list, it will be automatically marked as bought to avoid duplicates.
+                                    {t('gifts.wishlist.description')}
                                 </p>
                             </div>
                             <a
@@ -176,7 +176,7 @@ const GiftRegistry = () => {
                                 className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-christian-accent to-hindu-secondary text-white rounded-full font-semibold hover:shadow-lg transition-all duration-300"
                             >
                                 <Icon path={mdiCart} size={1} className="mr-2" />
-                                View Wishlist
+                                {t('gifts.wishlist.button')}
                             </a>
                         </div>
 
@@ -232,7 +232,7 @@ const GiftRegistry = () => {
                 {/* Gift Items Grid */}
                 {(activeCategory !== 'cash' && filteredGifts.length > 0) && (
                     <AnimatedSection className="mb-16">
-                        <h2 className="text-2xl font-bold mb-8 text-center">Registry Items</h2>
+                        <h2 className="text-2xl font-bold mb-8 text-center">{t('gifts.registry.title')}</h2>
                         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                             {filteredGifts.map((gift, index) => (
                                 <AnimatedSection
@@ -253,8 +253,8 @@ const GiftRegistry = () => {
                                                 <div className="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center mb-2">
                                                     <Icon path={mdiCheck} size={1.2} className="text-green-600" />
                                                 </div>
-                                                <p className="font-bold text-gray-800">Already Purchased</p>
-                                                <p className="text-sm text-gray-600">by {gift.purchasedBy}</p>
+                                                <p className="font-bold text-gray-800">{t('gifts.registry.purchased')}</p>
+                                                <p className="text-sm text-gray-600">{t('gifts.registry.by')}{gift.purchasedBy}</p>
                                             </div>
                                         )}
                                     </div>
@@ -272,7 +272,7 @@ const GiftRegistry = () => {
                                                 className="inline-flex items-center text-sm px-4 py-2 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-700 transition-colors"
                                             >
                                                 <Icon path={mdiLink} size={0.7} className="mr-1" />
-                                                View on Amazon
+                                                {t('gifts.registry.viewOnAmazon')}
                                             </a>
                                         )}
                                     </div>
@@ -285,7 +285,7 @@ const GiftRegistry = () => {
                 {/* Cash Gift Options */}
                 {showCashGifts && (
                     <AnimatedSection className="mb-16">
-                        <h2 className="text-2xl font-bold mb-8 text-center">Cash Gift Options</h2>
+                        <h2 className="text-2xl font-bold mb-8 text-center">{t('gifts.cashGifts.title')}</h2>
                         <div className="grid md:grid-cols-3 gap-6">
                             {cashGifts.map((cashGift, index) => (
                                 <AnimatedSection
@@ -306,8 +306,8 @@ const GiftRegistry = () => {
 
                                         <div className="mb-4">
                                             <div className="flex justify-between text-sm mb-1">
-                                                <span>Progress: {cashGift.progress}%</span>
-                                                <span>Goal: {cashGift.goal}</span>
+                                                <span>{t('gifts.cashGifts.progress')}: {cashGift.progress}%</span>
+                                                <span>{t('gifts.cashGifts.goal')}: {cashGift.goal}</span>
                                             </div>
                                             <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
                                                 <motion.div
@@ -323,7 +323,7 @@ const GiftRegistry = () => {
                                             href="#"
                                             className={`inline-block py-2 px-6 ${cashGift.color} text-white rounded-full font-semibold hover:shadow-md transition-shadow`}
                                         >
-                                            Contribute
+                                            {t('gifts.cashGifts.contribute')}
                                         </a>
                                     </div>
                                 </AnimatedSection>
@@ -338,7 +338,7 @@ const GiftRegistry = () => {
                         We're truly honored that you will be celebrating our special day with us. Your presence is what matters most, and we're grateful for your love and support.
                     </p>
                     <p className="text-gray-700">
-                        If you have any questions about our registry or gift preferences, please don't hesitate to contact us.
+                        {t('gifts.contact.description')}
                     </p>
                 </AnimatedSection>
             </div>

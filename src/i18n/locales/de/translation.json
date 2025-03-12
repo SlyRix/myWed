@@ -239,6 +239,27 @@
       "title": "Eine Notiz zu Geschenken",
       "description1": "Wir fühlen uns wirklich geehrt, dass Sie unseren besonderen Tag mit uns feiern werden. Ihre Anwesenheit ist das Wichtigste, und wir sind dankbar für Ihre Liebe und Unterstützung.",
       "description2": "Wenn Sie ein Geschenk machen möchten, hoffen wir, dass unsere Geschenkliste einige hilfreiche Orientierung bietet. Wir haben Optionen erstellt, die für uns bedeutungsvoll wären, während wir dieses neue Kapitel gemeinsam beginnen."
+    },
+    "wishlist": {
+      "title": "Unsere Amazon-Wunschliste ansehen",
+      "description": "Wir haben eine Amazon-Wunschliste mit Dingen erstellt, die wir gerne bekommen würden. Wenn Sie etwas von dieser Liste kaufen, wird es automatisch als gekauft markiert, um Duplikate zu vermeiden.",
+      "button": "Wunschliste ansehen"
+    },
+    "registry": {
+      "title": "Registrierte Artikel",
+      "purchased": "Bereits gekauft",
+      "by": "von",
+      "viewOnAmazon": "Auf Amazon ansehen"
+    },
+    "cashGifts": {
+      "title": "Bargeld-Geschenk-Optionen",
+      "progress": "Fortschritt",
+      "goal": "Ziel",
+      "contribute": "Beitragen"
+    },
+    "contact": {
+      "title": "Benötigen Sie weitere Hilfe?",
+      "description": "Wenn Sie Fragen zu unserer Geschenkliste oder Geschenkpräferenzen haben, zögern Sie bitte nicht, uns zu kontaktieren."
     }
   },
   "gallery": {
@@ -307,5 +328,100 @@
   },
   "common": {
     "loading": "Unsere Liebesgeschichte wird geladen..."
+  },
+  "accommodations": {
+    "title": "Unterkünfte",
+    "description": "Wir haben eine Liste empfohlener Unterkünfte für unsere auswärtigen Gäste zusammengestellt. Diese Optionen bieten verschiedene Preiskategorien und Nähe zu unseren Zeremonienorten.",
+    "travelInfo": {
+      "title": "Reiseinformationen",
+      "christianVenue": "Ort der christlichen Zeremonie",
+      "hinduVenue": "Ort der hinduistischen Zeremonie",
+      "venue": "Ort",
+      "address": "Adresse",
+      "nearestAirport": "Nächster Flughafen",
+      "distance": "Ungefähr {distance} km ({time} mit dem Auto)"
+    },
+    "transportationTips": {
+      "title": "Transporttipps",
+      "tips": [
+        "Wir empfehlen einen Mietwagen, da die Veranstaltungsorte an verschiedenen Orten liegen.",
+        "Die Schweizer öffentlichen Verkehrsmittel sind ausgezeichnet, erfordern aber möglicherweise mehrere Verbindungen.",
+        "Taxis und Mitfahrdienste sind verfügbar, können aber für längere Strecken teuer sein.",
+        "Wir werden an den Zeremonientagen einen Shuttle-Service zwischen den wichtigsten Hotels und Veranstaltungsorten einrichten."
+      ]
+    },
+    "filter": {
+      "title": "Finden Sie den perfekten Aufenthalt",
+      "venueProximity": "Filtern nach Veranstaltungsort-Nähe",
+      "priceRange": "Filtern nach Preisklasse",
+      "allLocations": "Alle Standorte",
+      "nearChristian": "Nahe der christlichen Zeremonie",
+      "nearHindu": "Nahe der hinduistischen Zeremonie",
+      "allPrices": "Alle Preise",
+      "budget": "Budget ($)",
+      "midRange": "Mittelklasse ($$)",
+      "luxury": "Luxus ($$$)"
+    },
+    "hotelCard": {
+      "amenities": "Annehmlichkeiten",
+      "christianVenue": "Christlicher Veranstaltungsort",
+      "hinduVenue": "Hinduistischer Veranstaltungsort",
+      "bookNow": "Jetzt buchen",
+      "varies": "Variiert je nach Unterkunft"
+    },
+    "help": {
+      "title": "Benötigen Sie weitere Hilfe?",
+      "description": "Wenn Sie weitere Informationen zu Unterkünften benötigen oder besondere Anforderungen haben, zögern Sie bitte nicht, uns zu kontaktieren.",
+      "description2": "Wir helfen Ihnen gerne, den perfekten Ort für Ihren Aufenthalt während unserer Hochzeitsfeierlichkeiten zu finden.",
+      "contactButton": "E-Mail für Unterstützung"
+    },
+    "noResults": "Keine Unterkünfte entsprechen Ihren aktuellen Filtern. Bitte passen Sie Ihre Kriterien an."
+  },
+  "admin": {
+    "title": "Hochzeits-Admin-Dashboard",
+    "login": {
+      "title": "Admin-Zugang",
+      "subtitle": "Dieser Bereich ist Administratoren vorbehalten",
+      "password": "Admin-Passwort",
+      "submit": "Anmelden",
+      "checking": "Überprüfe...",
+      "error": "Ungültiges Admin-Passwort"
+    },
+    "dashboard": {
+      "title": "Hochzeits-Admin-Dashboard",
+      "tabs": {
+        "qrCodes": "QR-Code-Generator",
+        "guestList": "Gästeliste"
+      },
+      "guestList": {
+        "code": "Code",
+        "name": "Name",
+        "ceremonies": "Zeremonien"
+      }
+    },
+    "qrCode": {
+      "title": "QR-Code-Generator",
+      "selectGuest": "Gast auswählen",
+      "guestPlaceholder": "-- Wählen Sie einen Gast --",
+      "invitationCode": "Einladungscode",
+      "directLink": "Direkter Einladungslink",
+      "linkDescription": "Sie können diesen Link direkt per E-Mail oder Messaging-Apps teilen.",
+      "download": "QR-Code herunterladen",
+      "copy": "Kopieren",
+      "copied": "Link in die Zwischenablage kopiert!"
+    }
+  },
+
+  "ceremony": {
+    "access": {
+      "title": "Zugang erforderlich",
+      "description": "Diese {ceremony} Zeremonieseite ist nur für eingeladene Gäste zugänglich. Bitte geben Sie Ihren Einladungscode ein, um fortzufahren.",
+      "placeholder": "Ihr Einladungscode (z.B. SCHMIDT123)",
+      "submit": "Absenden",
+      "checking": "Überprüfe...",
+      "backToHome": "Zurück zur Startseite",
+      "invalidCode": "Ungültiger Einladungscode. Bitte überprüfen und erneut versuchen.",
+      "noAccess": "Es tut uns leid, Ihre Einladung beinhaltet keinen Zugang zur {ceremony} Zeremonie."
+    }
   }
 }

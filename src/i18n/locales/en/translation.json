@@ -239,6 +239,27 @@
       "title": "A Note About Gifts",
       "description1": "We're truly honored that you will be celebrating our special day with us. Your presence is what matters most, and we're grateful for your love and support.",
       "description2": "If you'd like to give a gift, we hope our registry provides some helpful guidance. We've created options that would be meaningful to us as we start this new chapter together."
+    },
+    "wishlist": {
+      "title": "View Our Amazon Wishlist",
+      "description": "We've created an Amazon wishlist with items we'd love to receive. When you purchase from this list, it will be automatically marked as bought to avoid duplicates.",
+      "button": "View Wishlist"
+    },
+    "registry": {
+      "title": "Registry Items",
+      "purchased": "Already Purchased",
+      "by": "by",
+      "viewOnAmazon": "View on Amazon"
+    },
+    "cashGifts": {
+      "title": "Cash Gift Options",
+      "progress": "Progress",
+      "goal": "Goal",
+      "contribute": "Contribute"
+    },
+    "contact": {
+      "title": "Need Additional Help?",
+      "description": "If you have any questions about our registry or gift preferences, please don't hesitate to contact us."
     }
   },
   "gallery": {
@@ -307,5 +328,100 @@
   },
   "common": {
     "loading": "Loading our love story..."
+  },
+  "accommodations": {
+    "title": "Accommodations",
+    "description": "We've compiled a list of recommended accommodations for our out-of-town guests. These options offer various price points and proximities to our ceremony venues.",
+    "travelInfo": {
+      "title": "Travel Information",
+      "christianVenue": "Christian Ceremony Location",
+      "hinduVenue": "Hindu Ceremony Location",
+      "venue": "Venue",
+      "address": "Address",
+      "nearestAirport": "Nearest Airport",
+      "distance": "Approximately {distance} km ({time} by car)"
+    },
+    "transportationTips": {
+      "title": "Transportation Tips",
+      "tips": [
+        "We recommend renting a car as the venues are in different locations.",
+        "Swiss public transportation is excellent but may require multiple connections.",
+        "Taxis and ride-sharing services are available but can be expensive for longer distances.",
+        "We will arrange shuttle service between key hotels and venues on ceremony days."
+      ]
+    },
+    "filter": {
+      "title": "Find the Perfect Stay",
+      "venueProximity": "Filter by Venue Proximity",
+      "priceRange": "Filter by Price Range",
+      "allLocations": "All Locations",
+      "nearChristian": "Near Christian Ceremony",
+      "nearHindu": "Near Hindu Ceremony",
+      "allPrices": "All Prices",
+      "budget": "Budget ($)",
+      "midRange": "Mid-Range ($$)",
+      "luxury": "Luxury ($$$)"
+    },
+    "hotelCard": {
+      "amenities": "Amenities",
+      "christianVenue": "Christian Venue",
+      "hinduVenue": "Hindu Venue",
+      "bookNow": "Book Now",
+      "varies": "Varies by property"
+    },
+    "help": {
+      "title": "Need Additional Help?",
+      "description": "If you need more information about accommodations or have specific requirements, please don't hesitate to contact us.",
+      "description2": "We're happy to help you find the perfect place to stay during our wedding celebrations.",
+      "contactButton": "Email Us for Assistance"
+    },
+    "noResults": "No accommodations match your current filters. Please adjust your criteria."
+  },
+  "admin": {
+    "title": "Wedding Admin Dashboard",
+    "login": {
+      "title": "Admin Access",
+      "subtitle": "This area is restricted to site administrators",
+      "password": "Admin Password",
+      "submit": "Sign In",
+      "checking": "Checking...",
+      "error": "Invalid admin password"
+    },
+    "dashboard": {
+      "title": "Wedding Admin Dashboard",
+      "tabs": {
+        "qrCodes": "QR Code Generator",
+        "guestList": "Guest List"
+      },
+      "guestList": {
+        "code": "Code",
+        "name": "Name",
+        "ceremonies": "Ceremonies"
+      }
+    },
+    "qrCode": {
+      "title": "QR Code Generator",
+      "selectGuest": "Select Guest",
+      "guestPlaceholder": "-- Select a guest --",
+      "invitationCode": "Invitation Code",
+      "directLink": "Direct Invitation Link",
+      "linkDescription": "You can share this link directly via email or messaging apps.",
+      "download": "Download QR Code",
+      "copy": "Copy",
+      "copied": "Link copied to clipboard!"
+    }
+  },
+
+  "ceremony": {
+    "access": {
+      "title": "Access Required",
+      "description": "This {ceremony} ceremony page is only accessible to invited guests. Please enter your invitation code to continue.",
+      "placeholder": "Your invitation code (e.g., SMITH123)",
+      "submit": "Submit",
+      "checking": "Checking...",
+      "backToHome": "Back to Home",
+      "invalidCode": "Invalid invitation code. Please check and try again.",
+      "noAccess": "Sorry, your invitation doesn't include access to the {ceremony} ceremony."
+    }
   }
 }

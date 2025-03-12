@@ -28,7 +28,7 @@ const QRCodeGenerator = () => {
 
     // Create guest invitation URL
     const getInvitationUrl = (code) => {
-        return `https://yourweddingsite.com?code=${code}`;
+        return `https://rswed.slyrix.com?code=${code}`;
     };
 
     return (

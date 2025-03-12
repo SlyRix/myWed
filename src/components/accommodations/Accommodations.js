@@ -153,7 +153,7 @@ const Accommodations = () => {
     // Render amenity icons
     const renderAmenityIcons = (amenities) => {
         if (amenities.includes('variable')) {
-            return <span className="text-gray-600 text-sm italic">Varies by property</span>;
+            return <span className="text-gray-600 text-sm italic">{t('accommodations.hotelCard.varies')}</span>;
         }
 
         const amenityIcons = {
@@ -203,40 +203,40 @@ const Accommodations = () => {
         <section className="pt-24 pb-20 bg-gradient-to-br from-christian-secondary/30 to-hindu-primary/20 overflow-hidden">
             <div className="container mx-auto max-w-6xl px-4">
                 <AnimatedSection className="text-center mb-12">
-                    <h1 className="text-4xl font-bold mb-6">Accommodations</h1>
+                    <h1 className="text-4xl font-bold mb-6">{t('accommodations.title')}</h1>
                     <p className="text-gray-700 max-w-2xl mx-auto">
-                        We've compiled a list of recommended accommodations for our out-of-town guests. These options offer various price points and proximities to our ceremony venues.
+                    {t('accommodations.description')}
                     </p>
                 </AnimatedSection>
 
                 <AnimatedSection className="mb-12">
                     <div className="max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-md">
-                        <h2 className="text-2xl font-bold mb-4 text-center">Travel Information</h2>
+                        <h2 className="text-2xl font-bold mb-4 text-center">{t('accommodations.travelInfo.title')}</h2>
                         <div className="grid md:grid-cols-2 gap-6">
                             <div>
-                                <h3 className="text-xl font-semibold mb-2 text-christian-accent">Christian Ceremony Location</h3>
-                                <p className="mb-2"><strong>Venue:</strong> Kath. Pfarramt Heilig Kreuz</p>
-                                <p className="mb-2"><strong>Address:</strong> Kirchpl. 10, 8853 Lachen</p>
-                                <p className="mb-1"><strong>Nearest Airport:</strong> Zürich Airport (ZRH)</p>
-                                <p className="text-sm text-gray-600 mb-3">Approximately 50 km (40 minutes by car)</p>
+                                <h3 className="text-xl font-semibold mb-2 text-christian-accent">{t('accommodations.travelInfo.christianVenue')}</h3>
+                                <p className="mb-2"><strong>Venue:</strong>{t('accommodations.travelInfo.venue')}</p>
+                                <p className="mb-2"><strong>Address:</strong>{t('accommodations.travelInfo.address')}</p>
+                                <p className="mb-1"><strong>Nearest Airport:</strong>{t('accommodations.travelInfo.nearestAirport')}</p>
+                                <p className="text-sm text-gray-600 mb-3">{t('accommodations.travelInfo.distance')}</p>
                             </div>
 
                             <div>
-                                <h3 className="text-xl font-semibold mb-2 text-hindu-secondary">Hindu Ceremony Location</h3>
-                                <p className="mb-2"><strong>Venue:</strong> Sri Manonmani Ampal Tempel</p>
-                                <p className="mb-2"><strong>Address:</strong> Miesernweg 13, 4632 Trimbach</p>
-                                <p className="mb-1"><strong>Nearest Airport:</strong> Zürich Airport (ZRH)</p>
-                                <p className="text-sm text-gray-600 mb-3">Approximately 70 km (1 hour by car)</p>
+                                <h3 className="text-xl font-semibold mb-2 text-hindu-secondary">{t('accommodations.travelInfo.christianVenue')}</h3>
+                                <p className="mb-2"><strong>Venue:</strong>{t('accommodations.travelInfo.venue')}</p>
+                                <p className="mb-2"><strong>Address:</strong>{t('accommodations.travelInfo.address')}</p>
+                                <p className="mb-1"><strong>Nearest Airport:</strong>{t('accommodations.travelInfo.nearestAirport')}</p>
+                                <p className="text-sm text-gray-600 mb-3">{t('accommodations.travelInfo.distance')}</p>
                             </div>
                         </div>
 
                         <div className="mt-4 p-4 bg-gray-50 rounded-lg">
-                            <h3 className="text-lg font-semibold mb-2">Transportation Tips</h3>
+                            <h3 className="text-lg font-semibold mb-2">{t('accommodations.transportationTips.title')}</h3>
                             <ul className="list-disc list-inside text-gray-700 space-y-1">
-                                <li>We recommend renting a car as the venues are in different locations.</li>
-                                <li>Swiss public transportation is excellent but may require multiple connections.</li>
-                                <li>Taxis and ride-sharing services are available but can be expensive for longer distances.</li>
-                                <li>We will arrange shuttle service between key hotels and venues on ceremony days.</li>
+                                <li>{t('accommodations.transportationTips.tips.0')}</li>
+                                <li>{t('accommodations.transportationTips.tips.1')}</li>
+                                <li>{t('accommodations.transportationTips.tips.2')}</li>
+                                <li>{t('accommodations.transportationTips.tips.3')}</li>
                             </ul>
                         </div>
                     </div>
@@ -244,11 +244,11 @@ const Accommodations = () => {
 
                 <AnimatedSection className="mb-8">
                     <div className="bg-white rounded-lg shadow-md p-6">
-                        <h2 className="text-2xl font-bold mb-6 text-center">Find the Perfect Stay</h2>
+                        <h2 className="text-2xl font-bold mb-6 text-center">{t('accommodations.filter.title')}</h2>
 
                         <div className="flex flex-col md:flex-row justify-center gap-4 mb-8">
                             <div className="flex flex-col">
-                                <label className="mb-2 font-medium">Filter by Venue Proximity</label>
+                                <label className="mb-2 font-medium">{t('accommodations.filter.venueProximity')}</label>
                                 <div className="inline-flex rounded-md shadow-sm">
                                     <button
                                         onClick={() => setVenueFilter('all')}
@@ -258,7 +258,7 @@ const Accommodations = () => {
                                                 : 'bg-white text-gray-700 hover:bg-gray-50'
                                         }`}
                                     >
-                                        All Locations
+                                        {t('accommodations.filter.allLocations')}
                                     </button>
                                     <button
                                         onClick={() => setVenueFilter('christian')}
@@ -268,7 +268,7 @@ const Accommodations = () => {
                                                 : 'bg-white text-gray-700 hover:bg-gray-50'
                                         }`}
                                     >
-                                        Near Christian Ceremony
+                                        {t('accommodations.filter.nearChristian')}
                                     </button>
                                     <button
                                         onClick={() => setVenueFilter('hindu')}
@@ -278,13 +278,13 @@ const Accommodations = () => {
                                                 : 'bg-white text-gray-700 hover:bg-gray-50'
                                         }`}
                                     >
-                                        Near Hindu Ceremony
+                                        {t('accommodations.filter.nearHindu')}
                                     </button>
                                 </div>
                             </div>
 
                             <div className="flex flex-col mt-4 md:mt-0">
-                                <label className="mb-2 font-medium">Filter by Price Range</label>
+                                <label className="mb-2 font-medium">{t('accommodations.filter.priceRange')}</label>
                                 <div className="inline-flex rounded-md shadow-sm">
                                     <button
                                         onClick={() => setPriceFilter('all')}
@@ -294,7 +294,7 @@ const Accommodations = () => {
                                                 : 'bg-white text-gray-700 hover:bg-gray-50'
                                         }`}
                                     >
-                                        All Prices
+                                        {t('accommodations.filter.allPrices')}
                                     </button>
                                     <button
                                         onClick={() => setPriceFilter('budget')}
@@ -304,7 +304,7 @@ const Accommodations = () => {
                                                 : 'bg-white text-gray-700 hover:bg-gray-50'
                                         }`}
                                     >
-                                        Budget ($)
+                                        {t('accommodations.filter.budget')}
                                     </button>
                                     <button
                                         onClick={() => setPriceFilter('mid')}
@@ -314,7 +314,7 @@ const Accommodations = () => {
                                                 : 'bg-white text-gray-700 hover:bg-gray-50'
                                         }`}
                                     >
-                                        Mid-Range ($$)
+                                        {t('accommodations.filter.midRange')}
                                     </button>
                                     <button
                                         onClick={() => setPriceFilter('luxury')}
@@ -324,7 +324,7 @@ const Accommodations = () => {
                                                 : 'bg-white text-gray-700 hover:bg-gray-50'
                                         }`}
                                     >
-                                        Luxury ($$$)
+                                        {t('accommodations.filter.luxury')}
                                     </button>
                                 </div>
                             </div>
@@ -332,7 +332,7 @@ const Accommodations = () => {
 
                         {filteredAccommodations.length === 0 ? (
                             <div className="text-center text-gray-500 py-8">
-                                <p>No accommodations match your current filters. Please adjust your criteria.</p>
+                                <p>{t('accommodations.noResults')}</p>
                             </div>
                         ) : (
                             <div className="grid md:grid-cols-2 gap-6">
@@ -371,7 +371,7 @@ const Accommodations = () => {
                                                 <div className={`flex items-center ${accommodation.nearChristian ? 'text-christian-accent' : 'text-gray-500'}`}>
                                                     <Icon path={mdiBed} size={0.8} className="mr-2" />
                                                     <div>
-                                                        <p className="text-sm font-medium">Christian Venue</p>
+                                                        <p className="text-sm font-medium">{t('accommodations.hotelCard.christianVenue')}</p>
                                                         <p className="text-xs">{accommodation.distanceChristian}</p>
                                                     </div>
                                                 </div>
@@ -379,14 +379,14 @@ const Accommodations = () => {
                                                 <div className={`flex items-center ${accommodation.nearHindu ? 'text-hindu-secondary' : 'text-gray-500'}`}>
                                                     <Icon path={mdiBed} size={0.8} className="mr-2" />
                                                     <div>
-                                                        <p className="text-sm font-medium">Hindu Venue</p>
+                                                        <p className="text-sm font-medium">{t('accommodations.hotelCard.hinduVenue')}</p>
                                                         <p className="text-xs">{accommodation.distanceHindu}</p>
                                                     </div>
                                                 </div>
                                             </div>
 
                                             <div className="mb-4">
-                                                <p className="font-medium mb-1">Amenities</p>
+                                                <p className="font-medium mb-1">{t('accommodations.hotelCard.amenities')}</p>
                                                 {renderAmenityIcons(accommodation.amenities)}
                                             </div>
 
@@ -408,7 +408,7 @@ const Accommodations = () => {
                                                     rel="noopener noreferrer"
                                                     className="inline-block py-2 px-6 bg-gradient-to-r from-christian-accent to-hindu-secondary text-white rounded-full font-semibold hover:shadow-md transition-shadow"
                                                 >
-                                                    Book Now
+                                                    {t('accommodations.hotelCard.bookNow')}
                                                 </a>
                                             </div>
                                         </div>
@@ -421,18 +421,18 @@ const Accommodations = () => {
 
                 <AnimatedSection className="text-center">
                     <div className="bg-white p-6 rounded-lg shadow-md max-w-2xl mx-auto">
-                        <h2 className="text-xl font-bold mb-4">Need Additional Help?</h2>
+                        <h2 className="text-xl font-bold mb-4">{t('accommodations.help.title')}</h2>
                         <p className="text-gray-700 mb-4">
-                            If you need more information about accommodations or have specific requirements, please don't hesitate to contact us.
+                            {t('accommodations.help.description')}
                         </p>
                         <p className="text-gray-700 mb-4">
-                            We're happy to help you find the perfect place to stay during our wedding celebrations.
+                            {t('accommodations.help.description2')}
                         </p>
                         <a
                             href="mailto:slyrajah@gmail.com"
                             className="inline-block py-2 px-6 bg-gray-800 text-white rounded-full font-semibold hover:bg-gray-700 transition-colors"
                         >
-                            Email Us for Assistance
+                            {t('accommodations.help.contactButton')}
                         </a>
                     </div>
                 </AnimatedSection>
