@@ -1,7 +1,7 @@
 // src/components/admin/AdminDashboard.js
 import React, { useState, useEffect } from 'react';
 import { QRCodeCanvas } from 'qrcode.react';
-import { mdiPlus, mdiContentSave, mdiTrashCan, mdiCross, mdiTempleHindu, mdiPencil } from '@mdi/js';
+import { mdiPlus, mdiContentSave, mdiTrashCan, mdiCross, mdiTempleHindu, mdiPencil, mdiQrcode, mdiAccountMultiple } from '@mdi/js';
 import Icon from '@mdi/react';
 import { fetchAllGuests, saveGuest, deleteGuest, generateGuestCode } from '../../api/guestApi';
 
@@ -137,6 +137,11 @@ const AdminDashboard = () => {
         });
         setIsEditing(true);
         setEditingGuest(code);
+
+        // On mobile, scroll to the form when editing
+        if (window.innerWidth < 768) {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
     };
 
     // Delete guest
@@ -170,8 +175,8 @@ const AdminDashboard = () => {
     // Show loading state
     if (isLoading) {
         return (
-            <div className="container mx-auto py-12 px-4 text-center">
-                <h1 className="text-3xl font-bold mb-6">Wedding Admin Dashboard</h1>
+            <div className="container mx-auto pt-24 pb-12 px-4 text-center">
+                <h1 className="text-2xl md:text-3xl font-bold mb-6">Wedding Admin Dashboard</h1>
                 <div className="flex justify-center items-center h-64">
                     <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-christian-accent"></div>
                 </div>
@@ -181,8 +186,8 @@ const AdminDashboard = () => {
     }
 
     return (
-        <div className="container mx-auto py-12 px-4">
-            <h1 className="text-3xl font-bold mb-6">Wedding Admin Dashboard</h1>
+        <div className="container mx-auto pt-24 pb-12 px-4">
+            <h1 className="text-2xl md:text-3xl font-bold mb-8 text-center md:text-left">Wedding Admin Dashboard</h1>
 
             {error && (
                 <div className="mb-6 p-4 bg-red-100 border border-red-400 text-red-700 rounded">
@@ -190,27 +195,29 @@ const AdminDashboard = () => {
                 </div>
             )}
 
-            {/* Tabs */}
-            <div className="flex border-b mb-6">
+            {/* Tabs - Improved mobile design */}
+            <div className="flex justify-center md:justify-start border-b mb-6 overflow-x-auto">
                 <button
-                    className={`py-2 px-4 ${activeTab === 'guestList' ? 'border-b-2 border-christian-accent font-bold' : ''}`}
+                    className={`py-2 px-4 flex items-center whitespace-nowrap ${activeTab === 'guestList' ? 'border-b-2 border-christian-accent font-bold' : ''}`}
                     onClick={() => setActiveTab('guestList')}
                 >
-                    Guest List Management
+                    <Icon path={mdiAccountMultiple} size={0.8} className="mr-1 hidden sm:inline" />
+                    Guest List
                 </button>
                 <button
-                    className={`py-2 px-4 ${activeTab === 'qrCodes' ? 'border-b-2 border-christian-accent font-bold' : ''}`}
+                    className={`py-2 px-4 flex items-center whitespace-nowrap ${activeTab === 'qrCodes' ? 'border-b-2 border-christian-accent font-bold' : ''}`}
                     onClick={() => setActiveTab('qrCodes')}
                 >
-                    QR Code Generator
+                    <Icon path={mdiQrcode} size={0.8} className="mr-1 hidden sm:inline" />
+                    QR Codes
                 </button>
             </div>
 
-            {/* Guest List Management */}
+            {/* Guest List Management - Mobile optimized */}
             {activeTab === 'guestList' && (
-                <div className="grid md:grid-cols-2 gap-8">
+                <div className="space-y-8 md:grid md:grid-cols-2 md:gap-8 md:space-y-0">
                     {/* Add/Edit Guest Form */}
-                    <div className="bg-white p-6 rounded-lg shadow-md">
+                    <div className="bg-white p-4 md:p-6 rounded-lg shadow-md">
                         <h2 className="text-xl font-bold mb-4">
                             {isEditing ? 'Edit Guest' : 'Add New Guest'}
                         </h2>
@@ -225,7 +232,7 @@ const AdminDashboard = () => {
                                     name="name"
                                     value={formData.name}
                                     onChange={handleInputChange}
-                                    className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-christian-accent"
+                                    className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-christian-accent"
                                     placeholder="Enter guest name"
                                     required
                                     disabled={isSaving}
@@ -234,7 +241,7 @@ const AdminDashboard = () => {
 
                             <div className="mb-6">
                                 <p className="block text-gray-700 mb-2">Ceremonies Access</p>
-                                <div className="flex flex-col space-y-2">
+                                <div className="flex flex-col space-y-3">
                                     <label className="inline-flex items-center">
                                         <input
                                             type="checkbox"
@@ -244,7 +251,7 @@ const AdminDashboard = () => {
                                             className="form-checkbox h-5 w-5 text-christian-accent"
                                             disabled={isSaving}
                                         />
-                                        <span className="ml-2 flex items-center">
+                                        <span className="ml-2 flex items-center text-base">
                                             <Icon path={mdiCross} size={0.8} className="mr-1 text-christian-accent" />
                                             Christian Ceremony
                                         </span>
@@ -258,7 +265,7 @@ const AdminDashboard = () => {
                                             className="form-checkbox h-5 w-5 text-hindu-secondary"
                                             disabled={isSaving}
                                         />
-                                        <span className="ml-2 flex items-center">
+                                        <span className="ml-2 flex items-center text-base">
                                             <Icon path={mdiTempleHindu} size={0.8} className="mr-1 text-hindu-secondary" />
                                             Hindu Ceremony
                                         </span>
@@ -266,10 +273,10 @@ const AdminDashboard = () => {
                                 </div>
                             </div>
 
-                            <div className="flex space-x-4">
+                            <div className="flex flex-wrap gap-3">
                                 <button
                                     type="submit"
-                                    className="px-4 py-2 bg-gradient-to-r from-christian-accent to-hindu-secondary text-white rounded-md hover:opacity-90 flex items-center"
+                                    className="px-4 py-3 bg-gradient-to-r from-christian-accent to-hindu-secondary text-white rounded-md hover:opacity-90 flex items-center"
                                     disabled={isSaving}
                                 >
                                     {isSaving ? (
@@ -289,7 +296,7 @@ const AdminDashboard = () => {
                                     <button
                                         type="button"
                                         onClick={resetForm}
-                                        className="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300"
+                                        className="px-4 py-3 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300"
                                         disabled={isSaving}
                                     >
                                         Cancel
@@ -299,7 +306,7 @@ const AdminDashboard = () => {
                         </form>
                     </div>
 
-                    {/* Guest List */}
+                    {/* Guest List - Mobile optimized */}
                     <div>
                         <h2 className="text-xl font-bold mb-4">Guest List</h2>
 
@@ -309,20 +316,20 @@ const AdminDashboard = () => {
                             </div>
                         ) : (
                             <div className="bg-white rounded-lg shadow-md overflow-hidden">
-                                <div className="overflow-x-auto">
-                                    <table className="min-w-full divide-y divide-gray-200">
+                                <div className="w-full">
+                                    <table className="w-full table-fixed divide-y divide-gray-200">
                                         <thead className="bg-gray-50">
                                         <tr>
-                                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            <th className="w-2/5 px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                                 Name
                                             </th>
-                                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            <th className="w-1/5 px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                                 Code
                                             </th>
-                                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                Ceremonies
+                                            <th className="w-1/5 px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                                Access
                                             </th>
-                                            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            <th className="w-1/5 px-2 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                                                 Actions
                                             </th>
                                         </tr>
@@ -330,43 +337,47 @@ const AdminDashboard = () => {
                                         <tbody className="bg-white divide-y divide-gray-200">
                                         {Object.entries(guestList).map(([code, guest]) => (
                                             <tr key={code} className="hover:bg-gray-50">
-                                                <td className="px-6 py-4 whitespace-nowrap">
-                                                    <div className="text-sm font-medium text-gray-900">{guest.name}</div>
+                                                <td className="px-3 py-3 text-sm">
+                                                    <div className="font-medium text-gray-900 truncate">
+                                                        {guest.name}
+                                                    </div>
                                                 </td>
-                                                <td className="px-6 py-4 whitespace-nowrap">
-                                                    <div className="text-sm text-gray-900 font-mono">{code}</div>
+                                                <td className="px-3 py-3 text-sm">
+                                                    <div className="text-gray-900 font-mono truncate">{code}</div>
                                                 </td>
-                                                <td className="px-6 py-4 whitespace-nowrap">
-                                                    <div className="flex space-x-2">
+                                                <td className="px-3 py-3">
+                                                    <div className="flex flex-wrap gap-1">
                                                         {guest.ceremonies.includes('christian') && (
-                                                            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                                                                    <Icon path={mdiCross} size={0.6} className="mr-1" />
-                                                                    Christian
-                                                                </span>
+                                                            <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                                                <Icon path={mdiCross} size={0.5} className="mr-1" />
+                                                                <span className="hidden sm:inline">Christian</span>
+                                                                <span className="sm:hidden">C</span>
+                                                            </span>
                                                         )}
                                                         {guest.ceremonies.includes('hindu') && (
-                                                            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-orange-100 text-orange-800">
-                                                                    <Icon path={mdiTempleHindu} size={0.6} className="mr-1" />
-                                                                    Hindu
-                                                                </span>
+                                                            <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-orange-100 text-orange-800">
+                                                                <Icon path={mdiTempleHindu} size={0.5} className="mr-1" />
+                                                                <span className="hidden sm:inline">Hindu</span>
+                                                                <span className="sm:hidden">H</span>
+                                                            </span>
                                                         )}
                                                     </div>
                                                 </td>
-                                                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                                    <div className="flex space-x-2">
+                                                <td className="px-2 py-3 text-right">
+                                                    <div className="flex justify-end gap-3">
                                                         <button
                                                             onClick={() => handleEditGuest(code)}
-                                                            className="text-indigo-600 hover:text-indigo-900"
+                                                            className="text-indigo-600 hover:text-indigo-900 p-1"
                                                             title="Edit Guest"
                                                         >
-                                                            <Icon path={mdiPencil} size={0.8} />
+                                                            <Icon path={mdiPencil} size={0.9} />
                                                         </button>
                                                         <button
                                                             onClick={() => handleDeleteGuest(code)}
-                                                            className="text-red-600 hover:text-red-900"
+                                                            className="text-red-600 hover:text-red-900 p-1"
                                                             title="Delete Guest"
                                                         >
-                                                            <Icon path={mdiTrashCan} size={0.8} />
+                                                            <Icon path={mdiTrashCan} size={0.9} />
                                                         </button>
                                                     </div>
                                                 </td>
@@ -381,22 +392,22 @@ const AdminDashboard = () => {
                 </div>
             )}
 
-            {/* QR Code Generator */}
+            {/* QR Code Generator - Mobile optimized */}
             {activeTab === 'qrCodes' && (
-                <div className="p-6 max-w-md mx-auto bg-white rounded-lg shadow-md">
-                    <h2 className="text-2xl font-bold mb-6">QR Code Generator</h2>
+                <div className="p-4 md:p-6 mx-auto bg-white rounded-lg shadow-md max-w-md">
+                    <h2 className="text-xl font-bold mb-6 text-center">QR Code Generator</h2>
 
-                    <div className="mb-4">
-                        <label className="block mb-2">Select Guest:</label>
+                    <div className="mb-6">
+                        <label className="block mb-2 font-medium">Select Guest:</label>
                         <select
                             value={selectedGuest}
                             onChange={(e) => setSelectedGuest(e.target.value)}
-                            className="w-full p-2 border border-gray-300 rounded-lg"
+                            className="w-full p-3 border border-gray-300 rounded-lg text-base"
                         >
                             <option value="">-- Select a guest --</option>
                             {Object.entries(guestList).map(([code, guest]) => (
                                 <option key={code} value={code}>
-                                    {guest.name} - {code} - {guest.ceremonies.join(', ')}
+                                    {guest.name} - {code}
                                 </option>
                             ))}
                         </select>
@@ -404,7 +415,7 @@ const AdminDashboard = () => {
 
                     {selectedGuest && (
                         <div className="text-center">
-                            <div className="mb-4 p-4 inline-block bg-white rounded-lg">
+                            <div className="mb-4 p-4 inline-block bg-white rounded-lg border border-gray-200">
                                 <QRCodeCanvas
                                     id="qr-code"
                                     value={getInvitationUrl(selectedGuest)}
@@ -416,31 +427,31 @@ const AdminDashboard = () => {
                             </div>
 
                             <div className="space-y-4">
-                                <p className="mb-2">Invitation Code: <strong>{selectedGuest}</strong></p>
-                                <p className="mb-2">Guest: <strong>{guestList[selectedGuest].name}</strong></p>
+                                <p className="mb-2 text-base">Invitation Code: <strong>{selectedGuest}</strong></p>
+                                <p className="mb-2 text-base">Guest: <strong>{guestList[selectedGuest].name}</strong></p>
 
                                 {/* Direct invitation link section */}
                                 <div className="mt-4 p-4 bg-gray-50 rounded-lg text-left">
-                                    <p className="text-sm font-medium mb-2">Direct Invitation Link:</p>
-                                    <div className="flex">
+                                    <p className="text-sm font-medium mb-3">Direct Invitation Link:</p>
+                                    <div className="flex flex-col sm:flex-row gap-2">
                                         <input
                                             type="text"
                                             value={getInvitationUrl(selectedGuest)}
                                             readOnly
-                                            className="flex-grow p-2 text-sm border border-gray-300 rounded-l-lg focus:outline-none"
+                                            className="flex-grow p-3 text-sm border border-gray-300 rounded-lg sm:rounded-r-none focus:outline-none"
                                         />
                                         <button
                                             onClick={() => {
                                                 navigator.clipboard.writeText(getInvitationUrl(selectedGuest));
                                                 alert("Link copied to clipboard!");
                                             }}
-                                            className="px-4 py-2 bg-gray-200 text-gray-700 rounded-r-lg hover:bg-gray-300"
+                                            className="px-4 py-3 bg-gray-200 text-gray-700 rounded-lg sm:rounded-l-none hover:bg-gray-300 text-base"
                                         >
                                             Copy
                                         </button>
                                     </div>
                                     <p className="text-xs text-gray-500 mt-2">
-                                        You can share this link directly via email or messaging apps.
+                                        Share this link via email or messaging apps.
                                     </p>
                                 </div>
 
@@ -457,7 +468,7 @@ const AdminDashboard = () => {
                                         downloadLink.click();
                                         document.body.removeChild(downloadLink);
                                     }}
-                                    className="px-4 py-2 bg-christian-accent text-white rounded-lg"
+                                    className="px-4 py-3 bg-christian-accent text-white rounded-lg w-full sm:w-auto"
                                 >
                                     Download QR Code
                                 </button>
