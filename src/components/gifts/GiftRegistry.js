@@ -1,7 +1,7 @@
 // src/components/gifts/GiftRegistry.js
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { mdiHome, mdiAirplane, mdiSilverwareFork, mdiBed, mdiCashMultiple, mdiCart, mdiCheck, mdiLink, mdiGift } from '@mdi/js';
+import { mdiHeart,mdiHome, mdiAirplane, mdiSilverwareFork, mdiBed, mdiCashMultiple, mdiCart, mdiCheck, mdiLink, mdiGift } from '@mdi/js';
 import Icon from '@mdi/react';
 import { useTranslation } from 'react-i18next';
 import AnimatedSection from '../common/AnimatedSection';
@@ -28,7 +28,8 @@ const GiftRegistry = () => {
             name: 'Stand Mixer',
             category: 'kitchen',
             description: 'Professional 5.7L stand mixer in silver',
-            price: '€399',
+            price: '' +
+                '',
             image: '/images/placeholder.jpg',
             purchased: false,
             link: 'https://www.amazon.com'
@@ -38,7 +39,7 @@ const GiftRegistry = () => {
             name: 'Dinner Set',
             category: 'kitchen',
             description: '12-piece porcelain dinner set with elegant gold trim',
-            price: '€199',
+            price: '',
             image: '/images/placeholder.jpg',
             purchased: true,
             purchasedBy: 'Meier Family',
@@ -49,7 +50,7 @@ const GiftRegistry = () => {
             name: 'Coffee Machine',
             category: 'kitchen',
             description: 'Automatic espresso machine with milk frother',
-            price: '€499',
+            price: '',
             image: '/images/placeholder.jpg',
             purchased: false,
             link: 'https://www.amazon.com'
@@ -59,7 +60,7 @@ const GiftRegistry = () => {
             name: 'Smart TV',
             category: 'home',
             description: '65" 4K Ultra HD Smart TV with voice control',
-            price: '€899',
+            price: '',
             image: '/images/placeholder.jpg',
             purchased: false,
             link: 'https://www.amazon.com'
@@ -69,7 +70,7 @@ const GiftRegistry = () => {
             name: 'Artwork',
             category: 'home',
             description: 'Canvas print set - Abstract modern design',
-            price: '€249',
+            price: '',
             image: '/images/placeholder.jpg',
             purchased: false,
             link: 'https://www.amazon.com'
@@ -79,7 +80,7 @@ const GiftRegistry = () => {
             name: 'Luxury Bedding Set',
             category: 'bedroom',
             description: 'King-size 100% Egyptian cotton 800 thread count',
-            price: '€299',
+            price: '',
             image: '/images/placeholder.jpg',
             purchased: true,
             purchasedBy: 'Schmidt Family',
@@ -90,7 +91,7 @@ const GiftRegistry = () => {
             name: 'Decorative Pillows',
             category: 'bedroom',
             description: 'Set of 4 decorative throw pillows in matching colors',
-            price: '€129',
+            price: '',
             image: '/images/placeholder.jpg',
             purchased: false,
             link: 'https://www.amazon.com'
@@ -102,29 +103,23 @@ const GiftRegistry = () => {
         {
             id: 'honeymoon',
             title: 'Honeymoon Fund',
-            description: 'Help us create unforgettable memories on our dream honeymoon to Bali',
+            description: 'Help us create unforgettable memories on our honeymoon. Our destination is still being decided, but your contribution will help make it special.',
             icon: mdiAirplane,
-            color: 'bg-gradient-to-r from-blue-500 to-indigo-500',
-            progress: 65,
-            goal: '€3000'
+            color: 'bg-gradient-to-r from-blue-500 to-indigo-500'
         },
         {
             id: 'homefund',
             title: 'Home Fund',
-            description: 'Contribute to our first home together',
+            description: 'Contribute to our first home together. Your gift will help us establish our new life in a place we can call our own.',
             icon: mdiHome,
-            color: 'bg-gradient-to-r from-green-500 to-emerald-500',
-            progress: 40,
-            goal: '€5000'
+            color: 'bg-gradient-to-r from-green-500 to-emerald-500'
         },
         {
-            id: 'charity',
-            title: 'Charity Donation',
-            description: 'Donate to Plan International in our name to support children in need',
-            icon: mdiGift,
-            color: 'bg-gradient-to-r from-christian-accent to-wedding-love',
-            progress: 30,
-            goal: '€1000'
+            id: 'family',
+            title: 'Starting a Family',
+            description: 'Your gift will help us prepare for the future as we plan to grow our family together.',
+            icon: mdiHeart, // Assuming mdiHeart is imported, but you could use a different icon
+            color: 'bg-gradient-to-r from-christian-accent to-wedding-love'
         }
     ];
 
@@ -303,31 +298,17 @@ const GiftRegistry = () => {
                                         </div>
 
                                         <p className="text-gray-700 mb-6">{cashGift.description}</p>
-
-                                        <div className="mb-4">
-                                            <div className="flex justify-between text-sm mb-1">
-                                                <span>{t('gifts.cashGifts.progress')}: {cashGift.progress}%</span>
-                                                <span>{t('gifts.cashGifts.goal')}: {cashGift.goal}</span>
-                                            </div>
-                                            <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
-                                                <motion.div
-                                                    className={`h-full ${cashGift.color}`}
-                                                    initial={{ width: 0 }}
-                                                    animate={{ width: `${cashGift.progress}%` }}
-                                                    transition={{ duration: 1, delay: index * 0.2 }}
-                                                />
-                                            </div>
-                                        </div>
-
-                                        <a
-                                            href="#"
-                                            className={`inline-block py-2 px-6 ${cashGift.color} text-white rounded-full font-semibold hover:shadow-md transition-shadow`}
-                                        >
-                                            {t('gifts.cashGifts.contribute')}
-                                        </a>
                                     </div>
                                 </AnimatedSection>
                             ))}
+                        </div>
+
+                        <div className="text-center mt-8">
+                            <p className="text-gray-700 max-w-2xl mx-auto">
+                                Most of our guests prefer to give cash gifts at the wedding ceremonies,
+                                which we truly appreciate. If you'd like to contribute beforehand,
+                                please contact us for bank details.
+                            </p>
                         </div>
                     </AnimatedSection>
                 )}

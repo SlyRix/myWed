@@ -1,12 +1,11 @@
-// src/App.js
+// src/App.js (modified)
 import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import Header from './components/common/Header';
 import Footer from './components/common/Footer';
-import PasswordProtection from './components/common/PasswordProtection';
 import LoadingSpinner from './components/common/LoadingSpinner';
-import { AuthProvider } from './contexts/AuthContext';
 import { ThemeProvider } from './contexts/ThemeContext';
+import WelcomeSplash from './components/welcome/WelcomeSplash';
 import './styles/global.css';
 import emailjs from '@emailjs/browser';
 import { guestList } from './data/guestAccess'; // Import the guest list
@@ -38,12 +37,14 @@ const ConditionalFooter = () => {
 };
 
 function App() {
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [showSplash, setShowSplash] = useState(true);
 
-    // Check if user is already authenticated and process invitation codes
+    // Check if user has seen the splash screen before
     useEffect(() => {
-        // Check for authentication status
-        const authStatus = localStorage.getItem('weddingAuth');
+        const hasSeenSplash = localStorage.getItem('hasSeenSplash');
+        if (hasSeenSplash) {
+            setShowSplash(false);
+        }
 
         // Process invitation code from URL, if present
         const url = new URL(window.location.href);
@@ -62,21 +63,12 @@ function App() {
                 window.history.replaceState({}, document.title, window.location.pathname);
             }
         }
-
-        // Set authentication state
-        if (authStatus === 'true') {
-            setIsAuthenticated(true);
-        }
     }, []);
 
-    const handleAuthentication = (password) => {
-        // In a real app, you'd verify against a secure source
-        if (password === 'wedding2026') {
-            setIsAuthenticated(true);
-            localStorage.setItem('weddingAuth', 'true');
-            return true;
-        }
-        return false;
+    // Handle completion of splash screen
+    const handleSplashComplete = () => {
+        setShowSplash(false);
+        localStorage.setItem('hasSeenSplash', 'true');
     };
 
     // Loading fallback component with wedding-themed design
@@ -88,49 +80,47 @@ function App() {
     );
 
     return (
-        <AuthProvider value={{ isAuthenticated, setIsAuthenticated }}>
-            <ThemeProvider>
-                <Router>
-                    {!isAuthenticated ? (
-                        <PasswordProtection onAuthenticate={handleAuthentication} />
-                    ) : (
-                        <>
-                            <Header />
-                            <main>
-                                <Suspense fallback={<PageLoader />}>
-                                    <Routes>
-                                        <Route path="/" element={<HomePage />} />
-                                        <Route path="/christian-ceremony" element={<ChristianCeremony />} />
-                                        <Route path="/hindu-ceremony" element={<HinduCeremony />} />
-                                        <Route path="/our-story" element={<OurStory />} />
-                                        <Route path="/gifts" element={<GiftRegistry />} />
-                                        <Route path="/gallery" element={<PhotoGallery />} />
-                                        <Route path="/rsvp" element={<RSVPPage />} />
-                                        <Route path="/guestbook" element={<GuestbookPage />} />
-                                        <Route path="/accommodations" element={<AccommodationsPage />} />
+        <ThemeProvider>
+            <Router>
+                {showSplash ? (
+                    <WelcomeSplash onComplete={handleSplashComplete} />
+                ) : (
+                    <>
+                        <Header />
+                        <main>
+                            <Suspense fallback={<PageLoader />}>
+                                <Routes>
+                                    <Route path="/" element={<HomePage />} />
+                                    <Route path="/christian-ceremony" element={<ChristianCeremony />} />
+                                    <Route path="/hindu-ceremony" element={<HinduCeremony />} />
+                                    <Route path="/our-story" element={<OurStory />} />
+                                    <Route path="/gifts" element={<GiftRegistry />} />
+                                    <Route path="/gallery" element={<PhotoGallery />} />
+                                    <Route path="/rsvp" element={<RSVPPage />} />
+                                    <Route path="/guestbook" element={<GuestbookPage />} />
+                                    <Route path="/accommodations" element={<AccommodationsPage />} />
 
-                                        {/* Admin routes */}
-                                        <Route path="/admin" element={<AdminLogin />} />
-                                        <Route
-                                            path="/admin/dashboard"
-                                            element={
-                                                <AdminRoute>
-                                                    <AdminDashboard />
-                                                </AdminRoute>
-                                            }
-                                        />
+                                    {/* Admin routes */}
+                                    <Route path="/admin" element={<AdminLogin />} />
+                                    <Route
+                                        path="/admin/dashboard"
+                                        element={
+                                            <AdminRoute>
+                                                <AdminDashboard />
+                                            </AdminRoute>
+                                        }
+                                    />
 
-                                        <Route path="*" element={<Navigate to="/" replace />} />
-                                    </Routes>
-                                </Suspense>
-                            </main>
-                            {/* Use the conditional footer instead of always showing it */}
-                            <ConditionalFooter />
-                        </>
-                    )}
-                </Router>
-            </ThemeProvider>
-        </AuthProvider>
+                                    <Route path="*" element={<Navigate to="/" replace />} />
+                                </Routes>
+                            </Suspense>
+                        </main>
+                        {/* Use the conditional footer instead of always showing it */}
+                        <ConditionalFooter />
+                    </>
+                )}
+            </Router>
+        </ThemeProvider>
     );
 }
 

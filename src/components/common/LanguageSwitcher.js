@@ -11,6 +11,7 @@ const LanguageSwitcher = ({ scrolled }) => {
     const [isOpen, setIsOpen] = React.useState(false);
     const location = useLocation();
     const isHomePage = location.pathname === '/';
+    const dropdownRef = React.useRef(null);
 
     const languages = [
         { code: 'en', name: 'English', flag: '🇺🇸' },
@@ -18,12 +19,46 @@ const LanguageSwitcher = ({ scrolled }) => {
         { code: 'de', name: 'Deutsch', flag: '🇩🇪' },
     ];
 
-    const currentLanguage = languages.find(lang => lang.code === i18n.language) || languages[0];
+    // Fix: Check if current language starts with any of our supported language codes
+    // This handles cases like "de-DE" -> "de"
+    const getCurrentLanguage = () => {
+        const currentLang = i18n.language || '';
+        // First try exact match
+        const exactMatch = languages.find(lang => lang.code === currentLang);
+        if (exactMatch) return exactMatch;
+
+        // If no exact match, try to match the base language code
+        const baseMatch = languages.find(lang =>
+            currentLang.toLowerCase().startsWith(lang.code.toLowerCase())
+        );
+        return baseMatch || languages[0]; // Default to first language if no match
+    };
+
+    const currentLanguage = getCurrentLanguage();
 
     const handleChangeLanguage = (code) => {
         i18n.changeLanguage(code);
         setIsOpen(false);
     };
+
+    // Add click outside handler
+    React.useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+                setIsOpen(false);
+            }
+        };
+
+        // Add event listener if dropdown is open
+        if (isOpen) {
+            document.addEventListener('mousedown', handleClickOutside);
+        }
+
+        // Clean up event listener
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [isOpen]);
 
     // Determine button styling based on scrolled state and homepage
     const getButtonStyles = () => {
@@ -37,7 +72,7 @@ const LanguageSwitcher = ({ scrolled }) => {
     };
 
     return (
-        <div className="relative">
+        <div className="relative" ref={dropdownRef}>
             <button
                 onClick={() => setIsOpen(!isOpen)}
                 className={`flex items-center space-x-2 py-1.5 px-3 rounded-full border transition-all duration-300 ${getButtonStyles()}`}
@@ -67,7 +102,9 @@ const LanguageSwitcher = ({ scrolled }) => {
                             <li key={language.code} role="none">
                                 <button
                                     onClick={() => handleChangeLanguage(language.code)}
-                                    className={`flex items-center justify-between w-full px-4 py-2 text-sm text-left hover:bg-gray-100 transition-colors ${language.code === i18n.language ? 'bg-gray-50 text-christian-accent' : 'text-gray-700'}`}
+                                    className={`flex items-center justify-between w-full px-4 py-2 text-sm text-left hover:bg-gray-100 transition-colors ${
+                                        currentLanguage.code === language.code ? 'bg-gray-50 text-christian-accent' : 'text-gray-700'
+                                    }`}
                                     role="menuitem"
                                 >
                                     <div className="flex items-center space-x-2">
@@ -75,7 +112,7 @@ const LanguageSwitcher = ({ scrolled }) => {
                                         <span>{language.name}</span>
                                     </div>
 
-                                    {language.code === i18n.language && (
+                                    {currentLanguage.code === language.code && (
                                         <Icon path={mdiCheck} size={0.7} className="text-christian-accent" />
                                     )}
                                 </button>
