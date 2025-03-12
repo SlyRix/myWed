@@ -7,8 +7,12 @@ const db = require('./db');
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-// Enable CORS for frontend
-app.use(cors());
+// More permissive CORS configuration
+app.use(cors({
+    origin: '*', // Allow all origins
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+}));
 
 // Parse JSON request bodies
 app.use(bodyParser.json());
