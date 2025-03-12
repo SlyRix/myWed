@@ -34,36 +34,56 @@ const CeremonyTimeline = ({ events, theme }) => {
             <div className={`absolute h-full w-1 ${colors.line} left-1/2 -translate-x-1/2 hidden md:block`}></div>
 
             {/* Timeline items */}
-            <div className="flex flex-col">
-                {events.map((event, index) => (
-                    <motion.div
-                        key={index}
-                        className={`relative mb-8 p-6 ${index % 2 === 0 ? 'md:mr-auto md:text-right' : 'md:ml-auto'} md:w-[45%] w-full ml-0 md:ml-0 ${index % 2 !== 0 ? 'md:pl-0' : ''} pl-0 md:pl-0`}
-                        variants={timelineItem}
-                        initial="hidden"
-                        whileInView="visible"
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.6, delay: index * 0.1 }}
-                    >
-                        {/* Content box */}
-                        <div className="bg-white p-5 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
-                            <div className={`${colors.textColor} font-bold mb-2`}>{event.time}</div>
-                            <h3 className={`text-lg font-bold mb-2 ${colors.titleColor}`}>{event.title}</h3>
-                            <p className="text-gray-600">{event.description}</p>
-                        </div>
+            <div className="relative">
+                {events.map((event, index) => {
+                    // Calculate staggered positions for overlapping effect
+                    const topPosition = `${index * 220 - (index > 0 ? index * 50 : 0)}px`;
+                    const isLeftSide = index % 2 === 0;
 
-                        {/* Timeline dots - visible only on md screens and up */}
-                        <div className={`hidden md:block absolute top-6 w-4 h-4 rounded-full bg-white border-4 ${colors.dot} z-10
-                            ${index % 2 === 0 ? 'right-0 -translate-x-14' : 'left-0 translate-x-14'}`}>
-                        </div>
+                    return (
+                        <motion.div
+                            key={index}
+                            className="relative mb-8 md:mb-0"
+                            variants={timelineItem}
+                            initial="hidden"
+                            whileInView="visible"
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.6, delay: index * 0.1 }}
+                        >
+                            {/* Content box */}
+                            <div
+                                className={`md:absolute md:w-[45%] p-5 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 ${
+                                    isLeftSide ? 'md:left-0 md:text-right' : 'md:right-0'
+                                }`}
+                                style={{
+                                    top: topPosition,
+                                    zIndex: index % 3 + 1 // Vary z-index to create visual interest
+                                }}
+                            >
+                                <div className={`${colors.textColor} font-bold mb-2`}>{event.time}</div>
+                                <h3 className={`text-lg font-bold mb-2 ${colors.titleColor}`}>{event.title}</h3>
+                                <p className="text-gray-600">{event.description}</p>
+                            </div>
 
-                        {/* Connector lines - visible only on md screens and up */}
-                        <div className={`hidden md:block absolute top-8 h-1 ${colors.line} w-14
-                            ${index % 2 === 0 ? 'right-0 -translate-x-0' : 'left-0 translate-x-0'}`}>
-                        </div>
-                    </motion.div>
-                ))}
+                            {/* Timeline dots - visible only on md screens and up */}
+                            <div
+                                className={`hidden md:absolute md:block top-6 md:top-[calc(${topPosition}+1.5rem)] w-4 h-4 rounded-full bg-white border-4 ${colors.dot} z-10 left-1/2 -translate-x-1/2`}
+                            ></div>
+
+                            {/* Connector lines - visible only on md screens and up */}
+                            <div
+                                className={`hidden md:absolute md:block md:top-[calc(${topPosition}+1.5rem)] h-1 ${colors.line} w-[calc(25%-0.5rem)] ${
+                                    isLeftSide ? 'left-[calc(25%+0.5rem)]' : 'right-[calc(25%+0.5rem)]'
+                                }`}
+                                style={{ top: `calc(${topPosition} + 1.5rem)` }}
+                            ></div>
+                        </motion.div>
+                    );
+                })}
             </div>
+
+            {/* Spacer to ensure all events are visible */}
+            <div className="hidden md:block" style={{ height: `${events.length * 180}px` }}></div>
         </div>
     );
 };
