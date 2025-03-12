@@ -52,7 +52,7 @@ const StoryTimeline = ({ events }) => {
                                 {/* Connector lines to content boxes */}
                                 <div
                                     className={`absolute top-1/2 -translate-y-1/2 h-1 bg-christian-accent ${
-                                        isLeft ? 'right-full w-[3vw]' : 'left-full w-[3vw]'
+                                        isLeft ? 'right-full w-[7.8vw]' : 'left-full w-[7.8vw]'
                                     }`}
                                 ></div>
                             </div>
