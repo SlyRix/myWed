@@ -1,4 +1,4 @@
-// src/App.js (modified)
+// src/App.js (updated for API integration)
 import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import Header from './components/common/Header';
@@ -7,8 +7,7 @@ import LoadingSpinner from './components/common/LoadingSpinner';
 import { ThemeProvider } from './contexts/ThemeContext';
 import WelcomeSplash from './components/welcome/WelcomeSplash';
 import './styles/global.css';
-import emailjs from '@emailjs/browser';
-import { guestList } from './data/guestAccess'; // Import the guest list
+import { validateAccessCode } from './api/guestApi';
 
 // Lazy load components to reduce initial bundle size
 const HomePage = lazy(() => import('./components/home/HomePage'));
@@ -38,8 +37,9 @@ const ConditionalFooter = () => {
 
 function App() {
     const [showSplash, setShowSplash] = useState(true);
+    const [isCheckingCode, setIsCheckingCode] = useState(false);
 
-    // Check if user has seen the splash screen before
+    // Check if user has seen the splash screen before and process any invitation code
     useEffect(() => {
         const hasSeenSplash = localStorage.getItem('hasSeenSplash');
         if (hasSeenSplash) {
@@ -47,22 +47,32 @@ function App() {
         }
 
         // Process invitation code from URL, if present
-        const url = new URL(window.location.href);
-        const code = url.searchParams.get('code');
+        const processCode = async () => {
+            const url = new URL(window.location.href);
+            const code = url.searchParams.get('code');
 
-        if (code) {
-            // Normalize and validate the code
-            const formattedCode = code.trim().toUpperCase();
+            if (code) {
+                setIsCheckingCode(true);
+                try {
+                    // Validate the code against our API
+                    const validation = await validateAccessCode(code);
 
-            if (guestList[formattedCode]) {
-                // Valid code found in URL, save it
-                localStorage.setItem('invitationCode', formattedCode);
-                console.log(`Access granted for: ${guestList[formattedCode].name}, ceremonies: ${guestList[formattedCode].ceremonies.join(', ')}`);
-
-                // Clean URL (remove query parameters)
-                window.history.replaceState({}, document.title, window.location.pathname);
+                    if (validation.valid) {
+                        // Valid code found in URL, save it
+                        localStorage.setItem('invitationCode', code.trim().toUpperCase());
+                        console.log(`Access granted for: ${validation.guest.name}, ceremonies: ${validation.ceremonies.join(', ')}`);
+                    }
+                } catch (error) {
+                    console.error('Error validating invitation code:', error);
+                } finally {
+                    // Clean URL (remove query parameters)
+                    window.history.replaceState({}, document.title, window.location.pathname);
+                    setIsCheckingCode(false);
+                }
             }
-        }
+        };
+
+        processCode();
     }, []);
 
     // Handle completion of splash screen
@@ -78,6 +88,18 @@ function App() {
             <p className="mt-4 text-gray-600 animate-pulse">Loading our love story...</p>
         </div>
     );
+
+    // If checking invitation code, show a loading indicator
+    if (isCheckingCode) {
+        return (
+            <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-r from-christian-accent/10 to-hindu-secondary/10">
+                <div className="text-center">
+                    <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-christian-accent mx-auto mb-4"></div>
+                    <p className="text-gray-700">Validating your invitation code...</p>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <ThemeProvider>
@@ -115,7 +137,6 @@ function App() {
                                 </Routes>
                             </Suspense>
                         </main>
-                        {/* Use the conditional footer instead of always showing it */}
                         <ConditionalFooter />
                     </>
                 )}
