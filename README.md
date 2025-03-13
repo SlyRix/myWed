@@ -1,70 +1,175 @@
-# Getting Started with Create React App
+# Multicultural Wedding Website
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A beautiful, responsive wedding website that celebrates the union of two cultures through a Christian and Hindu wedding ceremony. This React-based project features password-protected ceremony pages, RSVP functionality, a gift registry, and much more.
 
-## Available Scripts
+![Wedding Website Screenshot](https://i.imgur.com/placeholder.jpg)
 
-In the project directory, you can run:
+## ✨ Features
 
-### `npm start`
+- **Dual Ceremony Support**: Separate pages for Christian and Hindu ceremonies with unique designs
+- **Password-Protected Access**: Guests can only access the ceremonies they're invited to
+- **QR Code Invitations**: Generate custom QR codes for each guest that provide access to their specific ceremonies
+- **Multilingual Support**: Available in English, German, and Tamil
+- **Responsive Design**: Looks beautiful on all devices
+- **RSVP System**: Allow guests to confirm their attendance and select which ceremonies they'll attend
+- **Gift Registry**: Integration with common registry services
+- **Photo Gallery**: For sharing wedding memories
+- **Guest Book**: Let your guests leave messages
+- **Admin Dashboard**: Manage guest access and generate QR codes
+- **Accommodation Information**: Help out-of-town guests find places to stay
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## 🚀 Getting Started
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### Prerequisites
 
-### `npm test`
+- Node.js (v14 or higher)
+- npm or yarn
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Installation
 
-### `npm run build`
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/yourusername/wedding-website.git
+   cd wedding-website
+   ```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+3. Create a `.env` file in the root directory with the following content:
+   ```
+   REACT_APP_API_URL=http://localhost:3001/api
+   ```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+4. Start the development server:
+   ```bash
+   npm start
+   ```
 
-### `npm run eject`
+5. Start the backend server (for RSVP and guest management):
+   ```bash
+   node src/server/server.js
+   ```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## 🏗️ Project Structure
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```
+wedding-website/
+├── public/
+├── src/
+│   ├── api/            # API integration
+│   ├── components/     # React components
+│   │   ├── admin/      # Admin dashboard
+│   │   ├── ceremonies/ # Christian and Hindu ceremony pages
+│   │   ├── common/     # Shared components
+│   │   ├── gallery/    # Photo gallery components
+│   │   ├── gifts/      # Gift registry components
+│   │   ├── guestbook/  # Guestbook components
+│   │   ├── home/       # Homepage components
+│   │   ├── map/        # Map components
+│   │   ├── rsvp/       # RSVP form components
+│   │   ├── story/      # Our story components
+│   │   └── welcome/    # Welcome splash components
+│   ├── contexts/       # React contexts
+│   ├── data/           # Static data
+│   ├── hooks/          # Custom React hooks
+│   ├── i18n/           # Internationalization
+│   │   └── locales/    # Translation files
+│   ├── server/         # Backend server code
+│   ├── styles/         # CSS and styling
+│   └── utils/          # Utility functions
+└── README.md
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## 🌈 Customization
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+### Updating Ceremony Information
 
-## Learn More
+Edit the translation files in `src/i18n/locales/` to update ceremony details:
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+```json
+"christian": {
+  "title": "Christian Ceremony",
+  "dateTime": {
+    "date": "July 4, 2026",
+    "time": "2:00 PM - 4:00 PM"
+  },
+  "location": {
+    "address1": "Your Church Name",
+    "address2": "Church Address"
+  }
+}
+```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+### Changing Colors and Theme
 
-### Code Splitting
+The theme colors can be modified in `tailwind.config.js`:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+```js
+theme: {
+  extend: {
+    colors: {
+      'christian': {
+        primary: '#f9f7f5',
+        secondary: '#e8e6e1',
+        accent: '#b08968',
+      },
+      'hindu': {
+        primary: '#fff9e6',
+        secondary: '#bc863c',
+        accent: '#d93f0b',
+      },
+    }
+  }
+}
+```
 
-### Analyzing the Bundle Size
+### Adding or Removing Guests
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+Use the admin dashboard at `/admin` (password: 123) to manage guest access.
 
-### Making a Progressive Web App
+## 📱 Deployment
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+### Option 1: Traditional Web Hosting
 
-### Advanced Configuration
+1. Build the project:
+   ```bash
+   npm run build
+   ```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+2. Upload the contents of the `build` directory to your web hosting provider.
 
-### Deployment
+### Option 2: Raspberry Pi Self-Hosting
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+Follow the instructions in `src/server/README.md` to set up the website on a Raspberry Pi.
 
-### `npm run build` fails to minify
+### Option 3: Vercel/Netlify
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fyourusername%2Fwedding-website)
+[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/yourusername/wedding-website)
+
+For these platforms, you'll need to set up a separate backend for the API server.
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🙏 Acknowledgments
+
+- Tailwind CSS for the styling system
+- Framer Motion for the animations
+- React-i18next for translations
+- React Router for navigation
+- The amazing open-source community
+
+## 📸 Screenshots
+
+| Homepage | Ceremonies | Mobile View |
+|---------|------------|-------------|
+| ![Homepage](https://i.imgur.com/placeholder1.jpg) | ![Ceremonies](https://i.imgur.com/placeholder2.jpg) | ![Mobile](https://i.imgur.com/placeholder3.jpg) |
+
+---
+
+Created with ❤️ for Rushel & Sivani's wedding
