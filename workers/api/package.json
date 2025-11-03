@@ -1,0 +1,30 @@
+{
+  "name": "wedding-api-worker",
+  "version": "1.0.0",
+  "description": "Cloudflare Worker for wedding website API - handles guest management and authentication",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "deploy:production": "wrangler deploy --env production",
+    "deploy:development": "wrangler deploy --env development",
+    "tail": "wrangler tail",
+    "d1:create": "wrangler d1 create wedding-db",
+    "d1:execute": "wrangler d1 execute wedding-db --file=./schema.sql",
+    "d1:execute:production": "wrangler d1 execute wedding-db --env production --file=./schema.sql",
+    "secret:put": "wrangler secret put ADMIN_PASSWORD_HASH"
+  },
+  "keywords": [
+    "cloudflare",
+    "workers",
+    "wedding",
+    "api",
+    "d1"
+  ],
+  "author": "Rushel",
+  "license": "MIT",
+  "devDependencies": {
+    "wrangler": "^3.0.0"
+  }
+}

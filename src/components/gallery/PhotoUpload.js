@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { mdiCloudUpload } from '@mdi/js';
 import Icon from '@mdi/react';
@@ -6,20 +6,45 @@ import Icon from '@mdi/react';
 const PhotoUpload = ({ onPhotoUpload }) => {
     const [isUploading, setIsUploading] = useState(false);
     const [uploadProgress, setUploadProgress] = useState(0);
+    const [objectUrls, setObjectUrls] = useState([]);
     const fileInputRef = useRef(null);
+    const intervalRef = useRef(null);
+    const timeoutRef = useRef(null);
+
+    // Cleanup effect to revoke object URLs and clear timers
+    useEffect(() => {
+        return () => {
+            // Revoke all object URLs when component unmounts
+            objectUrls.forEach(url => URL.revokeObjectURL(url));
+
+            // Clear any active timers
+            if (intervalRef.current) {
+                clearInterval(intervalRef.current);
+            }
+            if (timeoutRef.current) {
+                clearTimeout(timeoutRef.current);
+            }
+        };
+    }, [objectUrls]);
 
     const handleFileChange = (e) => {
         const files = Array.from(e.target.files);
         if (files.length === 0) return;
 
+        // Revoke previous object URLs before creating new ones
+        objectUrls.forEach(url => URL.revokeObjectURL(url));
+
         setIsUploading(true);
         setUploadProgress(0);
 
         // Simulate upload progress
-        const interval = setInterval(() => {
+        intervalRef.current = setInterval(() => {
             setUploadProgress(prev => {
                 if (prev >= 100) {
-                    clearInterval(interval);
+                    if (intervalRef.current) {
+                        clearInterval(intervalRef.current);
+                        intervalRef.current = null;
+                    }
                     return 100;
                 }
                 return prev + 5;
@@ -27,21 +52,32 @@ const PhotoUpload = ({ onPhotoUpload }) => {
         }, 100);
 
         // Process files to create photo objects
-        const newPhotos = files.map((file, index) => ({
-            id: Date.now() + index,
-            src: URL.createObjectURL(file),
-            alt: file.name
-        }));
+        const urls = [];
+        const newPhotos = files.map((file, index) => {
+            const url = URL.createObjectURL(file);
+            urls.push(url);
+            return {
+                id: Date.now() + index,
+                src: url,
+                alt: file.name
+            };
+        });
+
+        setObjectUrls(urls);
 
         // Simulate completed upload after "progress" reaches 100%
-        setTimeout(() => {
+        timeoutRef.current = setTimeout(() => {
             onPhotoUpload(newPhotos);
             setIsUploading(false);
             // Reset the file input
             if (fileInputRef.current) {
                 fileInputRef.current.value = '';
             }
-            clearInterval(interval);
+            if (intervalRef.current) {
+                clearInterval(intervalRef.current);
+                intervalRef.current = null;
+            }
+            timeoutRef.current = null;
         }, 2000);
     };
 

@@ -1,0 +1,15 @@
+# Wrangler configuration for Cloudflare Pages
+# This is for the frontend React application
+
+name = "wedding-website"
+pages_build_output_dir = "build"
+
+# Compatibility settings
+compatibility_date = "2024-01-01"
+
+# Production environment configuration
+[env.production]
+name = "wedding-website"
+
+[env.production.vars]
+NODE_ENV = "production"

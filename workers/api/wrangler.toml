@@ -1,0 +1,55 @@
+# Wrangler configuration for Wedding API Worker
+# Documentation: https://developers.cloudflare.com/workers/wrangler/configuration/
+
+name = "wedding-api"
+main = "src/index.js"
+compatibility_date = "2024-01-01"
+account_id = "a3000146f2714841e3bdd91d655aef9c"
+
+# Worker configuration
+workers_dev = true
+
+# D1 Database binding
+[[d1_databases]]
+binding = "DB"
+database_name = "wedding-db"
+database_id = "71f98b31-6ee3-47cf-84e0-33be1a805975"
+
+# Environment variables
+[vars]
+FRONTEND_URL = "https://rushel.me"
+
+# Secrets (set these using: wrangler secret put <KEY>)
+# ADMIN_PASSWORD_HASH = "your_password_hash_here"
+#
+# To generate password hash:
+# 1. Run: node -e "const crypto = require('crypto'); console.log(crypto.createHash('sha256').update('your_password').digest('hex'));"
+# 2. Then run: wrangler secret put ADMIN_PASSWORD_HASH
+# 3. Paste the hash when prompted
+
+# Production environment
+[env.production]
+name = "wedding-api"
+routes = [
+    { pattern = "api.rushel.me/*", zone_name = "rushel.me" }
+]
+
+[env.production.vars]
+FRONTEND_URL = "https://wed.rushel.me"
+
+[[env.production.d1_databases]]
+binding = "DB"
+database_name = "wedding-db"
+database_id = "71f98b31-6ee3-47cf-84e0-33be1a805975"
+
+# Development environment
+[env.development]
+name = "wedding-api-dev"
+
+[env.development.vars]
+FRONTEND_URL = "http://localhost:3000"
+
+[[env.development.d1_databases]]
+binding = "DB"
+database_name = "wedding-db-dev"
+database_id = "REPLACE_WITH_YOUR_DEV_D1_DATABASE_ID"

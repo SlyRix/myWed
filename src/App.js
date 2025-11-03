@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'r
 import Header from './components/common/Header';
 import Footer from './components/common/Footer';
 import LoadingSpinner from './components/common/LoadingSpinner';
+import ErrorBoundary from './components/common/ErrorBoundary';
 import { ThemeProvider } from './contexts/ThemeContext';
 import WelcomeSplash from './components/welcome/WelcomeSplash';
 import './styles/global.css';
@@ -60,7 +61,9 @@ function App() {
                     if (validation.valid) {
                         // Valid code found in URL, save it
                         localStorage.setItem('invitationCode', code.trim().toUpperCase());
-                        console.log(`Access granted for: ${validation.guest.name}, ceremonies: ${validation.ceremonies.join(', ')}`);
+                        if (process.env.NODE_ENV === 'development') {
+                            console.log('Access granted');
+                        }
                     }
                 } catch (error) {
                     console.error('Error validating invitation code:', error);
@@ -102,8 +105,9 @@ function App() {
     }
 
     return (
-        <ThemeProvider>
-            <Router>
+        <ErrorBoundary>
+            <ThemeProvider>
+                <Router>
                 {showSplash ? (
                     <WelcomeSplash onComplete={handleSplashComplete} />
                 ) : (
@@ -140,8 +144,9 @@ function App() {
                         <ConditionalFooter />
                     </>
                 )}
-            </Router>
-        </ThemeProvider>
+                </Router>
+            </ThemeProvider>
+        </ErrorBoundary>
     );
 }
 

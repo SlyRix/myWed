@@ -1,6 +1,7 @@
 // src/server/db.js
 const fs = require('fs');
 const path = require('path');
+const crypto = require('crypto');
 
 // Path to our JSON database file
 const DB_PATH = path.join(__dirname, '../../data/guestList.json');
@@ -112,22 +113,36 @@ const validateAccessCode = (code) => {
     return { valid: false };
 };
 
-// Generate a unique guest code
+// Generate a unique guest code using cryptographically secure random values
 const generateGuestCode = (name) => {
     if (!name) return '';
 
-    // Take first 4 letters and convert to uppercase
-    let baseCode = name.trim().substring(0, 4).toUpperCase();
-
-    // Check if code already exists
-    let newCode = baseCode;
-    let counter = 1;
     const guestList = getGuestList();
+    let newCode;
+    let attempts = 0;
+    const maxAttempts = 20;
 
-    while (guestList[newCode]) {
-        newCode = `${baseCode}${counter}`;
-        counter++;
+    // Generate cryptographically secure random codes
+    while (attempts < maxAttempts) {
+        // Generate 8-character alphanumeric code
+        const randomBytes = crypto.randomBytes(6);
+        newCode = randomBytes.toString('base64')
+            .replace(/[^A-Z0-9]/gi, '')
+            .toUpperCase()
+            .substring(0, 8);
+
+        // Ensure uniqueness
+        if (!guestList[newCode] && newCode.length === 8) {
+            return newCode;
+        }
+
+        attempts++;
     }
+
+    // Fallback: use name-based code with timestamp
+    const timestamp = Date.now().toString(36).toUpperCase();
+    const namePrefix = name.trim().substring(0, 4).toUpperCase().replace(/[^A-Z]/g, '');
+    newCode = `${namePrefix}${timestamp}`.substring(0, 8);
 
     return newCode;
 };

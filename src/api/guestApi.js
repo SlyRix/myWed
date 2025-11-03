@@ -1,10 +1,42 @@
 // src/api/guestApi.js
-const API_URL = process.env.REACT_APP_API_URL || 'https://rswed-api.slyrix.com/api';
+const API_URL = process.env.REACT_APP_API_URL || 'https://api.rushel.me/api';
+
+// Helper function to get auth headers
+const getAuthHeaders = () => {
+    const token = localStorage.getItem('adminToken');
+    return {
+        'Content-Type': 'application/json',
+        ...(token && { 'Authorization': `Bearer ${token}` })
+    };
+};
+
+// Helper function to add timeout to fetch requests
+const fetchWithTimeout = async (url, options = {}, timeout = 10000) => {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), timeout);
+
+    try {
+        const response = await fetch(url, {
+            ...options,
+            signal: controller.signal
+        });
+        clearTimeout(timeoutId);
+        return response;
+    } catch (error) {
+        clearTimeout(timeoutId);
+        if (error.name === 'AbortError') {
+            throw new Error('Request timeout - please check your connection and try again');
+        }
+        throw error;
+    }
+};
 
 // Fetch all guests
 export const fetchAllGuests = async () => {
     try {
-        const response = await fetch(`${API_URL}/guests`);
+        const response = await fetchWithTimeout(`${API_URL}/guests`, {
+            headers: getAuthHeaders()
+        });
 
         if (!response.ok) {
             throw new Error(`Failed to fetch guests: ${response.statusText}`);
@@ -20,11 +52,9 @@ export const fetchAllGuests = async () => {
 // Save a guest (add or update)
 export const saveGuest = async (code, guestData) => {
     try {
-        const response = await fetch(`${API_URL}/guests`, {
+        const response = await fetchWithTimeout(`${API_URL}/guests`, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
+            headers: getAuthHeaders(),
             body: JSON.stringify({ code, guestData }),
         });
 
@@ -42,8 +72,9 @@ export const saveGuest = async (code, guestData) => {
 // Delete a guest
 export const deleteGuest = async (code) => {
     try {
-        const response = await fetch(`${API_URL}/guests/${code}`, {
+        const response = await fetchWithTimeout(`${API_URL}/guests/${code}`, {
             method: 'DELETE',
+            headers: getAuthHeaders(),
         });
 
         if (!response.ok) {
@@ -63,7 +94,7 @@ export const validateAccessCode = async (code) => {
 
     try {
         const formattedCode = code.trim().toUpperCase();
-        const response = await fetch(`${API_URL}/validate/${formattedCode}`);
+        const response = await fetchWithTimeout(`${API_URL}/validate/${formattedCode}`);
 
         if (!response.ok) {
             throw new Error(`Failed to validate code: ${response.statusText}`);
@@ -79,11 +110,9 @@ export const validateAccessCode = async (code) => {
 // Generate a guest code
 export const generateGuestCode = async (name) => {
     try {
-        const response = await fetch(`${API_URL}/generate-code`, {
+        const response = await fetchWithTimeout(`${API_URL}/generate-code`, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
+            headers: getAuthHeaders(),
             body: JSON.stringify({ name }),
         });
 

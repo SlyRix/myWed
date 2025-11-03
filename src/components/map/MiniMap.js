@@ -10,7 +10,7 @@ const MiniMap = ({ address, lat, lng, title }) => {
         ? `${lat},${lng}`
         : encodeURIComponent(address);
 
-    const embedUrl = `https://www.google.com/maps/embed/v1/place?key=AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8&q=${embedAddress}`;
+    const embedUrl = `https://www.google.com/maps/embed/v1/place?key=${process.env.REACT_APP_GOOGLE_MAPS_API_KEY}&q=${embedAddress}`;
 
     // This is a free "no-API-key-needed" embed from Google
     // It has limited features but works for basic needs
@@ -29,23 +29,6 @@ const MiniMap = ({ address, lat, lng, title }) => {
                     allowFullScreen
                 ></iframe>
             </div>
-
-            {/* Map details */}
-            {/*<div className="p-3">*/}
-            {/*    <div className="text-sm font-medium text-gray-700 mb-1 truncate">*/}
-            {/*        {title}*/}
-            {/*    </div>*/}
-
-                <a
-                    href={googleMapsUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center text-xs text-christian-accent hover:text-wedding-love transition-colors"
-                >
-            {/*        <span>View on Google Maps</span>*/}
-            {/*        <span className="ml-1">↗</span>*/}
-                </a>
-            {/*</div>*/}
         </div>
     );
 };

@@ -457,18 +457,34 @@ const AdminDashboard = () => {
 
                                 <button
                                     onClick={() => {
-                                        const canvas = document.getElementById('qr-code');
-                                        const pngUrl = canvas
-                                            .toDataURL('image/png')
-                                            .replace('image/png', 'image/octet-stream');
-                                        const downloadLink = document.createElement('a');
-                                        downloadLink.href = pngUrl;
-                                        downloadLink.download = `${selectedGuest}-invitation.png`;
-                                        document.body.appendChild(downloadLink);
-                                        downloadLink.click();
-                                        document.body.removeChild(downloadLink);
+                                        try {
+                                            const qrElement = document.getElementById('qr-code');
+
+                                            if (!qrElement) {
+                                                alert('QR code not found. Please generate a QR code first.');
+                                                return;
+                                            }
+
+                                            const canvas = qrElement.querySelector('canvas');
+
+                                            if (!canvas) {
+                                                alert('Unable to generate QR code image. Please try again.');
+                                                return;
+                                            }
+
+                                            const pngUrl = canvas.toDataURL('image/png');
+                                            const downloadLink = document.createElement('a');
+                                            downloadLink.href = pngUrl;
+                                            downloadLink.download = `${selectedGuest}-invitation.png`;
+                                            document.body.appendChild(downloadLink);
+                                            downloadLink.click();
+                                            document.body.removeChild(downloadLink);
+                                        } catch (error) {
+                                            console.error('Error downloading QR code:', error);
+                                            alert('Failed to download QR code. Please try again.');
+                                        }
                                     }}
-                                    className="px-4 py-3 bg-christian-accent text-white rounded-lg w-full sm:w-auto"
+                                    className="px-4 py-3 bg-christian-accent text-white rounded-lg w-full sm:w-auto hover:bg-christian-accent/90 transition-colors"
                                 >
                                     Download QR Code
                                 </button>

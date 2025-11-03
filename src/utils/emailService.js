@@ -1,18 +1,22 @@
 // src/utils/emailService.js
 import emailjs from '@emailjs/browser';
 
-// Replace these with your actual values from EmailJS dashboard
-const SERVICE_ID = 'service_zwmh9m3';  // service_xxxxxx
-const TEMPLATE_ID = 'template_qq4oalp'; // template_xxxxxx
-const PUBLIC_KEY = '-aL2Rd-N2QdzeUs5Q';  // Found in Integration tab
+// Get EmailJS configuration from environment variables
+const SERVICE_ID = process.env.REACT_APP_EMAILJS_SERVICE_ID;
+const TEMPLATE_ID = process.env.REACT_APP_EMAILJS_TEMPLATE_ID;
+const PUBLIC_KEY = process.env.REACT_APP_EMAILJS_PUBLIC_KEY;
 
-// Initialize EmailJS with verbose logging
-console.log('Initializing EmailJS with PUBLIC_KEY:', PUBLIC_KEY);
+// Initialize EmailJS (only log in development mode)
+if (process.env.NODE_ENV === 'development') {
+    console.log('Initializing EmailJS');
+}
 emailjs.init(PUBLIC_KEY);
 
 // Function to send RSVP email with comprehensive error handling
 export const sendRSVPEmail = async (formData) => {
-    console.log('⚠️ SEND ATTEMPT: Sending email with data:', formData);
+    if (process.env.NODE_ENV === 'development') {
+        console.log('Sending RSVP email');
+    }
 
     try {
         // Format the attendance information for better readability in the email
@@ -58,9 +62,6 @@ export const sendRSVPEmail = async (formData) => {
             hinduAttending: formData.hinduGuests > 0 ? 'Yes' : 'No'
         };
 
-        console.log('⚠️ TEMPLATE PARAMS: About to send with parameters:', templateParams);
-        console.log('⚠️ SERVICE INFO: Using SERVICE_ID:', SERVICE_ID, 'TEMPLATE_ID:', TEMPLATE_ID);
-
         // Send the email
         const response = await emailjs.send(
             SERVICE_ID,
@@ -68,16 +69,13 @@ export const sendRSVPEmail = async (formData) => {
             templateParams
         );
 
-        console.log('✅ SUCCESS: Email sent successfully!', response);
+        if (process.env.NODE_ENV === 'development') {
+            console.log('Email sent successfully');
+        }
         return { success: true, response };
     } catch (error) {
-        console.error('❌ ERROR: Failed to send email:', error);
-        console.error('Error details:', {
-            name: error.name,
-            message: error.message,
-            text: error.text,
-            status: error.status
-        });
+        // Only log error type, not sensitive details
+        console.error('Failed to send email:', error.message || 'Unknown error');
         return { success: false, error };
     }
 };

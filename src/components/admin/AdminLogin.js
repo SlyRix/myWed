@@ -2,30 +2,47 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3001/api';
+
 const AdminLogin = () => {
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const [isChecking, setIsChecking] = useState(false);
     const navigate = useNavigate();
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         setIsChecking(true);
         setError('');
 
-        // Simple admin authentication
-        setTimeout(() => {
-            if (password === '123') { // Change this to your desired admin password
-                // Set admin access in localStorage
-                localStorage.setItem('adminAccess', 'true');
+        try {
+            // Call backend authentication endpoint
+            const response = await fetch(`${API_URL}/admin/login`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ password }),
+            });
+
+            const data = await response.json();
+
+            if (response.ok && data.success) {
+                // Store authentication token in localStorage
+                localStorage.setItem('adminToken', data.token);
                 // Redirect to admin dashboard
                 navigate('/admin/dashboard');
             } else {
-                setError('Invalid admin password');
+                setError(data.error || 'Invalid admin password');
                 setPassword('');
             }
+        } catch (err) {
+            console.error('Login error:', err);
+            setError('Failed to connect to server. Please try again.');
+            setPassword('');
+        } finally {
             setIsChecking(false);
-        }, 800);
+        }
     };
 
     return (
