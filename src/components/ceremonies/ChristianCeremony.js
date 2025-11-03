@@ -6,7 +6,7 @@ import { mdiMapMarker, mdiCalendar, mdiTshirtCrew } from '@mdi/js';
 import Icon from '@mdi/react';
 import { useTranslation } from 'react-i18next';
 import CeremonyTimeline from './CeremonyTimeline';
-import OpenStreetMap from '../map/OpenStreetMap';
+import MiniMap from '../map/MiniMap';
 import CalendarLink from '../common/CalendarLink';
 import { Link } from 'react-router-dom';
 import CeremonyAccessCheck from '../common/CeremonyAccessCheck';
@@ -130,9 +130,9 @@ const ChristianCeremony = () => {
                         <p className="mb-1">{t('christian.location.address1')}</p>
                         <p className="text-gray-600 mb-1">{t('christian.location.address2')}</p>
 
-                        {/* Free OpenStreetMap (no API key required!) */}
+                        {/* Add the mini map component */}
                         <div className="mt-4">
-                            <OpenStreetMap
+                            <MiniMap
                                 address={ceremonyLocation}
                                 title={t('christian.location.address1')}
                                 lat={47.192434}
