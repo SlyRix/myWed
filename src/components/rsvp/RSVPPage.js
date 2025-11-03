@@ -1,11 +1,11 @@
 // src/components/rsvp/RSVPPage.js
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import RSVPForm from './RSVPForm';
 import BubbleBackground from '../common/BubbleBackground';
-import { guestList } from '../../data/guestAccess'; // Import the guest list
+import { useGuest } from '../../contexts/GuestContext';
 
 const RSVPPage = () => {
     const { t } = useTranslation();
@@ -13,28 +13,9 @@ const RSVPPage = () => {
     const navigate = useNavigate();
     const queryParams = new URLSearchParams(location.search);
     const ceremony = queryParams.get('ceremony');
-    const [accessibleCeremonies, setAccessibleCeremonies] = useState([]);
-    const [isLoading, setIsLoading] = useState(true);
 
-    // Check if the user has access to any ceremonies
-    useEffect(() => {
-        const invitationCode = localStorage.getItem('invitationCode');
-
-        if (invitationCode && guestList[invitationCode]) {
-            // Set ceremonies this guest has access to
-            setAccessibleCeremonies(guestList[invitationCode].ceremonies);
-        } else {
-            // Admin access or no access code
-            const adminAccess = localStorage.getItem('adminAccess') === 'true';
-            if (adminAccess) {
-                setAccessibleCeremonies(['christian', 'hindu']);
-            } else {
-                setAccessibleCeremonies([]);
-            }
-        }
-
-        setIsLoading(false);
-    }, []);
+    // Use GuestContext to get ceremony access
+    const { ceremonies: accessibleCeremonies, isLoading } = useGuest();
 
     // If they don't have access to any ceremonies, redirect to home
     useEffect(() => {
