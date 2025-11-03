@@ -6,7 +6,7 @@ import {mdiMapMarker, mdiCalendar, mdiTshirtCrew} from '@mdi/js';
 import Icon from '@mdi/react';
 import {useTranslation} from 'react-i18next';
 import CeremonyTimeline from './CeremonyTimeline';
-import MiniMap from '../map/MiniMap';
+import OpenStreetMap from '../map/OpenStreetMap';
 import CalendarLink from '../common/CalendarLink';
 import AnimatedSection from '../common/AnimatedSection';
 import {Link} from 'react-router-dom';
@@ -129,9 +129,9 @@ const HinduCeremony = () => {
                             <p className="mb-1">{t('hindu.location.address1')}</p>
                             <p className="text-gray-600 mb-1">{t('hindu.location.address2')}</p>
 
-                            {/* Add the mini map component */}
+                            {/* Free OpenStreetMap (no API key required!) */}
                             <div className="mt-4">
-                                <MiniMap
+                                <OpenStreetMap
                                     address={ceremonyLocation}
                                     title={t('hindu.location.address1')}
                                     lat={47.366978}  // Example coordinates for a different location
