@@ -15,37 +15,43 @@ const OurStory = () => {
             date: t('story.events.met.date'),
             title: t('story.events.met.title'),
             description: t('story.events.met.description'),
-            image: '/images/placeholder.jpg'
+            image: '/images/story-met.jpg'
+        },
+        {
+            date: t('story.events.firstMeet.date'),
+            title: t('story.events.firstMeet.title'),
+            description: t('story.events.firstMeet.description'),
+            image: '/images/story-firstmeet.jpg'
         },
         {
             date: t('story.events.firstDate.date'),
             title: t('story.events.firstDate.title'),
             description: t('story.events.firstDate.description'),
-            image: '/images/placeholder.jpg'
+            image: '/images/story-firstdate.jpg'
         },
         {
             date: t('story.events.families.date'),
             title: t('story.events.families.title'),
             description: t('story.events.families.description'),
-            image: '/images/placeholder.jpg'
+            image: '/images/story-families.jpg'
         },
         {
             date: t('story.events.proposal.date'),
             title: t('story.events.proposal.title'),
             description: t('story.events.proposal.description'),
-            image: '/images/placeholder.jpg'
+            image: '/images/story-proposal.jpg'
         },
         {
             date: t('story.events.engagement.date'),
             title: t('story.events.engagement.title'),
             description: t('story.events.engagement.description'),
-            image: '/images/placeholder.jpg'
+            image: '/images/story-engagement.jpg'
         },
         {
             date: t('story.events.wedding.date'),
             title: t('story.events.wedding.title'),
             description: t('story.events.wedding.description'),
-            image: '/images/placeholder.jpg'
+            image: '/images/story-wedding.jpg'
         }
     ];
 
@@ -123,7 +129,7 @@ const OurStory = () => {
                     <StoryTimeline events={storyEvents} />
                 </div>
 
-                <AnimatedSection className="mt-20 max-w-3xl mx-auto text-center p-8 bg-white rounded-lg shadow-lg relative overflow-hidden">
+                <AnimatedSection className="mt-60 max-w-3xl mx-auto text-center p-8 bg-white rounded-lg shadow-lg relative overflow-hidden">
                     {/* Inner bubble animation for card */}
                     <motion.div
                         className="absolute -top-10 -right-10 w-48 h-48 rounded-full bg-christian-accent opacity-5"

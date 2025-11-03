@@ -184,40 +184,45 @@
     "description": "Every love story is beautiful, but ours is our favorite. Here's a glimpse into our journey from strangers to soulmates.",
     "events": {
       "met": {
-        "date": "June 2020",
+        "date": "September 2022",
         "title": "How We Met",
-        "description": "We first met at a mutual friend's birthday party. What started as a casual conversation over cake turned into hours of talking about our shared interests and dreams."
+        "description": "Through our friends Vithursan and Subi, who brought their colleague circles together, our paths crossed for the first time. What started as a casual meeting among colleagues quickly evolved into exciting conversations and a special connection."
+      },
+      "firstMeet": {
+        "date": "November 2022",
+        "title": "Our First Meeting",
+        "description": "Sivani was looking for someone to motivate her to run and wrote: 'If only I had someone to run with me, I would be much more motivated!'\nRushel didn't quite catch the hint at first and instead suggested various other running partners to her 😅.\nAfter several attempts, the hint was finally understood – and so we took our first walk together in Eschenbach. For the first time, we did something completely alone – and noticed how wonderful it felt."
       },
       "firstDate": {
-        "date": "December 2020",
-        "title": "First Date",
-        "description": "After months of friendship, we finally went on our first official date to a local coffee shop. We talked for hours, completely losing track of time."
+        "date": "March 9, 2023",
+        "title": "How We Got Together",
+        "description": "On a beautiful day in March, we met at Seerose in Pfäffikon for a date. Between conversations, laughter, and the view of the lake, we both realized that we had truly found each other.\nOn that day, we decided to make it official – and two friends became a couple. 💞"
       },
       "families": {
-        "date": "August 2021",
+        "date": "July 2024",
         "title": "Meeting the Families",
-        "description": "We introduced each other to our families. Despite our different cultural backgrounds, both families welcomed us with open arms and open hearts."
+        "description": "In July 2024, the time had come – we officially introduced ourselves to our parents for the first time.\nWith a little excitement, but much joy, our families met.\nIt quickly became clear: They also got along wonderfully – and welcomed us both with open arms and warm hearts. ❤️"
       },
       "proposal": {
-        "date": "July 2023",
-        "title": "The Proposal",
-        "description": "During a sunset hike to our favorite viewpoint, surrounded by nature and the golden glow of the setting sun, the question was asked and answered with tears of joy."
+        "date": "November 10, 2024",
+        "title": "Our Nichayathartham",
+        "description": "In November 2024, we celebrated our Tamil cultural Nichayathartham.\nA day full of joy, tradition, family, and love.\nWith this special moment, a new chapter began for us – the path to our life together. 💍✨"
       },
       "engagement": {
-        "date": "January 2024",
-        "title": "Engagement Ceremony",
-        "description": "We celebrated our engagement with a beautiful ceremony that blended both our traditions, a perfect representation of our future together."
+        "date": "July 18, 2025",
+        "title": "The Proposal",
+        "description": "In Nice, with a beautiful view and an unforgettable moment, Rushel got down on one knee before Sivani in July 2025.\nWith a pounding heart and a smile full of love, he asked the one question that changes everything.\nAnd with her 'Yes,' our forever together began. 💖🌅💍"
       },
       "wedding": {
-        "date": "Summer 2026",
+        "date": "May 2026",
         "title": "Our Wedding",
-        "description": "And now, we're excited to celebrate the next chapter of our journey with all our loved ones. We can't wait to create more beautiful memories together."
+        "description": "In May 2026, we will tie the knot in a beautiful ceremony 💞\nWe can hardly wait to celebrate this special day with all our loved ones – full of joy, emotions, and unforgettable moments.\nA new chapter begins – forever us. 💍✨"
       }
     },
     "cultures": {
-      "title": "A Union of Cultures",
-      "description1": "Our relationship has been a beautiful journey of bridging two different cultures and traditions. We've learned from each other, grown together, and found harmony in our diversity.",
-      "description2": "Our wedding will be a celebration of this union, honoring both Christian and Hindu traditions. We invite you to join us in this joyous celebration of love, family, and cultural harmony."
+      "title": "A Union of Religions",
+      "description1": "We are both proud to be of Tamil heritage and share the same beautiful culture. What makes us special is the union of our different faiths – Christian and Hindu.",
+      "description2": "Our wedding will be a celebration of this religious union, honoring both Christian and Hindu traditions. We invite you to join us in this joyous celebration of love, family, and spiritual harmony."
     }
   },
   "gifts": {

@@ -97,7 +97,7 @@
     "title": "Hinduistische Zeremonie",
     "headline": "Feiern Sie unsere hinduistische Hochzeitszeremonie",
     "description": "Wir laden Sie herzlich zu unserer traditionellen hinduistischen Hochzeitszeremonie ein. Diese lebendige Feier wird alte Bräuche und Rituale ehren, die die heilige Vereinigung zweier Seelen symbolisieren.",
-    "description2": "Die Zeremonie findet in einem wunderschön dekorierten Mandap statt, wo wir verschiedene Rituale unter der Anleitung eines hinduistischen Priesters durchführen werden. Ihre Anwesenheit würde diesen glückverheißenden Anlass noch besonderer machen.",
+    "description2": "Die Zeremonie findet in einem wunderschön dekorierten Mandap statt, wo wir verschiedene Rituale unter der Anleitung eines hinduistischen Priesters durchführen werden. Ihre Anwesenheit würde diesen glückverheissenden Anlass noch besonderer machen.",
     "rsvpButton": "Jetzt zusagen",
     "location": {
       "title": "Ort",
@@ -126,7 +126,7 @@
         "milni": {
           "time": "9:30 Uhr",
           "title": "Milni",
-          "description": "Die Begrüßungszeremonie zwischen beiden Familien."
+          "description": "Die Begrüssungszeremonie zwischen beiden Familien."
         },
         "ganeshPuja": {
           "time": "10:00 Uhr",
@@ -184,45 +184,50 @@
     "description": "Jede Liebesgeschichte ist schön, aber unsere ist unsere liebste. Hier ist ein Einblick in unsere Reise von Fremden zu Seelenverwandten.",
     "events": {
       "met": {
-        "date": "Juni 2020",
+        "date": "September 2022",
         "title": "Wie wir uns kennenlernten",
-        "description": "Wir trafen uns zum ersten Mal auf der Geburtstagsfeier eines gemeinsamen Freundes. Was als beiläufiges Gespräch über Kuchen begann, entwickelte sich zu stundenlangen Gesprächen über unsere gemeinsamen Interessen und Träume."
+        "description": "Durch unsere Freunde Vithursan und Subi, die ihre Kollegenkreise zusammenbrachten, kreuzten sich unsere Wege zum ersten Mal. Was als zufälliges Kennenlernen unter Kollegen begann, entwickelte sich schnell zu spannenden Gesprächen und einer besonderen Verbindung."
+      },
+      "firstMeet": {
+        "date": "November 2022",
+        "title": "Unser erstes Treffen",
+        "description": "Sivani suchte jemanden, der sie zum Laufen motiviert, und schrieb: „Wenn ich nur jemanden hätte, der mit mir laufen geht, wäre ich viel motivierter!“\nRushel verstand den Hinweis zunächst nicht ganz und schlug ihr stattdessen verschiedene andere Laufpartner vor 😅.\nNach mehreren Versuchen wurde der Wink endlich verstanden – und so machten wir in Eschenbach unseren ersten gemeinsamen Spaziergang. Zum ersten Mal unternahmen wir etwas ganz allein – und merkten, wie schön sich das anfühlt."
       },
       "firstDate": {
-        "date": "Dezember 2020",
-        "title": "Erstes Date",
-        "description": "Nach Monaten der Freundschaft gingen wir endlich auf unser erstes offizielles Date in ein lokales Café. Wir unterhielten uns stundenlang und verloren völlig das Zeitgefühl."
+        "date": "9. März 2023",
+        "title": "Wie wir zusammenkamen",
+        "description": "An einem wunderschönen Tag im März trafen wir uns in der Seerose in Pfäffikon zu einem Date. Zwischen Gesprächen, Lachen und dem Blick auf den See wurde uns beiden klar, dass wir uns wirklich gefunden hatten.\nAn diesem Tag entschieden wir, es offiziell zu machen – und aus zwei Freunden wurde ein Paar. 💞"
       },
       "families": {
-        "date": "August 2021",
+        "date": "Juli 2024",
         "title": "Treffen der Familien",
-        "description": "Wir stellten einander unseren Familien vor. Trotz unserer unterschiedlichen kulturellen Hintergründe begrüßten beide Familien uns mit offenen Armen und offenen Herzen."
+        "description": "Im Juli 2024 war es so weit – wir stellten uns zum ersten Mal offiziell unseren Eltern vor.\nMit ein wenig Aufregung, aber viel Freude, begegneten sich unsere Familien.\nSchnell war klar: Auch sie verstanden sich wunderbar – und empfingen uns beide mit offenen Armen und warmen Herzen. ❤️"
       },
       "proposal": {
-        "date": "Juli 2023",
-        "title": "Der Heiratsantrag",
-        "description": "Während einer Wanderung zum Sonnenuntergang zu unserem Lieblingsaussichtspunkt, umgeben von Natur und dem goldenen Glanz der untergehenden Sonne, wurde die Frage gestellt und mit Freudentränen beantwortet."
+        "date": "10. November 2024",
+        "title": "Unsere Nichayathartham",
+        "description": "Im November 2024 feierten wir unsere tamilische, kulturelle Nichayathartham.\nEin Tag voller Freude, Tradition, Familie und Liebe.\nMit diesem besonderen Moment begann für uns ein neues Kapitel – der Weg zu unserem gemeinsamen Leben. 💍✨"
       },
       "engagement": {
-        "date": "Januar 2024",
-        "title": "Verlobungsfeier",
-        "description": "Wir feierten unsere Verlobung mit einer wunderschönen Zeremonie, die beide Traditionen vereinte, eine perfekte Darstellung unserer gemeinsamen Zukunft."
+        "date": "18. Juli 2025",
+        "title": "Der Antrag",
+        "description": "In Nizza, mit einer wunderschönen Aussicht und einem unvergesslichen Moment, ging Rushel im Juli 2025 vor Sivani auf die Knie.\nMit klopfendem Herzen und einem Lächeln voller Liebe stellte er die eine Frage, die alles verändert.\nUnd mit ihrem „Ja“ begann unser gemeinsames Für-immer. 💖🌅💍"
       },
       "wedding": {
-        "date": "Sommer 2026",
+        "date": "Mai 2026",
         "title": "Unsere Hochzeit",
-        "description": "Und jetzt freuen wir uns darauf, das nächste Kapitel unserer Reise mit all unseren Lieben zu feiern. Wir können es kaum erwarten, gemeinsam weitere schöne Erinnerungen zu schaffen."
+        "description": "Im Mai 2026 werden wir in einer wunderschönen Zeremonie den Bund fürs Leben schliessen 💞\nWir können es kaum erwarten, diesen besonderen Tag mit all unseren Liebsten zu feiern – voller Freude, Emotionen und unvergesslicher Momente.\nEin neues Kapitel beginnt – für immer wir. 💍✨"
       }
     },
     "cultures": {
-      "title": "Eine Vereinigung von Kulturen",
-      "description1": "Unsere Beziehung war eine wunderschöne Reise der Überbrückung zweier verschiedener Kulturen und Traditionen. Wir haben voneinander gelernt, sind zusammen gewachsen und haben Harmonie in unserer Vielfalt gefunden.",
-      "description2": "Unsere Hochzeit wird eine Feier dieser Vereinigung sein, die sowohl christliche als auch hinduistische Traditionen ehrt. Wir laden Sie ein, sich uns bei dieser freudigen Feier von Liebe, Familie und kultureller Harmonie anzuschließen."
+      "title": "Eine Vereinigung von Religionen",
+      "description1": "Wir sind beide stolz darauf, tamilischer Herkunft zu sein und teilen die gleiche wunderschöne Kultur. Was uns besonders macht, ist die Vereinigung unserer unterschiedlichen Glaubensrichtungen – christlich und hinduistisch.",
+      "description2": "Unsere Hochzeit wird eine Feier dieser religiösen Vereinigung sein, die sowohl christliche als auch hinduistische Traditionen ehrt. Wir laden Sie ein, sich uns bei dieser freudigen Feier von Liebe, Familie und spiritueller Harmonie anzuschliessen."
     }
   },
   "gifts": {
     "title": "Hochzeitsgeschenke",
-    "description": "Ihre Anwesenheit bei unserer Hochzeit ist das größte Geschenk. Wenn Sie uns jedoch mit einem Geschenk ehren möchten, haben wir für Ihre Bequemlichkeit eine Geschenkliste erstellt.",
+    "description": "Ihre Anwesenheit bei unserer Hochzeit ist das grösste Geschenk. Wenn Sie uns jedoch mit einem Geschenk ehren möchten, haben wir für Ihre Bequemlichkeit eine Geschenkliste erstellt.",
     "options": {
       "homeFund": {
         "title": "Haus-Fonds",
@@ -417,7 +422,6 @@
       "copied": "Link in die Zwischenablage kopiert!"
     }
   },
-
   "ceremony": {
     "access": {
       "title": "Zugang erforderlich",
