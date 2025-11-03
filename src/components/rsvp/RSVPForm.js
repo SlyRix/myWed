@@ -6,7 +6,7 @@ import Icon from '@mdi/react';
 import { useLocation, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { sendRSVPEmail } from '../../utils/emailService';
-import { validateAccessCode } from '../../api/guestApi';
+import { useGuest } from '../../contexts/GuestContext';
 
 const RSVPForm = () => {
     const { t } = useTranslation();
@@ -14,8 +14,8 @@ const RSVPForm = () => {
     const queryParams = new URLSearchParams(location.search);
     const ceremonySrc = queryParams.get('ceremony');
 
-    // State to track which ceremonies the user has access to
-    const [accessibleCeremonies, setAccessibleCeremonies] = useState([]);
+    // Use GuestContext to get ceremony access
+    const { ceremonies: accessibleCeremonies } = useGuest();
 
     const [formData, setFormData] = useState({
         firstName: '',
@@ -38,41 +38,15 @@ const RSVPForm = () => {
     const [errors, setErrors] = useState({});
     const [submitError, setSubmitError] = useState('');
 
-    // Load accessible ceremonies from localStorage or API
+    // Set initial guest counts based on ceremony source
     useEffect(() => {
-        const loadCeremonies = async () => {
-            const invitationCode = localStorage.getItem('invitationCode');
-
-            // If there's an invitation code, validate it via API
-            if (invitationCode) {
-                try {
-                    const validation = await validateAccessCode(invitationCode);
-                    const ceremonies = validation.valid ? validation.ceremonies : [];
-                    setAccessibleCeremonies(ceremonies);
-
-                    // If they came from a specific ceremony, set initial count to 1
-                    if (ceremonySrc === 'christian' && ceremonies.includes('christian')) {
-                        setFormData(prev => ({ ...prev, christianGuests: 1 }));
-                    } else if (ceremonySrc === 'hindu' && ceremonies.includes('hindu')) {
-                        setFormData(prev => ({ ...prev, hinduGuests: 1 }));
-                    }
-                } catch (error) {
-                    console.error('Error validating access code:', error);
-                    setAccessibleCeremonies([]);
-                }
-            } else {
-                // Check if admin (using new token-based auth)
-                const adminToken = localStorage.getItem('adminToken');
-                if (adminToken) {
-                    setAccessibleCeremonies(['christian', 'hindu']);
-                } else {
-                    setAccessibleCeremonies([]);
-                }
-            }
-        };
-
-        loadCeremonies();
-    }, [ceremonySrc]);
+        // If they came from a specific ceremony, set initial count to 1
+        if (ceremonySrc === 'christian' && accessibleCeremonies.includes('christian')) {
+            setFormData(prev => ({ ...prev, christianGuests: 1 }));
+        } else if (ceremonySrc === 'hindu' && accessibleCeremonies.includes('hindu')) {
+            setFormData(prev => ({ ...prev, hinduGuests: 1 }));
+        }
+    }, [ceremonySrc, accessibleCeremonies]);
 
     // Initialize form with ceremony source if provided
     // Note: Removed localStorage persistence for security - form data should not be cached
@@ -142,24 +116,20 @@ const RSVPForm = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setSubmitError('');
-        console.log('Form submission started');
 
         const formErrors = validateForm();
         if (Object.keys(formErrors).length > 0) {
             setErrors(formErrors);
-            console.log('Form validation failed:', formErrors);
             return;
         }
 
         setSubmitted(true);
-        console.log('Form validated successfully, attempting to send email');
 
         try {
             // Actually call the email service
             const result = await sendRSVPEmail(formData);
 
             if (result.success) {
-                console.log('Email sent successfully!');
                 setShowThankYou(true);
                 // Clear any cached form data
                 localStorage.removeItem('weddingRSVPFormData');

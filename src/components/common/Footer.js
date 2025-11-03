@@ -5,19 +5,29 @@ import { motion } from 'framer-motion';
 import { mdiHeart, mdiFacebook, mdiInstagram, mdiTwitter } from '@mdi/js';
 import Icon from '@mdi/react';
 import { useTranslation } from 'react-i18next';
+import { useGuest } from '../../contexts/GuestContext';
 
 const Footer = () => {
     const { t } = useTranslation();
+    const { ceremonies: accessibleCeremonies } = useGuest();
 
     const footerLinks = [
         { path: '/', label: t('header.home') },
-        { path: '/christian-ceremony', label: t('header.christianCeremony') },
-        { path: '/hindu-ceremony', label: t('header.hinduCeremony') },
+        { path: '/christian-ceremony', label: t('header.christianCeremony'), ceremonyType: 'christian' },
+        { path: '/hindu-ceremony', label: t('header.hinduCeremony'), ceremonyType: 'hindu' },
         { path: '/our-story', label: t('header.ourStory') },
-        { path: '/accommodations', label: t('header.accommodations') }, // New link
+        { path: '/accommodations', label: t('header.accommodations') },
         { path: '/gifts', label: t('header.gifts') },
         { path: '/gallery', label: t('header.gallery') }
     ];
+
+    // Filter links based on ceremony access
+    const filteredFooterLinks = footerLinks.filter(link => {
+        if (link.ceremonyType) {
+            return accessibleCeremonies.includes(link.ceremonyType);
+        }
+        return true;
+    });
 
     const socialLinks = [
         { icon: mdiFacebook, url: '#', label: 'Facebook' },
@@ -34,7 +44,7 @@ const Footer = () => {
                     </div>
 
                     <ul className="flex flex-wrap justify-center mb-8 gap-4 md:gap-8">
-                        {footerLinks.map((link) => (
+                        {filteredFooterLinks.map((link) => (
                             <li key={link.path}>
                                 <Link
                                     to={link.path}

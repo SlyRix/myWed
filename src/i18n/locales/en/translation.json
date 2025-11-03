@@ -27,7 +27,13 @@
       "location": "Sri Manonmani Ampal Tempel",
       "description": "Experience a vibrant Hindu wedding ceremony full of color and tradition."
     },
-    "readStory": "Read Our Story"
+    "readStory": "Read Our Story",
+    "rsvp": {
+      "title": "Will You Join Us?",
+      "description": "Your presence would mean the world to us. Please let us know if you can celebrate this special day with us by submitting your RSVP.",
+      "button": "RSVP Now",
+      "reminder": "Please respond by June 1, 2026"
+    }
   },
   "christian": {
     "title": "Christian Ceremony",

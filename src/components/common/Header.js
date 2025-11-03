@@ -5,29 +5,17 @@ import { mdiHeart, mdiMenu, mdiClose } from '@mdi/js';
 import Icon from '@mdi/react';
 import { useTranslation } from 'react-i18next';
 import LanguageSwitcher from './LanguageSwitcher';
-import { guestList } from '../../data/guestAccess';
+import { useGuest } from '../../contexts/GuestContext';
 
 const Header = () => {
     const { t } = useTranslation();
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
-    const [accessibleCeremonies, setAccessibleCeremonies] = useState([]);
     const location = useLocation();
     const isHomePage = location.pathname === '/';
 
-    // Load accessible ceremonies
-    useEffect(() => {
-        const invitationCode = localStorage.getItem('invitationCode');
-        const adminAccess = localStorage.getItem('adminAccess') === 'true';
-
-        if (invitationCode && guestList[invitationCode]) {
-            setAccessibleCeremonies(guestList[invitationCode].ceremonies);
-        } else if (adminAccess) {
-            setAccessibleCeremonies(['christian', 'hindu']);
-        } else {
-            setAccessibleCeremonies([]);
-        }
-    }, []);
+    // Use GuestContext to get ceremony access
+    const { ceremonies: accessibleCeremonies } = useGuest();
 
     // Handle scroll effect
     useEffect(() => {

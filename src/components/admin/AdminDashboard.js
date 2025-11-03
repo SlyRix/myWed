@@ -4,6 +4,7 @@ import { QRCodeCanvas } from 'qrcode.react';
 import { mdiPlus, mdiContentSave, mdiTrashCan, mdiCross, mdiTempleHindu, mdiPencil, mdiQrcode, mdiAccountMultiple } from '@mdi/js';
 import Icon from '@mdi/react';
 import { fetchAllGuests, saveGuest, deleteGuest, generateGuestCode } from '../../api/guestApi';
+import ConfirmDialog from '../common/ConfirmDialog';
 
 const AdminDashboard = () => {
     const [activeTab, setActiveTab] = useState('guestList');
@@ -14,6 +15,7 @@ const AdminDashboard = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [isSaving, setIsSaving] = useState(false);
     const [error, setError] = useState(null);
+    const [deleteConfirm, setDeleteConfirm] = useState({ isOpen: false, guestCode: null, guestName: '' });
 
     // Form state for adding/editing guests
     const [formData, setFormData] = useState({
@@ -55,7 +57,7 @@ const AdminDashboard = () => {
         e.preventDefault();
 
         if (!formData.name.trim()) {
-            alert('Please enter a guest name');
+            setError('Please enter a guest name');
             return;
         }
 
@@ -65,7 +67,7 @@ const AdminDashboard = () => {
         if (formData.hinduAccess) ceremonies.push('hindu');
 
         if (ceremonies.length === 0) {
-            alert('Please select at least one ceremony');
+            setError('Please select at least one ceremony');
             return;
         }
 
@@ -144,25 +146,34 @@ const AdminDashboard = () => {
         }
     };
 
-    // Delete guest
-    const handleDeleteGuest = async (code) => {
-        if (window.confirm(`Are you sure you want to delete ${guestList[code].name}?`)) {
-            try {
-                await deleteGuest(code);
+    // Delete guest - shows confirmation dialog
+    const handleDeleteGuest = (code) => {
+        setDeleteConfirm({
+            isOpen: true,
+            guestCode: code,
+            guestName: guestList[code].name
+        });
+    };
 
-                // Update local state
-                const updatedGuestList = { ...guestList };
-                delete updatedGuestList[code];
-                setGuestList(updatedGuestList);
+    // Confirm delete guest
+    const confirmDeleteGuest = async () => {
+        const { guestCode } = deleteConfirm;
 
-                // If we're deleting the guest we're currently editing, reset the form
-                if (editingGuest === code) {
-                    resetForm();
-                }
-            } catch (error) {
-                console.error('Error deleting guest:', error);
-                alert('Failed to delete guest. Please try again.');
+        try {
+            await deleteGuest(guestCode);
+
+            // Update local state
+            const updatedGuestList = { ...guestList };
+            delete updatedGuestList[guestCode];
+            setGuestList(updatedGuestList);
+
+            // If we're deleting the guest we're currently editing, reset the form
+            if (editingGuest === guestCode) {
+                resetForm();
             }
+        } catch (error) {
+            console.error('Error deleting guest:', error);
+            setError('Failed to delete guest. Please try again.');
         }
     };
 
@@ -441,11 +452,22 @@ const AdminDashboard = () => {
                                             className="flex-grow p-3 text-sm border border-gray-300 rounded-lg sm:rounded-r-none focus:outline-none"
                                         />
                                         <button
-                                            onClick={() => {
-                                                navigator.clipboard.writeText(getInvitationUrl(selectedGuest));
-                                                alert("Link copied to clipboard!");
+                                            onClick={(e) => {
+                                                navigator.clipboard.writeText(getInvitationUrl(selectedGuest))
+                                                    .then(() => {
+                                                        // Visual feedback instead of alert
+                                                        const btn = e.target;
+                                                        const originalText = btn.textContent;
+                                                        btn.textContent = 'Copied!';
+                                                        btn.classList.add('bg-green-500', 'text-white');
+                                                        setTimeout(() => {
+                                                            btn.textContent = originalText;
+                                                            btn.classList.remove('bg-green-500', 'text-white');
+                                                        }, 2000);
+                                                    })
+                                                    .catch(() => setError('Failed to copy link'));
                                             }}
-                                            className="px-4 py-3 bg-gray-200 text-gray-700 rounded-lg sm:rounded-l-none hover:bg-gray-300 text-base"
+                                            className="px-4 py-3 bg-gray-200 text-gray-700 rounded-lg sm:rounded-l-none hover:bg-gray-300 text-base transition-colors"
                                         >
                                             Copy
                                         </button>
@@ -461,14 +483,14 @@ const AdminDashboard = () => {
                                             const qrElement = document.getElementById('qr-code');
 
                                             if (!qrElement) {
-                                                alert('QR code not found. Please generate a QR code first.');
+                                                setError('QR code not found. Please generate a QR code first.');
                                                 return;
                                             }
 
                                             const canvas = qrElement.querySelector('canvas');
 
                                             if (!canvas) {
-                                                alert('Unable to generate QR code image. Please try again.');
+                                                setError('Unable to generate QR code image. Please try again.');
                                                 return;
                                             }
 
@@ -481,7 +503,7 @@ const AdminDashboard = () => {
                                             document.body.removeChild(downloadLink);
                                         } catch (error) {
                                             console.error('Error downloading QR code:', error);
-                                            alert('Failed to download QR code. Please try again.');
+                                            setError('Failed to download QR code. Please try again.');
                                         }
                                     }}
                                     className="px-4 py-3 bg-christian-accent text-white rounded-lg w-full sm:w-auto hover:bg-christian-accent/90 transition-colors"
@@ -493,6 +515,17 @@ const AdminDashboard = () => {
                     )}
                 </div>
             )}
+
+            {/* Confirmation Dialog for Deleting Guests */}
+            <ConfirmDialog
+                isOpen={deleteConfirm.isOpen}
+                onClose={() => setDeleteConfirm({ isOpen: false, guestCode: null, guestName: '' })}
+                onConfirm={confirmDeleteGuest}
+                title="Delete Guest"
+                message={`Are you sure you want to delete ${deleteConfirm.guestName}? This action cannot be undone.`}
+                confirmText="Delete"
+                cancelText="Cancel"
+            />
         </div>
     );
 };

@@ -6,6 +6,7 @@ import Footer from './components/common/Footer';
 import LoadingSpinner from './components/common/LoadingSpinner';
 import ErrorBoundary from './components/common/ErrorBoundary';
 import { ThemeProvider } from './contexts/ThemeContext';
+import { GuestProvider } from './contexts/GuestContext';
 import WelcomeSplash from './components/welcome/WelcomeSplash';
 import './styles/global.css';
 import { validateAccessCode } from './api/guestApi';
@@ -61,9 +62,7 @@ function App() {
                     if (validation.valid) {
                         // Valid code found in URL, save it
                         localStorage.setItem('invitationCode', code.trim().toUpperCase());
-                        if (process.env.NODE_ENV === 'development') {
-                            console.log('Access granted');
-                        }
+                        // Token validated and stored successfully
                     }
                 } catch (error) {
                     console.error('Error validating invitation code:', error);
@@ -107,44 +106,46 @@ function App() {
     return (
         <ErrorBoundary>
             <ThemeProvider>
-                <Router>
-                {showSplash ? (
-                    <WelcomeSplash onComplete={handleSplashComplete} />
-                ) : (
-                    <>
-                        <Header />
-                        <main>
-                            <Suspense fallback={<PageLoader />}>
-                                <Routes>
-                                    <Route path="/" element={<HomePage />} />
-                                    <Route path="/christian-ceremony" element={<ChristianCeremony />} />
-                                    <Route path="/hindu-ceremony" element={<HinduCeremony />} />
-                                    <Route path="/our-story" element={<OurStory />} />
-                                    <Route path="/gifts" element={<GiftRegistry />} />
-                                    <Route path="/gallery" element={<PhotoGallery />} />
-                                    <Route path="/rsvp" element={<RSVPPage />} />
-                                    <Route path="/guestbook" element={<GuestbookPage />} />
-                                    <Route path="/accommodations" element={<AccommodationsPage />} />
+                <GuestProvider>
+                    <Router>
+                    {showSplash ? (
+                        <WelcomeSplash onComplete={handleSplashComplete} />
+                    ) : (
+                        <>
+                            <Header />
+                            <main>
+                                <Suspense fallback={<PageLoader />}>
+                                    <Routes>
+                                        <Route path="/" element={<HomePage />} />
+                                        <Route path="/christian-ceremony" element={<ChristianCeremony />} />
+                                        <Route path="/hindu-ceremony" element={<HinduCeremony />} />
+                                        <Route path="/our-story" element={<OurStory />} />
+                                        <Route path="/gifts" element={<GiftRegistry />} />
+                                        <Route path="/gallery" element={<PhotoGallery />} />
+                                        <Route path="/rsvp" element={<RSVPPage />} />
+                                        <Route path="/guestbook" element={<GuestbookPage />} />
+                                        <Route path="/accommodations" element={<AccommodationsPage />} />
 
-                                    {/* Admin routes */}
-                                    <Route path="/admin" element={<AdminLogin />} />
-                                    <Route
-                                        path="/admin/dashboard"
-                                        element={
-                                            <AdminRoute>
-                                                <AdminDashboard />
-                                            </AdminRoute>
-                                        }
-                                    />
+                                        {/* Admin routes */}
+                                        <Route path="/admin" element={<AdminLogin />} />
+                                        <Route
+                                            path="/admin/dashboard"
+                                            element={
+                                                <AdminRoute>
+                                                    <AdminDashboard />
+                                                </AdminRoute>
+                                            }
+                                        />
 
-                                    <Route path="*" element={<Navigate to="/" replace />} />
-                                </Routes>
-                            </Suspense>
-                        </main>
-                        <ConditionalFooter />
-                    </>
-                )}
-                </Router>
+                                        <Route path="*" element={<Navigate to="/" replace />} />
+                                    </Routes>
+                                </Suspense>
+                            </main>
+                            <ConditionalFooter />
+                        </>
+                    )}
+                    </Router>
+                </GuestProvider>
             </ThemeProvider>
         </ErrorBoundary>
     );

@@ -7,7 +7,7 @@ import Icon from '@mdi/react';
 import { useTranslation } from 'react-i18next';
 import CountdownTimer from '../common/CountdownTimer';
 import BubbleBackground from '../common/BubbleBackground';
-import { guestList } from '../../data/guestAccess';
+import { useGuest } from '../../contexts/GuestContext';
 
 // Fallback SVG pattern - only used if external SVG isn't available
 const FloralPatternSVG = () => (
@@ -100,24 +100,13 @@ const ParallaxElements = () => {
 
 const Hero = ({ backgroundImage = null, patternImage = "/images/floral-pattern.svg" }) => {
     const { t } = useTranslation();
-    const [accessibleCeremonies, setAccessibleCeremonies] = useState([]);
+    const { ceremonies: accessibleCeremonies } = useGuest();
 
     // Wedding date - July 4, 2026
     const weddingDate = new Date('May 9, 2026 14:00:00').getTime();
 
     // Check if pattern image exists by creating an image object
     const [patternExists, setPatternExists] = React.useState(false);
-
-    // Get accessible ceremonies
-    useEffect(() => {
-        const invitationCode = localStorage.getItem('invitationCode');
-        if (invitationCode && guestList[invitationCode]) {
-            setAccessibleCeremonies(guestList[invitationCode].ceremonies);
-        } else {
-            const adminAccess = localStorage.getItem('adminAccess') === 'true';
-            setAccessibleCeremonies(adminAccess ? ['christian', 'hindu'] : []);
-        }
-    }, []);
 
     React.useEffect(() => {
         if (patternImage) {

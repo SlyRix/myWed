@@ -338,8 +338,8 @@ async function handleDeleteGuest(env, code) {
 // Validate access code (public)
 async function handleValidateCode(env, code) {
     try {
-        // Input validation
-        if (!code || typeof code !== 'string' || code.length > 20) {
+        // Input validation - strict format for security
+        if (!code || typeof code !== 'string' || !/^[A-Z0-9]{4,10}$/.test(code.trim().toUpperCase())) {
             return new Response(
                 JSON.stringify({ valid: false, error: 'Invalid code format' }),
                 { status: 400, headers: getAllHeaders(env) }

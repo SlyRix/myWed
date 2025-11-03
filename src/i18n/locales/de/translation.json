@@ -27,7 +27,13 @@
       "location": "Shiva Tempel",
       "description": "Erleben Sie eine lebendige hinduistische Hochzeitszeremonie voller Farben und Tradition."
     },
-    "readStory": "Unsere Geschichte lesen"
+    "readStory": "Unsere Geschichte lesen",
+    "rsvp": {
+      "title": "Werden Sie mit uns feiern?",
+      "description": "Ihre Anwesenheit würde uns sehr bedeuten. Bitte lassen Sie uns wissen, ob Sie diesen besonderen Tag mit uns feiern können, indem Sie Ihre Zusage einreichen.",
+      "button": "Jetzt zusagen",
+      "reminder": "Bitte antworten Sie bis zum 1. Juni 2026"
+    }
   },
   "christian": {
     "title": "Christliche Zeremonie",

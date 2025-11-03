@@ -373,3 +373,191 @@ wrangler dev
 export REACT_APP_API_URL=http://localhost:8787/api
 npm start
 ```
+
+## Security & Best Practices
+
+### Security Guidelines
+
+This codebase follows security best practices. When making changes, adhere to these principles:
+
+#### Authentication & Authorization
+
+1. **Token Validation**: AdminRoute component validates tokens with backend on every access - NEVER rely solely on localStorage
+2. **Session Expiration**: Admin sessions expire after 24 hours (Cloudflare Worker) or when token validation fails
+3. **Rate Limiting**:
+   - Login attempts: 5 per 15 minutes per IP
+   - General API: 100 requests per 15 minutes per IP
+4. **Password Hashing**: Admin passwords use SHA-256 hashing (Cloudflare Worker)
+
+#### Input Validation
+
+1. **Guest Codes**: Must be 4-10 uppercase alphanumeric characters (`/^[A-Z0-9]{4,10}$/`)
+2. **Guest Names**: Max 100 characters, sanitized for XSS
+3. **Ceremonies Array**: Must contain only 'christian' and/or 'hindu'
+4. **Parameterized Queries**: ALL database queries use parameterized statements to prevent SQL injection
+
+Example of proper validation:
+```javascript
+// ✅ CORRECT - Strict validation
+if (!code || typeof code !== 'string' || !/^[A-Z0-9]{4,10}$/.test(code)) {
+    return { error: 'Invalid code format' };
+}
+
+// ❌ WRONG - Too permissive
+if (code && code.length > 0) {
+    // Process code
+}
+```
+
+#### XSS Prevention
+
+1. **User Input**: Never use `dangerouslySetInnerHTML` with user-controlled data
+2. **Alerts/Confirms**: Use React components (`ConfirmDialog`) instead of `window.alert()` or `window.confirm()` - prevents XSS via guest names
+3. **Error Messages**: Display generic errors to users, log detailed errors server-side only
+
+#### Data Handling
+
+1. **No Sensitive Data in localStorage**: Only store non-sensitive tokens and codes
+2. **No Form Data Caching**: RSVP form data should NOT be persisted to localStorage (security risk)
+3. **CORS Configuration**: Restrict origins to known domains (rushel.me, wed.rushel.me)
+
+#### Deprecated Files
+
+The following files are deprecated and should NOT be used:
+- `src/utils/accessCodes.js` - DELETED (contained hardcoded access codes)
+- `src/data/guestAccess.js` - Empty placeholder for backwards compatibility only
+
+### Code Quality Standards
+
+#### Console Logging
+
+- **Production**: NO console.log statements (information disclosure risk)
+- **Development**: Use conditional logging:
+```javascript
+// ✅ CORRECT
+if (process.env.NODE_ENV === 'development') {
+    console.log('Debug info');
+}
+
+// ❌ WRONG
+console.log('User data:', userData);
+```
+
+#### Error Handling
+
+All async operations must have try-catch blocks:
+```javascript
+// ✅ CORRECT
+try {
+    const result = await apiCall();
+    return { success: true, data: result };
+} catch (error) {
+    console.error('Operation failed:', error.message);  // Generic message only
+    return { success: false, error: 'Operation failed' };  // No internal details
+}
+
+// ❌ WRONG
+const result = await apiCall();  // No error handling
+throw new Error(`Failed: ${error.stack}`);  // Exposes internal details
+```
+
+#### Component Patterns
+
+1. **Lazy Loading**: Use React.lazy() for route-level components
+2. **Error Boundaries**: Wrap app in ErrorBoundary component (already implemented)
+3. **Loading States**: Always show loading indicators during async operations
+4. **Accessibility**:
+   - Add `aria-label` to icon-only buttons
+   - Use `role="alert"` for error messages
+   - Provide sr-only text for loading spinners
+
+#### Magic Numbers
+
+Extract constants for reusability:
+```javascript
+// ✅ CORRECT
+const MOBILE_BREAKPOINT = 768;
+const MAX_GUESTS = 10;
+const SESSION_DURATION_MS = 24 * 60 * 60 * 1000;
+
+if (window.innerWidth < MOBILE_BREAKPOINT) { ... }
+
+// ❌ WRONG
+if (window.innerWidth < 768) { ... }
+```
+
+#### JSDoc Documentation
+
+All exported functions MUST have JSDoc comments:
+```javascript
+/**
+ * Validates a guest invitation code
+ * @param {string} code - Invitation code to validate
+ * @returns {Promise<Object>} Validation result with valid flag and guest data
+ * @throws {Error} If network error occurs
+ * @example
+ * const result = await validateAccessCode('SMITH123');
+ */
+export const validateAccessCode = async (code) => { ... }
+```
+
+### Performance Considerations
+
+1. **Bundle Size**: Route-level code splitting is implemented - maintain this pattern
+2. **API Calls**: Use request deduplication for frequently called endpoints
+3. **Re-renders**: Memoize expensive computations with useMemo/useCallback
+4. **Images**: Use lazy loading and WebP format where possible
+
+### Testing Before Deployment
+
+Before deploying to production, verify:
+
+```bash
+# 1. Build succeeds
+npm run build
+
+# 2. No console.log in production code
+grep -r "console.log" src/ --exclude-dir=node_modules | grep -v "console.error"
+
+# 3. Worker deploys successfully
+cd workers/api && wrangler deploy --dry-run
+
+# 4. Test production API endpoints
+curl https://api.rushel.me/api/validate/TEST
+```
+
+### Maintenance Tasks
+
+#### Regular Security Tasks
+
+1. **Session Cleanup**: Clear expired sessions monthly
+```bash
+cd workers/api
+wrangler d1 execute wedding-db --command="DELETE FROM sessions WHERE expires_at < cast(strftime('%s', 'now') as integer) * 1000"
+```
+
+2. **Rate Limit Cleanup**: Clear old rate limit entries
+```bash
+cd workers/api
+wrangler d1 execute wedding-db --command="DELETE FROM rate_limits WHERE window_start < cast(strftime('%s', 'now') as integer) * 1000 - 900000"
+```
+
+3. **Dependency Updates**: Review and update dependencies quarterly
+```bash
+npm outdated
+npm audit
+```
+
+#### Monitoring
+
+Check production logs regularly:
+```bash
+cd workers/api
+wrangler tail --env production
+```
+
+Watch for:
+- Failed authentication attempts (potential brute force)
+- Rate limit hits (potential DDoS)
+- Database errors
+- CORS errors (misconfigured frontend)

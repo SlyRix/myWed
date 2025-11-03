@@ -1,7 +1,17 @@
-// src/api/guestApi.js
+/**
+ * Guest API Service
+ * Handles all communication with the backend API for guest management
+ * @module guestApi
+ */
+
 const API_URL = process.env.REACT_APP_API_URL || 'https://api.rushel.me/api';
 
-// Helper function to get auth headers
+/**
+ * Retrieves authentication headers for API requests
+ * Includes admin token from localStorage if available
+ * @returns {Object} Headers object with Content-Type and optional Authorization
+ * @private
+ */
 const getAuthHeaders = () => {
     const token = localStorage.getItem('adminToken');
     return {
@@ -10,7 +20,15 @@ const getAuthHeaders = () => {
     };
 };
 
-// Helper function to add timeout to fetch requests
+/**
+ * Wrapper for fetch with automatic timeout handling
+ * @param {string} url - The URL to fetch
+ * @param {Object} options - Fetch options (method, headers, body, etc.)
+ * @param {number} timeout - Timeout in milliseconds (default: 10000)
+ * @returns {Promise<Response>} Fetch response
+ * @throws {Error} If request times out or network error occurs
+ * @private
+ */
 const fetchWithTimeout = async (url, options = {}, timeout = 10000) => {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), timeout);
@@ -31,7 +49,15 @@ const fetchWithTimeout = async (url, options = {}, timeout = 10000) => {
     }
 };
 
-// Fetch all guests
+/**
+ * Fetches all guests from the backend (admin only)
+ * Requires valid admin authentication token in localStorage
+ * @returns {Promise<Object>} Guest list object where keys are codes and values are guest data
+ * @throws {Error} If request fails or user is not authorized
+ * @example
+ * const guests = await fetchAllGuests();
+ * // Returns: { "CODE1": { name: "John Doe", ceremonies: ["christian"] }, ... }
+ */
 export const fetchAllGuests = async () => {
     try {
         const response = await fetchWithTimeout(`${API_URL}/guests`, {
@@ -49,7 +75,20 @@ export const fetchAllGuests = async () => {
     }
 };
 
-// Save a guest (add or update)
+/**
+ * Saves a guest (creates new or updates existing) - admin only
+ * @param {string} code - Guest invitation code (4-10 uppercase alphanumeric characters)
+ * @param {Object} guestData - Guest information
+ * @param {string} guestData.name - Guest's full name
+ * @param {string[]} guestData.ceremonies - Array of accessible ceremonies ('christian', 'hindu')
+ * @returns {Promise<Object>} Server response with saved guest data
+ * @throws {Error} If save fails or validation errors occur
+ * @example
+ * await saveGuest('SMITH123', {
+ *   name: 'John Smith',
+ *   ceremonies: ['christian', 'hindu']
+ * });
+ */
 export const saveGuest = async (code, guestData) => {
     try {
         const response = await fetchWithTimeout(`${API_URL}/guests`, {
@@ -69,7 +108,13 @@ export const saveGuest = async (code, guestData) => {
     }
 };
 
-// Delete a guest
+/**
+ * Deletes a guest from the system - admin only
+ * WARNING: This action is permanent and cannot be undone
+ * @param {string} code - Guest invitation code to delete
+ * @returns {Promise<Object>} Server response confirming deletion
+ * @throws {Error} If deletion fails or guest not found
+ */
 export const deleteGuest = async (code) => {
     try {
         const response = await fetchWithTimeout(`${API_URL}/guests/${code}`, {
@@ -88,7 +133,20 @@ export const deleteGuest = async (code) => {
     }
 };
 
-// Validate access code
+/**
+ * Validates a guest invitation code (public endpoint)
+ * Checks if the code exists and returns associated guest data
+ * @param {string} code - Invitation code to validate
+ * @returns {Promise<Object>} Validation result
+ * @returns {boolean} returns.valid - Whether the code is valid
+ * @returns {Object} [returns.guest] - Guest information (if valid)
+ * @returns {string[]} [returns.ceremonies] - Accessible ceremonies (if valid)
+ * @example
+ * const result = await validateAccessCode('SMITH123');
+ * if (result.valid) {
+ *   console.log(`Welcome ${result.guest.name}`);
+ * }
+ */
 export const validateAccessCode = async (code) => {
     if (!code) return { valid: false };
 
@@ -107,7 +165,16 @@ export const validateAccessCode = async (code) => {
     }
 };
 
-// Generate a guest code
+/**
+ * Generates a unique guest invitation code based on name - admin only
+ * Creates a random 8-character alphanumeric code
+ * @param {string} name - Guest name (used as basis for code generation)
+ * @returns {Promise<string>} Generated unique code
+ * @throws {Error} If code generation fails
+ * @example
+ * const code = await generateGuestCode('John Smith');
+ * // Returns: "A3F8K9L2" (example)
+ */
 export const generateGuestCode = async (name) => {
     try {
         const response = await fetchWithTimeout(`${API_URL}/generate-code`, {

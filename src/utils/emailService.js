@@ -6,18 +6,22 @@ const SERVICE_ID = process.env.REACT_APP_EMAILJS_SERVICE_ID;
 const TEMPLATE_ID = process.env.REACT_APP_EMAILJS_TEMPLATE_ID;
 const PUBLIC_KEY = process.env.REACT_APP_EMAILJS_PUBLIC_KEY;
 
-// Initialize EmailJS (only log in development mode)
-if (process.env.NODE_ENV === 'development') {
-    console.log('Initializing EmailJS');
-}
+// Initialize EmailJS
 emailjs.init(PUBLIC_KEY);
 
-// Function to send RSVP email with comprehensive error handling
+/**
+ * Sends RSVP email notification via EmailJS
+ * @param {Object} formData - Form data containing guest RSVP information
+ * @param {string} formData.firstName - Guest's first name
+ * @param {string} formData.lastName - Guest's last name
+ * @param {string} formData.email - Guest's email address
+ * @param {string} formData.attending - Whether attending ('yes'/'no')
+ * @param {number} formData.christianGuests - Number of guests for Christian ceremony
+ * @param {number} formData.hinduGuests - Number of guests for Hindu ceremony
+ * @param {boolean} formData.isVegetarian - Vegetarian meal preference
+ * @returns {Promise<{success: boolean, response?: any, error?: any}>} Result object
+ */
 export const sendRSVPEmail = async (formData) => {
-    if (process.env.NODE_ENV === 'development') {
-        console.log('Sending RSVP email');
-    }
-
     try {
         // Format the attendance information for better readability in the email
         let attendanceInfo = '';
@@ -69,9 +73,6 @@ export const sendRSVPEmail = async (formData) => {
             templateParams
         );
 
-        if (process.env.NODE_ENV === 'development') {
-            console.log('Email sent successfully');
-        }
         return { success: true, response };
     } catch (error) {
         // Only log error type, not sensitive details

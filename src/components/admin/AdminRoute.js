@@ -1,24 +1,62 @@
-// src/components/admin/AdminRoute.js
 import React, { useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
 
+const API_URL = process.env.REACT_APP_API_URL || 'https://api.rushel.me/api';
+
+/**
+ * Protected route component for admin-only pages
+ * Validates admin authentication token with backend before granting access
+ * @param {Object} props - Component props
+ * @param {React.ReactNode} props.children - Child components to render if authenticated
+ * @returns {React.ReactElement} Protected content or redirect
+ */
 const AdminRoute = ({ children }) => {
     const [loading, setLoading] = useState(true);
     const [hasAccess, setHasAccess] = useState(false);
 
     useEffect(() => {
-        // Check if user has admin token
-        const token = localStorage.getItem('adminToken');
+        /**
+         * Validates admin token with backend server
+         * SECURITY: Never trust localStorage alone - always validate server-side
+         */
+        const validateToken = async () => {
+            const token = localStorage.getItem('adminToken');
 
-        if (token && token.length > 0) {
-            // Token exists - consider user authenticated
-            // In a more robust implementation, you could validate the token with the server
-            setHasAccess(true);
-        } else {
-            setHasAccess(false);
-        }
+            if (!token) {
+                setHasAccess(false);
+                setLoading(false);
+                return;
+            }
 
-        setLoading(false);
+            try {
+                // Validate token with backend by attempting to fetch guest list
+                const response = await fetch(`${API_URL}/guests`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (response.ok) {
+                    // Token is valid
+                    setHasAccess(true);
+                } else {
+                    // Token invalid or expired - clear it
+                    localStorage.removeItem('adminToken');
+                    setHasAccess(false);
+                }
+            } catch (error) {
+                // Network error or server down - deny access and clear token
+                console.error('Token validation failed:', error);
+                localStorage.removeItem('adminToken');
+                setHasAccess(false);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        validateToken();
     }, []);
 
     if (loading) {
