@@ -15,6 +15,7 @@ import { validateAccessCode } from './api/guestApi';
 const HomePage = lazy(() => import('./components/home/HomePage'));
 const ChristianCeremony = lazy(() => import('./components/ceremonies/ChristianCeremony'));
 const HinduCeremony = lazy(() => import('./components/ceremonies/HinduCeremony'));
+const Reception = lazy(() => import('./components/ceremonies/Reception'));
 const OurStory = lazy(() => import('./components/story/OurStory'));
 const GiftRegistry = lazy(() => import('./components/gifts/GiftRegistry'));
 const PhotoGallery = lazy(() => import('./components/gallery/PhotoGallery'));
@@ -119,6 +120,7 @@ function App() {
                                         <Route path="/" element={<HomePage />} />
                                         <Route path="/christian-ceremony" element={<ChristianCeremony />} />
                                         <Route path="/hindu-ceremony" element={<HinduCeremony />} />
+                                        <Route path="/reception" element={<Reception />} />
                                         <Route path="/our-story" element={<OurStory />} />
                                         <Route path="/gifts" element={<GiftRegistry />} />
                                         <Route path="/gallery" element={<PhotoGallery />} />

@@ -7,7 +7,7 @@ import Icon from '@mdi/react';
 import { useTranslation } from 'react-i18next';
 import CeremonyTimeline from './CeremonyTimeline';
 import MiniMap from '../map/MiniMap';
-import CalendarLink from '../common/CalendarLink';
+import AddToCalendarButton from '../common/AddToCalendarButton';
 import { Link } from 'react-router-dom';
 import CeremonyAccessCheck from '../common/CeremonyAccessCheck';
 
@@ -60,8 +60,8 @@ const ChristianCeremony = () => {
     const [timelineRef, timelineInView] = useInView({ triggerOnce: true, threshold: 0.1 });
 
     // Parse ceremony date for calendar
-    const ceremonyDate = new Date('May 9, 2026 14:00:00');
-    const ceremonyEndDate = new Date('May 9, 2026 16:00:00');
+    const ceremonyDate = new Date('2026-07-04T14:00:00');
+    const ceremonyEndDate = new Date('2026-07-04T16:00:00');
     const ceremonyLocation = t('christian.location.address1') + ', ' + t('christian.location.address2');
 
     return (
@@ -133,10 +133,8 @@ const ChristianCeremony = () => {
                         {/* Add the mini map component */}
                         <div className="mt-4">
                             <MiniMap
-                                address={ceremonyLocation}
+                                address="Kirche Altendorf, Dorfpl. 5, 8852 Altendorf"
                                 title={t('christian.location.address1')}
-                                lat={47.192434}
-                                lng={8.850763}
                             />
                         </div>
                     </motion.div>
@@ -150,14 +148,15 @@ const ChristianCeremony = () => {
                         <p className="mb-1">{t('christian.dateTime.date')}</p>
                         <p className="text-gray-600 mb-1">{t('christian.dateTime.time')}</p>
 
-                        {/* Add the calendar link component */}
-                        <div className="mt-4">
-                            <CalendarLink
-                                title="Rushel & Sivanis Christian Wedding Ceremony"
+                        {/* Add the calendar button component */}
+                        <div className="mt-4 flex justify-center">
+                            <AddToCalendarButton
+                                eventTitle="Rushel & Sivani - Christian Ceremony"
                                 description="Join us for our Christian Wedding Ceremony"
                                 location={ceremonyLocation}
                                 startDate={ceremonyDate}
                                 endDate={ceremonyEndDate}
+                                theme="christian"
                             />
                         </div>
                     </motion.div>
@@ -181,7 +180,11 @@ const ChristianCeremony = () => {
                     variants={fadeIn}
                 >
                     <h2 className="text-2xl font-bold mb-10 text-center text-christian-accent">{t('christian.schedule.title')}</h2>
-                    <CeremonyTimeline events={timelineEvents} theme="christian" />
+                    {/* Timeline with Ceremony Schedule */}
+                    <CeremonyTimeline
+                        events={timelineEvents}
+                        theme="christian"
+                    />
                 </motion.div>
             </div>
         </section>

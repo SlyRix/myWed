@@ -118,7 +118,7 @@ const Accommodations = () => {
         {
             id: 6,
             name: 'Airbnb Options',
-            description: 'For guests who prefer a homelier stay or are traveling with family, we recommend checking Airbnb options in Lachen or Trimbach areas.',
+            description: 'For guests who prefer a homelier stay or are traveling with family, we recommend checking Airbnb options in Lachen or Seegräben areas.',
             address: 'Various locations',
             priceRange: 'all', // covers all price ranges
             priceIndicator: '$-$$$',

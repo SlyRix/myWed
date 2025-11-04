@@ -3,6 +3,7 @@
     "home": "Home",
     "christianCeremony": "Christian Ceremony",
     "hinduCeremony": "Hindu Ceremony",
+    "reception": "Reception",
     "ourStory": "Our Story",
     "gifts": "Gifts",
     "gallery": "Gallery",
@@ -18,13 +19,13 @@
     "christianEvent": {
       "title": "Christian Ceremony",
       "date": "July 4, 2026",
-      "location": "Kath. Pfarramt Heilig Kreuz",
+      "location": "Kirche Altendorf",
       "description": "Join us for a beautiful celebration of marriage with traditional Christian customs."
     },
     "hinduEvent": {
       "title": "Hindu Ceremony",
       "date": "July 5, 2026",
-      "location": "Sri Manonmani Ampal Tempel",
+      "location": "Shed15 events&more",
       "description": "Experience a vibrant Hindu wedding ceremony full of color and tradition."
     },
     "readStory": "Read Our Story",
@@ -41,10 +42,12 @@
     "description": "We are delighted to invite you to our Christian wedding ceremony. This sacred occasion will be a celebration of our love and commitment to each other, guided by Christian traditions and values.",
     "description2": "The ceremony will take place in a beautiful church setting, where we will exchange vows and rings before God and our loved ones. We would be honored to have you witness this special moment in our lives.",
     "rsvpButton": "RSVP Now",
+    "videoUrl": "",
+    "videoType": "youtube",
     "location": {
       "title": "Location",
-      "address1": "Kath. Pfarramt Heilig Kreuz",
-      "address2": "Kirchpl. 10, 8853 Lachen",
+      "address1": "Kirche Altendorf",
+      "address2": "Dorfpl. 5, 8852 Altendorf",
       "mapLink": "View on Map"
     },
     "dateTime": {
@@ -99,10 +102,12 @@
     "description": "We warmly invite you to our traditional Hindu wedding ceremony. This vibrant celebration will honor ancient customs and rituals that symbolize the sacred union of two souls.",
     "description2": "The ceremony will take place in a beautifully decorated mandap, where we will perform various rituals guided by a Hindu priest. Your presence would make this auspicious occasion even more special.",
     "rsvpButton": "RSVP Now",
+    "videoUrl": "",
+    "videoType": "youtube",
     "location": {
       "title": "Location",
-      "address1": "Sri Manonmani Ampal Tempel",
-      "address2": "Miesernweg 13, 4632 Trimbach",
+      "address1": "Shed15 events&more",
+      "address2": "Zürichstrasse 15-17, 8607 Seegräben",
       "mapLink": "View on Map"
     },
     "dateTime": {
@@ -179,6 +184,73 @@
       }
     }
   },
+  "reception": {
+    "title": "Wedding Reception",
+    "headline": "Celebrate With Us at Our Wedding Reception",
+    "description": "After our ceremonies, we invite you to join us for an evening of celebration, food, music, and dancing. This will be a wonderful opportunity to come together with family and friends in a relaxed and joyful atmosphere.",
+    "description2": "The reception will feature a delicious dinner, heartfelt speeches, our first dance as a married couple, and plenty of time to dance the night away. We can't wait to celebrate this special day with all of you!",
+    "rsvpButton": "RSVP Now",
+    "location": {
+      "title": "Location",
+      "address1": "Sporthalle Unterrohr",
+      "address2": "Unterrohrstrasse 2, 8952 Schlieren"
+    },
+    "dateTime": {
+      "title": "Date & Time",
+      "date": "July 5, 2026",
+      "time": "6:00 PM - 2:00 AM"
+    },
+    "dress": {
+      "title": "Dress Code",
+      "code1": "Cocktail Attire",
+      "code2": "Dressy and festive"
+    },
+    "schedule": {
+      "title": "Reception Schedule",
+      "events": {
+        "arrival": {
+          "time": "6:00 PM",
+          "title": "Guest Arrival",
+          "description": "Arrive and get settled. Enjoy welcome drinks as we prepare for the evening."
+        },
+        "cocktail": {
+          "time": "6:30 PM",
+          "title": "Cocktail Hour",
+          "description": "Mingle with other guests and enjoy appetizers and refreshments."
+        },
+        "entrance": {
+          "time": "7:30 PM",
+          "title": "Grand Entrance",
+          "description": "The newlyweds make their grand entrance into the reception hall."
+        },
+        "dinner": {
+          "time": "8:00 PM",
+          "title": "Dinner Service",
+          "description": "A delicious multi-course meal featuring both Western and Indian cuisine."
+        },
+        "speeches": {
+          "time": "9:00 PM",
+          "title": "Speeches & Toasts",
+          "description": "Heartfelt speeches from family and friends, followed by toasts to the newlyweds."
+        },
+        "firstDance": {
+          "time": "9:45 PM",
+          "title": "First Dance",
+          "description": "The couple's first dance as husband and wife."
+        },
+        "cake": {
+          "time": "10:15 PM",
+          "title": "Cake Cutting",
+          "description": "The traditional cake cutting ceremony."
+        },
+        "party": {
+          "time": "10:30 PM",
+          "title": "Dance Party",
+          "description": "The dance floor opens! Let's celebrate with music and dancing until late into the night."
+        }
+      }
+    }
+  },
   "story": {
     "title": "Our Story",
     "description": "Every love story is beautiful, but ours is our favorite. Here's a glimpse into our journey from strangers to soulmates.",
@@ -251,6 +323,7 @@
       "ceremonies": "Which ceremonies will you attend?",
       "christianCeremony": "Christian Ceremony (July 4)",
       "hinduCeremony": "Hindu Ceremony (July 5)",
+      "reception": "Wedding Reception",
       "dietary": "Dietary Restrictions",
       "dietaryPlaceholder": "Any food allergies or preferences we should know about?",
       "message": "Message to the Couple",
@@ -298,7 +371,13 @@
     "seconds": "Seconds"
   },
   "common": {
-    "loading": "Loading our love story..."
+    "loading": "Loading our love story...",
+    "videoComingSoon": "Video coming soon",
+    "loadingVideo": "Loading video...",
+    "videoNotSupported": "Your browser does not support the video tag."
+  },
+  "calendar": {
+    "addToCalendar": "Add to Calendar"
   },
   "accommodations": {
     "title": "Accommodations",

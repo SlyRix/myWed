@@ -1,13 +1,11 @@
 // src/components/ceremonies/HinduCeremony.js
 import React from 'react';
-import {motion} from 'framer-motion';
-import {useInView} from 'react-intersection-observer';
 import {mdiMapMarker, mdiCalendar, mdiTshirtCrew} from '@mdi/js';
 import Icon from '@mdi/react';
 import {useTranslation} from 'react-i18next';
 import CeremonyTimeline from './CeremonyTimeline';
 import MiniMap from '../map/MiniMap';
-import CalendarLink from '../common/CalendarLink';
+import AddToCalendarButton from '../common/AddToCalendarButton';
 import AnimatedSection from '../common/AnimatedSection';
 import {Link} from 'react-router-dom';
 import CeremonyAccessCheck from '../common/CeremonyAccessCheck';
@@ -60,8 +58,8 @@ const HinduCeremony = () => {
     ];
 
     // Parse ceremony date for calendar
-    const ceremonyDate = new Date('July 5, 2026 10:00:00');
-    const ceremonyEndDate = new Date('July 5, 2026 14:00:00');
+    const ceremonyDate = new Date('2026-07-05T10:00:00');
+    const ceremonyEndDate = new Date('2026-07-05T14:00:00');
     const ceremonyLocation = t('hindu.location.address1') + ', ' + t('hindu.location.address2');
 
     return (
@@ -132,10 +130,8 @@ const HinduCeremony = () => {
                             {/* Add the mini map component */}
                             <div className="mt-4">
                                 <MiniMap
-                                    address={ceremonyLocation}
+                                    address="Shed15 events&more, Zürichstrasse 15-17, 8607 Seegräben"
                                     title={t('hindu.location.address1')}
-                                    lat={47.366978}  // Example coordinates for a different location
-                                    lng={7.879901}  // Example coordinates for a different location
                                 />
                             </div>
                         </div>
@@ -147,14 +143,15 @@ const HinduCeremony = () => {
                             <p className="mb-1">{t('hindu.dateTime.date')}</p>
                             <p className="text-gray-600 mb-1">{t('hindu.dateTime.time')}</p>
 
-                            {/* Add the calendar link component */}
-                            <div className="mt-4">
-                                <CalendarLink
-                                    title="Rushel & Sivanis Hindu Wedding Ceremony"
+                            {/* Add the calendar button component */}
+                            <div className="mt-4 flex justify-center">
+                                <AddToCalendarButton
+                                    eventTitle="Rushel & Sivani - Hindu Ceremony"
                                     description="Join us for our traditional Hindu Wedding Ceremony"
                                     location={ceremonyLocation}
                                     startDate={ceremonyDate}
                                     endDate={ceremonyEndDate}
+                                    theme="hindu"
                                 />
                             </div>
                         </div>
@@ -170,7 +167,11 @@ const HinduCeremony = () => {
 
                     <AnimatedSection className="mt-20" delay={0.4}>
                         <h2 className="text-2xl font-bold mb-10 text-center text-hindu-secondary">{t('hindu.schedule.title')}</h2>
-                        <CeremonyTimeline events={timelineEvents} theme="hindu"/>
+                        {/* Timeline with Ceremony Schedule */}
+                        <CeremonyTimeline
+                            events={timelineEvents}
+                            theme="hindu"
+                        />
                     </AnimatedSection>
 
                     <AnimatedSection className="mt-16 text-center" delay={0.5}>

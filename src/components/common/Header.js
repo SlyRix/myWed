@@ -59,6 +59,7 @@ const Header = () => {
         { path: '/', label: t('header.home') },
         { path: '/christian-ceremony', label: t('header.christianCeremony'), ceremonyType: 'christian' },
         { path: '/hindu-ceremony', label: t('header.hinduCeremony'), ceremonyType: 'hindu' },
+        { path: '/reception', label: t('header.reception') },
         { path: '/our-story', label: t('header.ourStory') },
         { path: '/accommodations', label: t('header.accommodations') },
         { path: '/gifts', label: t('header.gifts') },

@@ -3,6 +3,7 @@
     "home": "Startseite",
     "christianCeremony": "Christlich",
     "hinduCeremony": "Hinduistisch",
+    "reception": "Empfang",
     "ourStory": "Unsere Geschichte",
     "gifts": "Geschenke",
     "gallery": "Galerie",
@@ -18,13 +19,13 @@
     "christianEvent": {
       "title": "Christliche Zeremonie",
       "date": "4. Juli 2026",
-      "location": "Kath. Pfarramt Heilig Kreuz",
+      "location": "Kirche Altendorf",
       "description": "Nehmen Sie teil an einer wunderschönen Feier der Ehe mit traditionellen christlichen Bräuchen."
     },
     "hinduEvent": {
       "title": "Hinduistische Zeremonie",
       "date": "5. Juli 2026",
-      "location": "Shiva Tempel",
+      "location": "Shed15 events&more",
       "description": "Erleben Sie eine lebendige hinduistische Hochzeitszeremonie voller Farben und Tradition."
     },
     "readStory": "Unsere Geschichte lesen",
@@ -41,10 +42,12 @@
     "description": "Wir freuen uns, Sie zu unserer christlichen Hochzeitszeremonie einzuladen. Diese heilige Gelegenheit wird eine Feier unserer Liebe und Verpflichtung zueinander sein, geleitet von christlichen Traditionen und Werten.",
     "description2": "Die Zeremonie findet in einer wunderschönen Kirchenumgebung statt, wo wir Gelübde und Ringe vor Gott und unseren Lieben austauschen werden. Wir wären geehrt, wenn Sie diesen besonderen Moment in unserem Leben miterleben würden.",
     "rsvpButton": "Jetzt zusagen",
+    "videoUrl": "",
+    "videoType": "youtube",
     "location": {
       "title": "Ort",
-      "address1": "Kath. Pfarramt Heilig Kreuz",
-      "address2": "Kirchweg 1, 8853 Lachen",
+      "address1": "Kirche Altendorf",
+      "address2": "Dorfpl. 5, 8852 Altendorf",
       "mapLink": "Auf Karte anzeigen"
     },
     "dateTime": {
@@ -99,10 +102,12 @@
     "description": "Wir laden Sie herzlich zu unserer traditionellen hinduistischen Hochzeitszeremonie ein. Diese lebendige Feier wird alte Bräuche und Rituale ehren, die die heilige Vereinigung zweier Seelen symbolisieren.",
     "description2": "Die Zeremonie findet in einem wunderschön dekorierten Mandap statt, wo wir verschiedene Rituale unter der Anleitung eines hinduistischen Priesters durchführen werden. Ihre Anwesenheit würde diesen glückverheissenden Anlass noch besonderer machen.",
     "rsvpButton": "Jetzt zusagen",
+    "videoUrl": "",
+    "videoType": "youtube",
     "location": {
       "title": "Ort",
-      "address1": "Sri Manonmani Ampal Tempel",
-      "address2": "Miesernweg 13, 4632 Trimbach",
+      "address1": "Shed15 events&more",
+      "address2": "Zürichstrasse 15-17, 8607 Seegräben",
       "mapLink": "Auf Karte anzeigen"
     },
     "dateTime": {
@@ -179,6 +184,73 @@
       }
     }
   },
+  "reception": {
+    "title": "Hochzeitsempfang",
+    "headline": "Feiert mit uns beim Hochzeitsempfang",
+    "description": "Nach unseren Zeremonien laden wir euch zu einem Abend voller Feiern, Essen, Musik und Tanz ein. Dies wird eine wunderbare Gelegenheit sein, mit Familie und Freunden in entspannter und fröhlicher Atmosphäre zusammenzukommen.",
+    "description2": "Der Empfang bietet ein köstliches Abendessen, herzliche Reden, unseren ersten Tanz als Ehepaar und viel Zeit zum Tanzen bis spät in die Nacht. Wir können es kaum erwarten, diesen besonderen Tag mit euch allen zu feiern!",
+    "rsvpButton": "Jetzt zusagen",
+    "location": {
+      "title": "Ort",
+      "address1": "Sporthalle Unterrohr",
+      "address2": "Unterrohrstrasse 2, 8952 Schlieren"
+    },
+    "dateTime": {
+      "title": "Datum & Zeit",
+      "date": "5. Juli 2026",
+      "time": "18:00 - 02:00 Uhr"
+    },
+    "dress": {
+      "title": "Kleiderordnung",
+      "code1": "Cocktail-Kleidung",
+      "code2": "Schick und festlich"
+    },
+    "schedule": {
+      "title": "Empfangs-Zeitplan",
+      "events": {
+        "arrival": {
+          "time": "18:00",
+          "title": "Gästeankuft",
+          "description": "Ankunft und Platznahme. Geniesst Willkommensgetränke während wir uns auf den Abend vorbereiten."
+        },
+        "cocktail": {
+          "time": "18:30",
+          "title": "Apéro",
+          "description": "Plaudert mit anderen Gästen und geniesst Häppchen und Erfrischungen."
+        },
+        "entrance": {
+          "time": "19:30",
+          "title": "Grosser Einzug",
+          "description": "Das Brautpaar macht seinen grossen Einzug in den Empfangssaal."
+        },
+        "dinner": {
+          "time": "20:00",
+          "title": "Abendessen",
+          "description": "Ein köstliches Menü mit westlicher und indischer Küche."
+        },
+        "speeches": {
+          "time": "21:00",
+          "title": "Reden & Anstossen",
+          "description": "Herzliche Reden von Familie und Freunden, gefolgt von einem Toast auf das Brautpaar."
+        },
+        "firstDance": {
+          "time": "21:45",
+          "title": "Erster Tanz",
+          "description": "Der erste Tanz des Paares als Ehemann und Ehefrau."
+        },
+        "cake": {
+          "time": "22:15",
+          "title": "Hochzeitstorte",
+          "description": "Die traditionelle Hochzeitstorte wird angeschnitten."
+        },
+        "party": {
+          "time": "22:30",
+          "title": "Tanzparty",
+          "description": "Die Tanzfläche ist eröffnet! Lasst uns mit Musik und Tanz bis spät in die Nacht feiern."
+        }
+      }
+    }
+  },
   "story": {
     "title": "Unsere Geschichte",
     "description": "Jede Liebesgeschichte ist schön, aber unsere ist unsere liebste. Hier ist ein Einblick in unsere Reise von Fremden zu Seelenverwandten.",
@@ -251,6 +323,7 @@
       "ceremonies": "An welchen Zeremonien werden Sie teilnehmen?",
       "christianCeremony": "Christliche Zeremonie (4. Juli)",
       "hinduCeremony": "Hinduistische Zeremonie (5. Juli)",
+      "reception": "Hochzeitsempfang",
       "dietary": "Ernährungseinschränkungen",
       "dietaryPlaceholder": "Gibt es Nahrungsmittelallergien oder Vorlieben, die wir wissen sollten?",
       "message": "Nachricht an das Paar",
@@ -298,7 +371,13 @@
     "seconds": "Sekunden"
   },
   "common": {
-    "loading": "Unsere Liebesgeschichte wird geladen..."
+    "loading": "Unsere Liebesgeschichte wird geladen...",
+    "videoComingSoon": "Video kommt bald",
+    "loadingVideo": "Video wird geladen...",
+    "videoNotSupported": "Ihr Browser unterstützt das Video-Tag nicht."
+  },
+  "calendar": {
+    "addToCalendar": "Zum Kalender hinzufügen"
   },
   "accommodations": {
     "title": "Unterkünfte",

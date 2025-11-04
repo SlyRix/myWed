@@ -26,6 +26,7 @@ const RSVPForm = () => {
         // Number of guests for each ceremony
         christianGuests: 0,
         hinduGuests: 0,
+        receptionGuests: 0,
         // Dietary preference - vegetarian checkbox
         isVegetarian: false,
         message: '',
@@ -80,12 +81,13 @@ const RSVPForm = () => {
         }
 
         if (formData.attending === 'yes') {
-            // Make sure they've entered guests for at least one ceremony they have access to
+            // Make sure they've entered guests for at least one ceremony/reception
             const totalGuests = (accessibleCeremonies.includes('christian') ? formData.christianGuests : 0) +
-                (accessibleCeremonies.includes('hindu') ? formData.hinduGuests : 0);
+                (accessibleCeremonies.includes('hindu') ? formData.hinduGuests : 0) +
+                formData.receptionGuests;
 
             if (totalGuests < 1) {
-                newErrors.guests = 'Please enter at least 1 guest for at least one ceremony';
+                newErrors.guests = 'Please enter at least 1 guest for at least one ceremony or reception';
             }
 
             // Validate guest counts are not negative
@@ -95,6 +97,10 @@ const RSVPForm = () => {
 
             if (formData.hinduGuests < 0) {
                 newErrors.hinduGuests = 'Guest count cannot be negative';
+            }
+
+            if (formData.receptionGuests < 0) {
+                newErrors.receptionGuests = 'Guest count cannot be negative';
             }
         }
 
@@ -143,6 +149,7 @@ const RSVPForm = () => {
                     attending: 'yes',
                     christianGuests: 0,
                     hinduGuests: 0,
+                    receptionGuests: 0,
                     isVegetarian: false,
                     message: '',
                     source: ceremonySrc || 'direct'
@@ -358,6 +365,30 @@ const RSVPForm = () => {
                                         {errors.hinduGuests && <p className="text-red-500 text-sm mt-1">{errors.hinduGuests}</p>}
                                     </div>
                                 )}
+
+                                {/* Reception - Always visible for all guests */}
+                                <div className="p-4 border border-gray-200 rounded-lg bg-gradient-to-r from-christian-primary/20 to-hindu-primary/20">
+                                    <div className="mb-2">
+                                        <label className="font-medium text-gray-700">
+                                            {t('rsvp.form.reception')} - {t('reception.dateTime.date')}
+                                        </label>
+                                    </div>
+
+                                    <div className="flex items-center gap-3">
+                                        <input
+                                            type="number"
+                                            name="receptionGuests"
+                                            min="0"
+                                            max="10"
+                                            value={formData.receptionGuests}
+                                            onChange={handleChange}
+                                            disabled={submitted}
+                                            className={`w-20 p-2 border rounded-lg focus:outline-none focus:ring-2 ${errors.receptionGuests ? 'border-red-500 focus:ring-red-200' : 'border-gray-300 focus:ring-christian-accent/20'}`}
+                                        />
+                                        <span className="text-sm text-gray-600">people (enter 0 if not attending)</span>
+                                    </div>
+                                    {errors.receptionGuests && <p className="text-red-500 text-sm mt-1">{errors.receptionGuests}</p>}
+                                </div>
                             </div>
 
                             {errors.guests && <p className="text-red-500 text-sm mt-2">{errors.guests}</p>}
