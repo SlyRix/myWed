@@ -228,49 +228,9 @@
   "gifts": {
     "title": "Hochzeitsgeschenke",
     "description": "Ihre Anwesenheit bei unserer Hochzeit ist das grösste Geschenk. Wenn Sie uns jedoch mit einem Geschenk ehren möchten, haben wir für Ihre Bequemlichkeit eine Geschenkliste erstellt.",
-    "options": {
-      "homeFund": {
-        "title": "Haus-Fonds",
-        "description": "Helfen Sie uns, unser Traumhaus zu bauen"
-      },
-      "honeymoonFund": {
-        "title": "Flitterwochen-Fonds",
-        "description": "Tragen Sie zu unserem Abenteuer bei"
-      },
-      "registry": {
-        "title": "Geschenkliste",
-        "description": "Sehen Sie unsere Wunschliste an"
-      },
-      "charity": {
-        "title": "Wohltätigkeitsspende",
-        "description": "Spenden Sie in unserem Namen"
-      }
-    },
     "note": {
       "title": "Eine Notiz zu Geschenken",
-      "description1": "Wir fühlen uns wirklich geehrt, dass Sie unseren besonderen Tag mit uns feiern werden. Ihre Anwesenheit ist das Wichtigste, und wir sind dankbar für Ihre Liebe und Unterstützung.",
-      "description2": "Wenn Sie ein Geschenk machen möchten, hoffen wir, dass unsere Geschenkliste einige hilfreiche Orientierung bietet. Wir haben Optionen erstellt, die für uns bedeutungsvoll wären, während wir dieses neue Kapitel gemeinsam beginnen."
-    },
-    "wishlist": {
-      "title": "Unsere Amazon-Wunschliste ansehen",
-      "description": "Wir haben eine Amazon-Wunschliste mit Dingen erstellt, die wir gerne bekommen würden. Wenn Sie etwas von dieser Liste kaufen, wird es automatisch als gekauft markiert, um Duplikate zu vermeiden.",
-      "button": "Wunschliste ansehen"
-    },
-    "registry": {
-      "title": "Registrierte Artikel",
-      "purchased": "Bereits gekauft",
-      "by": "von",
-      "viewOnAmazon": "Auf Amazon ansehen"
-    },
-    "cashGifts": {
-      "title": "Bargeld-Geschenk-Optionen",
-      "progress": "Fortschritt",
-      "goal": "Ziel",
-      "contribute": "Beitragen"
-    },
-    "contact": {
-      "title": "Benötigen Sie weitere Hilfe?",
-      "description": "Wenn Sie Fragen zu unserer Geschenkliste oder Geschenkpräferenzen haben, zögern Sie bitte nicht, uns zu kontaktieren."
+      "description": "Wir fühlen uns wirklich geehrt, dass Sie unseren besonderen Tag mit uns feiern werden. Ihre Anwesenheit ist das Wichtigste, und wir sind dankbar für Ihre Liebe und Unterstützung. Wenn Sie ein Geschenk machen möchten, hoffen wir, dass unsere Geschenkliste einige hilfreiche Orientierung bietet."
     }
   },
   "gallery": {

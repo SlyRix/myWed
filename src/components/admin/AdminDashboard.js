@@ -1,10 +1,11 @@
 // src/components/admin/AdminDashboard.js
 import React, { useState, useEffect } from 'react';
 import { QRCodeCanvas } from 'qrcode.react';
-import { mdiPlus, mdiContentSave, mdiTrashCan, mdiCross, mdiTempleHindu, mdiPencil, mdiQrcode, mdiAccountMultiple } from '@mdi/js';
+import { mdiPlus, mdiContentSave, mdiTrashCan, mdiCross, mdiTempleHindu, mdiPencil, mdiQrcode, mdiAccountMultiple, mdiGift } from '@mdi/js';
 import Icon from '@mdi/react';
 import { fetchAllGuests, saveGuest, deleteGuest, generateGuestCode } from '../../api/guestApi';
 import ConfirmDialog from '../common/ConfirmDialog';
+import GiftsManager from './GiftsManager';
 
 const AdminDashboard = () => {
     const [activeTab, setActiveTab] = useState('guestList');
@@ -216,6 +217,13 @@ const AdminDashboard = () => {
                     Guest List
                 </button>
                 <button
+                    className={`py-2 px-4 flex items-center whitespace-nowrap ${activeTab === 'gifts' ? 'border-b-2 border-christian-accent font-bold' : ''}`}
+                    onClick={() => setActiveTab('gifts')}
+                >
+                    <Icon path={mdiGift} size={0.8} className="mr-1 hidden sm:inline" />
+                    Gifts
+                </button>
+                <button
                     className={`py-2 px-4 flex items-center whitespace-nowrap ${activeTab === 'qrCodes' ? 'border-b-2 border-christian-accent font-bold' : ''}`}
                     onClick={() => setActiveTab('qrCodes')}
                 >
@@ -401,6 +409,11 @@ const AdminDashboard = () => {
                         )}
                     </div>
                 </div>
+            )}
+
+            {/* Gift Registry Management */}
+            {activeTab === 'gifts' && (
+                <GiftsManager />
             )}
 
             {/* QR Code Generator - Mobile optimized */}

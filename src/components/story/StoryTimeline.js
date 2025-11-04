@@ -9,7 +9,10 @@ const StoryTimeline = ({ events }) => {
 
     return (
         <div className="relative py-8">
-            {/* Center line (visible on md screens and up) */}
+            {/* Mobile: Left-aligned vertical line */}
+            <div className="absolute h-full w-0.5 bg-gradient-to-b from-christian-accent via-hindu-secondary to-christian-accent left-6 top-0 md:hidden"></div>
+
+            {/* Desktop: Center line */}
             <div className="absolute h-full w-1 bg-gradient-to-b from-christian-accent to-hindu-secondary left-1/2 -translate-x-1/2 hidden md:block"></div>
 
             {/* Timeline items */}
@@ -22,16 +25,44 @@ const StoryTimeline = ({ events }) => {
                     return (
                         <motion.div
                             key={index}
-                            className="relative mb-16 md:mb-0"
+                            className="relative mb-12 md:mb-0 flex md:block"
                             variants={timelineItem}
                             initial="hidden"
                             whileInView="visible"
-                            viewport={{ once: true }}
+                            viewport={{ once: true, margin: "-50px" }}
                             transition={{ duration: 0.6, delay: index * 0.1 }}
                         >
+                            {/* Mobile: Timeline dot on the left */}
+                            <div className="flex-shrink-0 md:hidden">
+                                <motion.div
+                                    className="w-12 h-12 rounded-full bg-white border-4 border-christian-accent shadow-lg flex items-center justify-center relative z-10"
+                                    initial={{ scale: 0 }}
+                                    whileInView={{ scale: 1 }}
+                                    viewport={{ once: true }}
+                                    transition={{ duration: 0.5, delay: index * 0.1 + 0.2 }}
+                                >
+                                    <motion.div
+                                        className="w-3 h-3 rounded-full bg-gradient-to-br from-christian-accent to-hindu-secondary"
+                                        animate={{
+                                            scale: [1, 1.2, 1],
+                                            opacity: [0.8, 1, 0.8]
+                                        }}
+                                        transition={{
+                                            duration: 2,
+                                            repeat: Infinity,
+                                            ease: "easeInOut",
+                                            delay: index * 0.3
+                                        }}
+                                    />
+                                </motion.div>
+                            </div>
+
+                            {/* Mobile: Connector line from dot to card */}
+                            <div className="w-6 h-0.5 bg-gradient-to-r from-christian-accent to-transparent mt-6 md:hidden"></div>
+
                             {/* Content box */}
                             <div
-                                className={`md:absolute md:w-[45%] p-6 bg-white rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 ${
+                                className={`flex-1 md:absolute md:w-[45%] p-6 bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-300 ${
                                     isLeftSide ? 'md:left-0 md:text-right' : 'md:right-0'
                                 }`}
                                 style={{
@@ -61,13 +92,13 @@ const StoryTimeline = ({ events }) => {
                                 </p>
                             </div>
 
-                            {/* Timeline dots - visible only on md screens and up */}
+                            {/* Desktop: Timeline dots - visible only on md screens and up */}
                             <div
                                 className={`hidden md:absolute md:block w-5 h-5 rounded-full bg-white border-4 border-christian-accent z-10 left-1/2 -translate-x-1/2`}
                                 style={{ top: `calc(${topPosition} + 1.5rem)` }}
                             ></div>
 
-                            {/* Connector lines - visible only on md screens and up */}
+                            {/* Desktop: Connector lines - visible only on md screens and up */}
                             <div
                                 className={`hidden md:absolute md:block h-1 bg-gradient-to-r ${
                                     isLeftSide ? 'from-christian-accent to-transparent' : 'from-transparent to-christian-accent'
@@ -81,7 +112,7 @@ const StoryTimeline = ({ events }) => {
                 })}
             </div>
 
-            {/* Spacer to ensure all events are visible */}
+            {/* Spacer to ensure all events are visible on desktop */}
             <div className="hidden md:block" style={{ height: `${events.length * 480}px` }}></div>
         </div>
     );

@@ -78,9 +78,6 @@ const OurStory = () => {
                 </AnimatedSection>
 
                 <div className="relative">
-                    {/* Decorative elements */}
-                    <div className="absolute h-full w-1 bg-gradient-to-b from-christian-accent to-hindu-secondary left-1/2 -translate-x-1/2 hidden md:block"></div>
-
                     {/* Floating animated highlights for the timeline */}
                     <motion.div
                         className="absolute left-1/2 top-1/4 w-20 h-20 rounded-full bg-christian-accent/20 -z-10 hidden md:block"

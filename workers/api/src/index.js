@@ -1,13 +1,37 @@
 // workers/api/src/index.js
 // Cloudflare Worker for Wedding Website API
 
-// CORS headers configuration (will be set dynamically from env.FRONTEND_URL)
-const getCorsHeaders = (env) => ({
-    'Access-Control-Allow-Origin': env.FRONTEND_URL || 'https://wed.rushel.me',
-    'Access-Control-Allow-Methods': 'GET, POST, DELETE, OPTIONS',
-    'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-    'Access-Control-Allow-Credentials': 'true',
-});
+// CORS headers configuration
+// Supports multiple origins including localhost for development
+const getAllowedOrigins = (env) => {
+    const origins = [
+        'https://rushel.me',
+        'https://wed.rushel.me',
+        'http://localhost:3000',
+        'http://localhost:3001',
+        'http://127.0.0.1:3000',
+        'http://127.0.0.1:3001'
+    ];
+
+    // Add custom frontend URL from environment if provided
+    if (env.FRONTEND_URL && !origins.includes(env.FRONTEND_URL)) {
+        origins.push(env.FRONTEND_URL);
+    }
+
+    return origins;
+};
+
+const getCorsHeaders = (env, requestOrigin) => {
+    const allowedOrigins = getAllowedOrigins(env);
+    const origin = allowedOrigins.includes(requestOrigin) ? requestOrigin : allowedOrigins[0];
+
+    return {
+        'Access-Control-Allow-Origin': origin,
+        'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+        'Access-Control-Allow-Credentials': 'true',
+    };
+};
 
 // Security headers
 const securityHeaders = {
@@ -19,8 +43,8 @@ const securityHeaders = {
 };
 
 // Combine all headers
-const getAllHeaders = (env) => ({
-    ...getCorsHeaders(env),
+const getAllHeaders = (env, requestOrigin) => ({
+    ...getCorsHeaders(env, requestOrigin),
     ...securityHeaders,
     'Content-Type': 'application/json',
 });
@@ -131,14 +155,14 @@ function extractToken(request) {
 }
 
 // Admin authentication middleware
-async function requireAdmin(env, request) {
+async function requireAdmin(env, request, requestOrigin) {
     const token = extractToken(request);
     const isValid = await validateSession(env, token);
 
     if (!isValid) {
         return new Response(
             JSON.stringify({ error: 'Authentication required' }),
-            { status: 401, headers: getAllHeaders(env) }
+            { status: 401, headers: getAllHeaders(env, requestOrigin) }
         );
     }
 
@@ -146,7 +170,7 @@ async function requireAdmin(env, request) {
 }
 
 // Handle admin login
-async function handleAdminLogin(env, request, rateLimiter) {
+async function handleAdminLogin(env, request, rateLimiter, requestOrigin) {
     try {
         const body = await request.json();
         const { password } = body;
@@ -154,7 +178,7 @@ async function handleAdminLogin(env, request, rateLimiter) {
         if (!password) {
             return new Response(
                 JSON.stringify({ error: 'Password required' }),
-                { status: 400, headers: getAllHeaders(env) }
+                { status: 400, headers: getAllHeaders(env, requestOrigin) }
             );
         }
 
@@ -169,7 +193,7 @@ async function handleAdminLogin(env, request, rateLimiter) {
         if (!rateLimit.allowed) {
             return new Response(
                 JSON.stringify({ error: 'Too many login attempts. Please try again later.' }),
-                { status: 429, headers: getAllHeaders(env) }
+                { status: 429, headers: getAllHeaders(env, requestOrigin) }
             );
         }
 
@@ -189,25 +213,25 @@ async function handleAdminLogin(env, request, rateLimiter) {
 
             return new Response(
                 JSON.stringify({ success: true, token }),
-                { status: 200, headers: getAllHeaders(env) }
+                { status: 200, headers: getAllHeaders(env, requestOrigin) }
             );
         } else {
             return new Response(
                 JSON.stringify({ error: 'Invalid password' }),
-                { status: 401, headers: getAllHeaders(env) }
+                { status: 401, headers: getAllHeaders(env, requestOrigin) }
             );
         }
     } catch (error) {
         console.error('Login error:', error);
         return new Response(
             JSON.stringify({ error: 'Login failed' }),
-            { status: 500, headers: getAllHeaders(env) }
+            { status: 500, headers: getAllHeaders(env, requestOrigin) }
         );
     }
 }
 
 // Get all guests (admin only)
-async function handleGetGuests(env) {
+async function handleGetGuests(env, requestOrigin) {
     try {
         const results = await env.DB.prepare(
             'SELECT code, name, ceremonies FROM guests ORDER BY name'
@@ -224,19 +248,19 @@ async function handleGetGuests(env) {
 
         return new Response(
             JSON.stringify(guestList),
-            { status: 200, headers: getAllHeaders(env) }
+            { status: 200, headers: getAllHeaders(env, requestOrigin) }
         );
     } catch (error) {
         console.error('Get guests error:', error);
         return new Response(
             JSON.stringify({ error: 'Failed to fetch guest list' }),
-            { status: 500, headers: getAllHeaders(env) }
+            { status: 500, headers: getAllHeaders(env, requestOrigin) }
         );
     }
 }
 
 // Save guest (admin only)
-async function handleSaveGuest(env, request) {
+async function handleSaveGuest(env, request, requestOrigin) {
     try {
         const body = await request.json();
         const { code, guestData } = body;
@@ -245,28 +269,28 @@ async function handleSaveGuest(env, request) {
         if (!code || typeof code !== 'string' || !/^[A-Z0-9]{4,10}$/.test(code)) {
             return new Response(
                 JSON.stringify({ error: 'Invalid code format. Must be 4-10 uppercase alphanumeric characters.' }),
-                { status: 400, headers: getAllHeaders(env) }
+                { status: 400, headers: getAllHeaders(env, requestOrigin) }
             );
         }
 
         if (!guestData || !guestData.name || typeof guestData.name !== 'string') {
             return new Response(
                 JSON.stringify({ error: 'Invalid guest data. Name is required.' }),
-                { status: 400, headers: getAllHeaders(env) }
+                { status: 400, headers: getAllHeaders(env, requestOrigin) }
             );
         }
 
         if (guestData.name.length > 100) {
             return new Response(
                 JSON.stringify({ error: 'Guest name too long. Maximum 100 characters.' }),
-                { status: 400, headers: getAllHeaders(env) }
+                { status: 400, headers: getAllHeaders(env, requestOrigin) }
             );
         }
 
         if (!Array.isArray(guestData.ceremonies)) {
             return new Response(
                 JSON.stringify({ error: 'Invalid ceremonies data. Must be an array.' }),
-                { status: 400, headers: getAllHeaders(env) }
+                { status: 400, headers: getAllHeaders(env, requestOrigin) }
             );
         }
 
@@ -276,7 +300,7 @@ async function handleSaveGuest(env, request) {
             if (!validCeremonies.includes(ceremony)) {
                 return new Response(
                     JSON.stringify({ error: 'Invalid ceremony type. Must be "christian" or "hindu".' }),
-                    { status: 400, headers: getAllHeaders(env) }
+                    { status: 400, headers: getAllHeaders(env, requestOrigin) }
                 );
             }
         }
@@ -288,25 +312,25 @@ async function handleSaveGuest(env, request) {
 
         return new Response(
             JSON.stringify({ success: true, code, guest: guestData }),
-            { status: 200, headers: getAllHeaders(env) }
+            { status: 200, headers: getAllHeaders(env, requestOrigin) }
         );
     } catch (error) {
         console.error('Save guest error:', error);
         return new Response(
             JSON.stringify({ error: 'Failed to save guest' }),
-            { status: 500, headers: getAllHeaders(env) }
+            { status: 500, headers: getAllHeaders(env, requestOrigin) }
         );
     }
 }
 
 // Delete guest (admin only)
-async function handleDeleteGuest(env, code) {
+async function handleDeleteGuest(env, code, requestOrigin) {
     try {
         // Input validation
         if (!code || typeof code !== 'string' || !/^[A-Z0-9]{4,10}$/.test(code)) {
             return new Response(
                 JSON.stringify({ error: 'Invalid code format' }),
-                { status: 400, headers: getAllHeaders(env) }
+                { status: 400, headers: getAllHeaders(env, requestOrigin) }
             );
         }
 
@@ -318,31 +342,31 @@ async function handleDeleteGuest(env, code) {
         if (result.meta.changes === 0) {
             return new Response(
                 JSON.stringify({ error: 'Guest not found or could not be deleted' }),
-                { status: 404, headers: getAllHeaders(env) }
+                { status: 404, headers: getAllHeaders(env, requestOrigin) }
             );
         }
 
         return new Response(
             JSON.stringify({ success: true }),
-            { status: 200, headers: getAllHeaders(env) }
+            { status: 200, headers: getAllHeaders(env, requestOrigin) }
         );
     } catch (error) {
         console.error('Delete guest error:', error);
         return new Response(
             JSON.stringify({ error: 'Failed to delete guest' }),
-            { status: 500, headers: getAllHeaders(env) }
+            { status: 500, headers: getAllHeaders(env, requestOrigin) }
         );
     }
 }
 
 // Validate access code (public)
-async function handleValidateCode(env, code) {
+async function handleValidateCode(env, code, requestOrigin) {
     try {
         // Input validation - strict format for security
         if (!code || typeof code !== 'string' || !/^[A-Z0-9]{4,10}$/.test(code.trim().toUpperCase())) {
             return new Response(
                 JSON.stringify({ valid: false, error: 'Invalid code format' }),
-                { status: 400, headers: getAllHeaders(env) }
+                { status: 400, headers: getAllHeaders(env, requestOrigin) }
             );
         }
 
@@ -363,25 +387,25 @@ async function handleValidateCode(env, code) {
                     },
                     ceremonies: JSON.parse(result.ceremonies)
                 }),
-                { status: 200, headers: getAllHeaders(env) }
+                { status: 200, headers: getAllHeaders(env, requestOrigin) }
             );
         } else {
             return new Response(
                 JSON.stringify({ valid: false }),
-                { status: 200, headers: getAllHeaders(env) }
+                { status: 200, headers: getAllHeaders(env, requestOrigin) }
             );
         }
     } catch (error) {
         console.error('Validate code error:', error);
         return new Response(
             JSON.stringify({ error: 'Failed to validate code' }),
-            { status: 500, headers: getAllHeaders(env) }
+            { status: 500, headers: getAllHeaders(env, requestOrigin) }
         );
     }
 }
 
 // Generate guest code (admin only)
-async function handleGenerateCode(env, request) {
+async function handleGenerateCode(env, request, requestOrigin) {
     try {
         const body = await request.json();
         const { name } = body;
@@ -390,14 +414,14 @@ async function handleGenerateCode(env, request) {
         if (!name || typeof name !== 'string') {
             return new Response(
                 JSON.stringify({ error: 'Name is required' }),
-                { status: 400, headers: getAllHeaders(env) }
+                { status: 400, headers: getAllHeaders(env, requestOrigin) }
             );
         }
 
         if (name.length > 100) {
             return new Response(
                 JSON.stringify({ error: 'Name too long. Maximum 100 characters.' }),
-                { status: 400, headers: getAllHeaders(env) }
+                { status: 400, headers: getAllHeaders(env, requestOrigin) }
             );
         }
 
@@ -430,7 +454,7 @@ async function handleGenerateCode(env, request) {
             if (!existing) {
                 return new Response(
                     JSON.stringify({ code: newCode }),
-                    { status: 200, headers: getAllHeaders(env) }
+                    { status: 200, headers: getAllHeaders(env, requestOrigin) }
                 );
             }
 
@@ -444,13 +468,649 @@ async function handleGenerateCode(env, request) {
 
         return new Response(
             JSON.stringify({ code: newCode }),
-            { status: 200, headers: getAllHeaders(env) }
+            { status: 200, headers: getAllHeaders(env, requestOrigin) }
         );
     } catch (error) {
         console.error('Generate code error:', error);
         return new Response(
             JSON.stringify({ error: 'Failed to generate code' }),
-            { status: 500, headers: getAllHeaders(env) }
+            { status: 500, headers: getAllHeaders(env, requestOrigin) }
+        );
+    }
+}
+
+/**
+ * Get all gifts with contribution totals (public)
+ * Returns gift list with calculated total contributions and remaining amounts
+ * @returns {Promise<Response>} JSON array of gifts with contribution data
+ */
+async function handleGetGifts(env, requestOrigin) {
+    try {
+        // Get all gifts
+        const giftsResult = await env.DB.prepare(
+            'SELECT id, name_en, name_de, name_ta, description_en, description_de, description_ta, price, image_url, category, product_url, created_at FROM gifts ORDER BY category, id'
+        ).all();
+
+        // For each gift, calculate total contributions
+        const giftsWithContributions = await Promise.all(
+            giftsResult.results.map(async (gift) => {
+                const contributionsResult = await env.DB.prepare(
+                    'SELECT COALESCE(SUM(amount), 0) as total_contributed, COUNT(*) as contribution_count FROM contributions WHERE gift_id = ?'
+                ).bind(gift.id).first();
+
+                return {
+                    id: gift.id,
+                    names: {
+                        en: gift.name_en,
+                        de: gift.name_de,
+                        ta: gift.name_ta
+                    },
+                    descriptions: {
+                        en: gift.description_en,
+                        de: gift.description_de,
+                        ta: gift.description_ta
+                    },
+                    price: gift.price,
+                    imageUrl: gift.image_url,
+                    category: gift.category,
+                    productUrl: gift.product_url,
+                    totalContributed: contributionsResult.total_contributed,
+                    contributionCount: contributionsResult.contribution_count,
+                    remainingAmount: gift.price - contributionsResult.total_contributed,
+                    percentageFunded: Math.round((contributionsResult.total_contributed / gift.price) * 100),
+                    createdAt: gift.created_at
+                };
+            })
+        );
+
+        return new Response(
+            JSON.stringify(giftsWithContributions),
+            { status: 200, headers: getAllHeaders(env, requestOrigin) }
+        );
+    } catch (error) {
+        console.error('Get gifts error:', error);
+        return new Response(
+            JSON.stringify({ error: 'Failed to fetch gifts' }),
+            { status: 500, headers: getAllHeaders(env, requestOrigin) }
+        );
+    }
+}
+
+/**
+ * Create a new gift (admin only)
+ * @param {Request} request - Request with gift data in body
+ * @returns {Promise<Response>} Created gift object
+ */
+async function handleCreateGift(env, request, requestOrigin) {
+    try {
+        const body = await request.json();
+        const { names, descriptions, price, imageUrl, category, productUrl } = body;
+
+        // Input validation
+        if (!names || !names.en || !names.de || !names.ta) {
+            return new Response(
+                JSON.stringify({ error: 'All language names are required (en, de, ta)' }),
+                { status: 400, headers: getAllHeaders(env, requestOrigin) }
+            );
+        }
+
+        if (!descriptions || !descriptions.en || !descriptions.de || !descriptions.ta) {
+            return new Response(
+                JSON.stringify({ error: 'All language descriptions are required (en, de, ta)' }),
+                { status: 400, headers: getAllHeaders(env, requestOrigin) }
+            );
+        }
+
+        if (!price || typeof price !== 'number' || price <= 0) {
+            return new Response(
+                JSON.stringify({ error: 'Valid price is required (must be positive number)' }),
+                { status: 400, headers: getAllHeaders(env, requestOrigin) }
+            );
+        }
+
+        if (!imageUrl || typeof imageUrl !== 'string' || imageUrl.length === 0) {
+            return new Response(
+                JSON.stringify({ error: 'Image URL is required' }),
+                { status: 400, headers: getAllHeaders(env, requestOrigin) }
+            );
+        }
+
+        if (!category || typeof category !== 'string' || category.length === 0) {
+            return new Response(
+                JSON.stringify({ error: 'Category is required' }),
+                { status: 400, headers: getAllHeaders(env, requestOrigin) }
+            );
+        }
+
+        // Validate productUrl if provided
+        if (productUrl !== null && productUrl !== undefined && productUrl !== '') {
+            if (typeof productUrl !== 'string') {
+                return new Response(
+                    JSON.stringify({ error: 'Product URL must be a string' }),
+                    { status: 400, headers: getAllHeaders(env, requestOrigin) }
+                );
+            }
+            // Check if URL starts with http:// or https:// and doesn't contain javascript:
+            if (!productUrl.startsWith('http://') && !productUrl.startsWith('https://')) {
+                return new Response(
+                    JSON.stringify({ error: 'Product URL must start with http:// or https://' }),
+                    { status: 400, headers: getAllHeaders(env, requestOrigin) }
+                );
+            }
+            if (productUrl.toLowerCase().includes('javascript:')) {
+                return new Response(
+                    JSON.stringify({ error: 'Invalid product URL' }),
+                    { status: 400, headers: getAllHeaders(env, requestOrigin) }
+                );
+            }
+            if (productUrl.length > 500) {
+                return new Response(
+                    JSON.stringify({ error: 'Product URL too long. Maximum 500 characters.' }),
+                    { status: 400, headers: getAllHeaders(env, requestOrigin) }
+                );
+            }
+        }
+
+        // Validate string lengths
+        if (names.en.length > 200 || names.de.length > 200 || names.ta.length > 200) {
+            return new Response(
+                JSON.stringify({ error: 'Gift names too long. Maximum 200 characters.' }),
+                { status: 400, headers: getAllHeaders(env, requestOrigin) }
+            );
+        }
+
+        if (descriptions.en.length > 500 || descriptions.de.length > 500 || descriptions.ta.length > 500) {
+            return new Response(
+                JSON.stringify({ error: 'Descriptions too long. Maximum 500 characters.' }),
+                { status: 400, headers: getAllHeaders(env, requestOrigin) }
+            );
+        }
+
+        // Insert gift into database
+        const result = await env.DB.prepare(
+            'INSERT INTO gifts (name_en, name_de, name_ta, description_en, description_de, description_ta, price, image_url, category, product_url) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
+        ).bind(
+            names.en,
+            names.de,
+            names.ta,
+            descriptions.en,
+            descriptions.de,
+            descriptions.ta,
+            price,
+            imageUrl,
+            category,
+            productUrl || null
+        ).run();
+
+        const giftId = result.meta.last_row_id;
+
+        return new Response(
+            JSON.stringify({
+                success: true,
+                gift: {
+                    id: giftId,
+                    names,
+                    descriptions,
+                    price,
+                    imageUrl,
+                    category,
+                    productUrl: productUrl || null
+                }
+            }),
+            { status: 201, headers: getAllHeaders(env, requestOrigin) }
+        );
+    } catch (error) {
+        console.error('Create gift error:', error);
+        return new Response(
+            JSON.stringify({ error: 'Failed to create gift' }),
+            { status: 500, headers: getAllHeaders(env, requestOrigin) }
+        );
+    }
+}
+
+/**
+ * Update an existing gift (admin only)
+ * @param {number} giftId - ID of gift to update
+ * @param {Request} request - Request with updated gift data
+ * @returns {Promise<Response>} Updated gift object
+ */
+async function handleUpdateGift(env, giftId, request, requestOrigin) {
+    try {
+        const body = await request.json();
+        const { names, descriptions, price, imageUrl, category, productUrl } = body;
+
+        // Input validation
+        if (!giftId || isNaN(giftId)) {
+            return new Response(
+                JSON.stringify({ error: 'Invalid gift ID' }),
+                { status: 400, headers: getAllHeaders(env, requestOrigin) }
+            );
+        }
+
+        // Check if gift exists
+        const existingGift = await env.DB.prepare('SELECT id FROM gifts WHERE id = ?').bind(giftId).first();
+        if (!existingGift) {
+            return new Response(
+                JSON.stringify({ error: 'Gift not found' }),
+                { status: 404, headers: getAllHeaders(env, requestOrigin) }
+            );
+        }
+
+        // Validate inputs (same as create)
+        if (!names || !names.en || !names.de || !names.ta) {
+            return new Response(
+                JSON.stringify({ error: 'All language names are required (en, de, ta)' }),
+                { status: 400, headers: getAllHeaders(env, requestOrigin) }
+            );
+        }
+
+        if (!descriptions || !descriptions.en || !descriptions.de || !descriptions.ta) {
+            return new Response(
+                JSON.stringify({ error: 'All language descriptions are required (en, de, ta)' }),
+                { status: 400, headers: getAllHeaders(env, requestOrigin) }
+            );
+        }
+
+        if (!price || typeof price !== 'number' || price <= 0) {
+            return new Response(
+                JSON.stringify({ error: 'Valid price is required (must be positive number)' }),
+                { status: 400, headers: getAllHeaders(env, requestOrigin) }
+            );
+        }
+
+        if (!imageUrl || typeof imageUrl !== 'string' || imageUrl.length === 0) {
+            return new Response(
+                JSON.stringify({ error: 'Image URL is required' }),
+                { status: 400, headers: getAllHeaders(env, requestOrigin) }
+            );
+        }
+
+        if (!category || typeof category !== 'string' || category.length === 0) {
+            return new Response(
+                JSON.stringify({ error: 'Category is required' }),
+                { status: 400, headers: getAllHeaders(env, requestOrigin) }
+            );
+        }
+
+        // Validate productUrl if provided
+        if (productUrl !== null && productUrl !== undefined && productUrl !== '') {
+            if (typeof productUrl !== 'string') {
+                return new Response(
+                    JSON.stringify({ error: 'Product URL must be a string' }),
+                    { status: 400, headers: getAllHeaders(env, requestOrigin) }
+                );
+            }
+            // Check if URL starts with http:// or https:// and doesn't contain javascript:
+            if (!productUrl.startsWith('http://') && !productUrl.startsWith('https://')) {
+                return new Response(
+                    JSON.stringify({ error: 'Product URL must start with http:// or https://' }),
+                    { status: 400, headers: getAllHeaders(env, requestOrigin) }
+                );
+            }
+            if (productUrl.toLowerCase().includes('javascript:')) {
+                return new Response(
+                    JSON.stringify({ error: 'Invalid product URL' }),
+                    { status: 400, headers: getAllHeaders(env, requestOrigin) }
+                );
+            }
+            if (productUrl.length > 500) {
+                return new Response(
+                    JSON.stringify({ error: 'Product URL too long. Maximum 500 characters.' }),
+                    { status: 400, headers: getAllHeaders(env, requestOrigin) }
+                );
+            }
+        }
+
+        // Update gift in database
+        await env.DB.prepare(
+            'UPDATE gifts SET name_en = ?, name_de = ?, name_ta = ?, description_en = ?, description_de = ?, description_ta = ?, price = ?, image_url = ?, category = ?, product_url = ? WHERE id = ?'
+        ).bind(
+            names.en,
+            names.de,
+            names.ta,
+            descriptions.en,
+            descriptions.de,
+            descriptions.ta,
+            price,
+            imageUrl,
+            category,
+            productUrl || null,
+            giftId
+        ).run();
+
+        return new Response(
+            JSON.stringify({
+                success: true,
+                gift: {
+                    id: giftId,
+                    names,
+                    descriptions,
+                    price,
+                    imageUrl,
+                    category,
+                    productUrl: productUrl || null
+                }
+            }),
+            { status: 200, headers: getAllHeaders(env, requestOrigin) }
+        );
+    } catch (error) {
+        console.error('Update gift error:', error);
+        return new Response(
+            JSON.stringify({ error: 'Failed to update gift' }),
+            { status: 500, headers: getAllHeaders(env, requestOrigin) }
+        );
+    }
+}
+
+/**
+ * Delete a gift (admin only)
+ * WARNING: This also deletes all associated contributions
+ * @param {number} giftId - ID of gift to delete
+ * @returns {Promise<Response>} Success confirmation
+ */
+async function handleDeleteGift(env, giftId, requestOrigin) {
+    try {
+        if (!giftId || isNaN(giftId)) {
+            return new Response(
+                JSON.stringify({ error: 'Invalid gift ID' }),
+                { status: 400, headers: getAllHeaders(env, requestOrigin) }
+            );
+        }
+
+        const result = await env.DB.prepare('DELETE FROM gifts WHERE id = ?').bind(giftId).run();
+
+        if (result.meta.changes === 0) {
+            return new Response(
+                JSON.stringify({ error: 'Gift not found or could not be deleted' }),
+                { status: 404, headers: getAllHeaders(env, requestOrigin) }
+            );
+        }
+
+        return new Response(
+            JSON.stringify({ success: true }),
+            { status: 200, headers: getAllHeaders(env, requestOrigin) }
+        );
+    } catch (error) {
+        console.error('Delete gift error:', error);
+        return new Response(
+            JSON.stringify({ error: 'Failed to delete gift' }),
+            { status: 500, headers: getAllHeaders(env, requestOrigin) }
+        );
+    }
+}
+
+/**
+ * Make a contribution to a gift (public with rate limiting)
+ * @param {number} giftId - ID of gift to contribute to
+ * @param {Request} request - Request with contribution data
+ * @param {RateLimiter} rateLimiter - Rate limiter instance
+ * @returns {Promise<Response>} Created contribution object
+ */
+async function handleMakeContribution(env, giftId, request, rateLimiter, requestOrigin) {
+    try {
+        const body = await request.json();
+        const { contributorName, amount, message } = body;
+
+        // Input validation
+        if (!giftId || isNaN(giftId)) {
+            return new Response(
+                JSON.stringify({ error: 'Invalid gift ID' }),
+                { status: 400, headers: getAllHeaders(env, requestOrigin) }
+            );
+        }
+
+        if (!contributorName || typeof contributorName !== 'string' || contributorName.trim().length === 0) {
+            return new Response(
+                JSON.stringify({ error: 'Contributor name is required' }),
+                { status: 400, headers: getAllHeaders(env, requestOrigin) }
+            );
+        }
+
+        if (contributorName.length > 100) {
+            return new Response(
+                JSON.stringify({ error: 'Contributor name too long. Maximum 100 characters.' }),
+                { status: 400, headers: getAllHeaders(env, requestOrigin) }
+            );
+        }
+
+        if (!amount || typeof amount !== 'number' || amount <= 0) {
+            return new Response(
+                JSON.stringify({ error: 'Valid contribution amount is required (must be positive number)' }),
+                { status: 400, headers: getAllHeaders(env, requestOrigin) }
+            );
+        }
+
+        if (message && message.length > 200) {
+            return new Response(
+                JSON.stringify({ error: 'Message too long. Maximum 200 characters.' }),
+                { status: 400, headers: getAllHeaders(env, requestOrigin) }
+            );
+        }
+
+        // Rate limiting for contributions (10 per 15 minutes per IP)
+        const clientIP = request.headers.get('CF-Connecting-IP') || 'unknown';
+        const rateLimit = await rateLimiter.checkRateLimit(
+            `contribution:${clientIP}`,
+            10,
+            15 * 60 * 1000
+        );
+
+        if (!rateLimit.allowed) {
+            return new Response(
+                JSON.stringify({ error: 'Too many contribution attempts. Please try again later.' }),
+                { status: 429, headers: getAllHeaders(env, requestOrigin) }
+            );
+        }
+
+        // Check if gift exists and get current contribution total
+        const gift = await env.DB.prepare(
+            'SELECT id, price FROM gifts WHERE id = ?'
+        ).bind(giftId).first();
+
+        if (!gift) {
+            return new Response(
+                JSON.stringify({ error: 'Gift not found' }),
+                { status: 404, headers: getAllHeaders(env, requestOrigin) }
+            );
+        }
+
+        // Calculate current total contributions
+        const contributionsResult = await env.DB.prepare(
+            'SELECT COALESCE(SUM(amount), 0) as total_contributed FROM contributions WHERE gift_id = ?'
+        ).bind(giftId).first();
+
+        const totalContributed = contributionsResult.total_contributed;
+        const remainingAmount = gift.price - totalContributed;
+
+        // Check if contribution exceeds remaining amount
+        if (amount > remainingAmount) {
+            return new Response(
+                JSON.stringify({
+                    error: 'Contribution amount exceeds remaining balance',
+                    remainingAmount: remainingAmount
+                }),
+                { status: 400, headers: getAllHeaders(env, requestOrigin) }
+            );
+        }
+
+        // Insert contribution
+        const result = await env.DB.prepare(
+            'INSERT INTO contributions (gift_id, contributor_name, amount, message) VALUES (?, ?, ?, ?)'
+        ).bind(giftId, contributorName.trim(), amount, message ? message.trim() : null).run();
+
+        const contributionId = result.meta.last_row_id;
+
+        return new Response(
+            JSON.stringify({
+                success: true,
+                contribution: {
+                    id: contributionId,
+                    giftId,
+                    contributorName: contributorName.trim(),
+                    amount,
+                    message: message ? message.trim() : null
+                }
+            }),
+            { status: 201, headers: getAllHeaders(env, requestOrigin) }
+        );
+    } catch (error) {
+        console.error('Make contribution error:', error);
+        return new Response(
+            JSON.stringify({ error: 'Failed to make contribution' }),
+            { status: 500, headers: getAllHeaders(env, requestOrigin) }
+        );
+    }
+}
+
+/**
+ * Get contributions for a specific gift (admin only)
+ * @param {number} giftId - ID of gift to get contributions for
+ * @returns {Promise<Response>} Array of contributions
+ */
+async function handleGetGiftContributions(env, giftId, requestOrigin) {
+    try {
+        if (!giftId || isNaN(giftId)) {
+            return new Response(
+                JSON.stringify({ error: 'Invalid gift ID' }),
+                { status: 400, headers: getAllHeaders(env, requestOrigin) }
+            );
+        }
+
+        const result = await env.DB.prepare(
+            'SELECT id, contributor_name, amount, message, created_at FROM contributions WHERE gift_id = ? ORDER BY created_at DESC'
+        ).bind(giftId).all();
+
+        return new Response(
+            JSON.stringify(result.results),
+            { status: 200, headers: getAllHeaders(env, requestOrigin) }
+        );
+    } catch (error) {
+        console.error('Get contributions error:', error);
+        return new Response(
+            JSON.stringify({ error: 'Failed to fetch contributions' }),
+            { status: 500, headers: getAllHeaders(env, requestOrigin) }
+        );
+    }
+}
+
+/**
+ * Mark a gift as purchased directly (public with rate limiting)
+ * Creates a contribution record for the full remaining amount
+ * @param {number} giftId - ID of gift that was purchased
+ * @param {Request} request - Request with purchaser data
+ * @param {RateLimiter} rateLimiter - Rate limiter instance
+ * @returns {Promise<Response>} Created contribution object
+ */
+async function handleMarkPurchased(env, giftId, request, rateLimiter, requestOrigin) {
+    try {
+        const body = await request.json();
+        const { contributorName, storeName } = body;
+
+        // Input validation
+        if (!giftId || isNaN(giftId)) {
+            return new Response(
+                JSON.stringify({ error: 'Invalid gift ID' }),
+                { status: 400, headers: getAllHeaders(env, requestOrigin) }
+            );
+        }
+
+        if (!contributorName || typeof contributorName !== 'string' || contributorName.trim().length === 0) {
+            return new Response(
+                JSON.stringify({ error: 'Contributor name is required' }),
+                { status: 400, headers: getAllHeaders(env, requestOrigin) }
+            );
+        }
+
+        if (contributorName.length > 100) {
+            return new Response(
+                JSON.stringify({ error: 'Contributor name too long. Maximum 100 characters.' }),
+                { status: 400, headers: getAllHeaders(env, requestOrigin) }
+            );
+        }
+
+        if (storeName && storeName.length > 200) {
+            return new Response(
+                JSON.stringify({ error: 'Store name too long. Maximum 200 characters.' }),
+                { status: 400, headers: getAllHeaders(env, requestOrigin) }
+            );
+        }
+
+        // Rate limiting for direct purchases (same as contributions: 10 per 15 minutes per IP)
+        const clientIP = request.headers.get('CF-Connecting-IP') || 'unknown';
+        const rateLimit = await rateLimiter.checkRateLimit(
+            `contribution:${clientIP}`,
+            10,
+            15 * 60 * 1000
+        );
+
+        if (!rateLimit.allowed) {
+            return new Response(
+                JSON.stringify({ error: 'Too many purchase attempts. Please try again later.' }),
+                { status: 429, headers: getAllHeaders(env, requestOrigin) }
+            );
+        }
+
+        // Check if gift exists and get current contribution total
+        const gift = await env.DB.prepare(
+            'SELECT id, price FROM gifts WHERE id = ?'
+        ).bind(giftId).first();
+
+        if (!gift) {
+            return new Response(
+                JSON.stringify({ error: 'Gift not found' }),
+                { status: 404, headers: getAllHeaders(env, requestOrigin) }
+            );
+        }
+
+        // Calculate current total contributions
+        const contributionsResult = await env.DB.prepare(
+            'SELECT COALESCE(SUM(amount), 0) as total_contributed FROM contributions WHERE gift_id = ?'
+        ).bind(giftId).first();
+
+        const totalContributed = contributionsResult.total_contributed;
+        const remainingAmount = gift.price - totalContributed;
+
+        // Check if gift is already fully funded
+        if (remainingAmount <= 0) {
+            return new Response(
+                JSON.stringify({
+                    error: 'Gift is already fully funded',
+                    remainingAmount: 0
+                }),
+                { status: 400, headers: getAllHeaders(env, requestOrigin) }
+            );
+        }
+
+        // Create message indicating direct purchase
+        const message = storeName
+            ? `Purchased directly from ${storeName.trim()}`
+            : 'Purchased directly';
+
+        // Insert contribution for full remaining amount
+        const result = await env.DB.prepare(
+            'INSERT INTO contributions (gift_id, contributor_name, amount, message) VALUES (?, ?, ?, ?)'
+        ).bind(giftId, contributorName.trim(), remainingAmount, message).run();
+
+        const contributionId = result.meta.last_row_id;
+
+        return new Response(
+            JSON.stringify({
+                success: true,
+                contribution: {
+                    id: contributionId,
+                    giftId,
+                    contributorName: contributorName.trim(),
+                    amount: remainingAmount,
+                    message: message
+                }
+            }),
+            { status: 201, headers: getAllHeaders(env, requestOrigin) }
+        );
+    } catch (error) {
+        console.error('Mark purchased error:', error);
+        return new Response(
+            JSON.stringify({ error: 'Failed to mark gift as purchased' }),
+            { status: 500, headers: getAllHeaders(env, requestOrigin) }
         );
     }
 }
@@ -460,12 +1120,13 @@ async function handleRequest(request, env) {
     const url = new URL(request.url);
     const path = url.pathname;
     const method = request.method;
+    const requestOrigin = request.headers.get('Origin') || '';
 
     // Handle CORS preflight
     if (method === 'OPTIONS') {
         return new Response(null, {
             status: 204,
-            headers: getAllHeaders(env)
+            headers: getAllHeaders(env, requestOrigin)
         });
     }
 
@@ -483,7 +1144,7 @@ async function handleRequest(request, env) {
     if (!rateLimit.allowed && !path.includes('/admin/login')) {
         return new Response(
             JSON.stringify({ error: 'Too many requests from this IP' }),
-            { status: 429, headers: getAllHeaders(env) }
+            { status: 429, headers: getAllHeaders(env, requestOrigin) }
         );
     }
 
@@ -491,45 +1152,80 @@ async function handleRequest(request, env) {
     try {
         // Public routes
         if (path === '/api/admin/login' && method === 'POST') {
-            return await handleAdminLogin(env, request, rateLimiter);
+            return await handleAdminLogin(env, request, rateLimiter, requestOrigin);
         }
 
         if (path.startsWith('/api/validate/') && method === 'GET') {
             const code = path.split('/').pop();
-            return await handleValidateCode(env, code);
+            return await handleValidateCode(env, code, requestOrigin);
+        }
+
+        // Gift endpoints - public
+        if (path === '/api/gifts' && method === 'GET') {
+            return await handleGetGifts(env, requestOrigin);
+        }
+
+        if (path.startsWith('/api/gifts/') && path.endsWith('/contribute') && method === 'POST') {
+            const giftId = parseInt(path.split('/')[3]);
+            return await handleMakeContribution(env, giftId, request, rateLimiter, requestOrigin);
+        }
+
+        if (path.startsWith('/api/gifts/') && path.endsWith('/mark-purchased') && method === 'POST') {
+            const giftId = parseInt(path.split('/')[3]);
+            return await handleMarkPurchased(env, giftId, request, rateLimiter, requestOrigin);
         }
 
         // Protected routes (require admin authentication)
-        const authError = await requireAdmin(env, request);
+        const authError = await requireAdmin(env, request, requestOrigin);
         if (authError) return authError;
 
         if (path === '/api/guests' && method === 'GET') {
-            return await handleGetGuests(env);
+            return await handleGetGuests(env, requestOrigin);
         }
 
         if (path === '/api/guests' && method === 'POST') {
-            return await handleSaveGuest(env, request);
+            return await handleSaveGuest(env, request, requestOrigin);
         }
 
         if (path.startsWith('/api/guests/') && method === 'DELETE') {
             const code = path.split('/').pop();
-            return await handleDeleteGuest(env, code);
+            return await handleDeleteGuest(env, code, requestOrigin);
         }
 
         if (path === '/api/generate-code' && method === 'POST') {
-            return await handleGenerateCode(env, request);
+            return await handleGenerateCode(env, request, requestOrigin);
+        }
+
+        // Gift endpoints - admin only
+        if (path === '/api/gifts' && method === 'POST') {
+            return await handleCreateGift(env, request, requestOrigin);
+        }
+
+        if (path.startsWith('/api/gifts/') && !path.includes('/contribute') && !path.includes('/contributions') && !path.includes('/mark-purchased') && method === 'PUT') {
+            const giftId = parseInt(path.split('/')[3]);
+            return await handleUpdateGift(env, giftId, request, requestOrigin);
+        }
+
+        if (path.startsWith('/api/gifts/') && !path.includes('/contribute') && !path.includes('/contributions') && !path.includes('/mark-purchased') && method === 'DELETE') {
+            const giftId = parseInt(path.split('/')[3]);
+            return await handleDeleteGift(env, giftId, requestOrigin);
+        }
+
+        if (path.startsWith('/api/gifts/') && path.endsWith('/contributions') && method === 'GET') {
+            const giftId = parseInt(path.split('/')[3]);
+            return await handleGetGiftContributions(env, giftId, requestOrigin);
         }
 
         // 404 - Not found
         return new Response(
             JSON.stringify({ error: 'Not found' }),
-            { status: 404, headers: getAllHeaders(env) }
+            { status: 404, headers: getAllHeaders(env, requestOrigin) }
         );
     } catch (error) {
         console.error('Request error:', error);
         return new Response(
             JSON.stringify({ error: 'Internal server error' }),
-            { status: 500, headers: getAllHeaders(env) }
+            { status: 500, headers: getAllHeaders(env, requestOrigin) }
         );
     }
 }

@@ -228,49 +228,9 @@
   "gifts": {
     "title": "Wedding Gifts",
     "description": "Your presence at our wedding is the greatest gift of all. However, if you wish to honor us with a gift, we have created a registry for your convenience.",
-    "options": {
-      "homeFund": {
-        "title": "Home Fund",
-        "description": "Help us build our dream home"
-      },
-      "honeymoonFund": {
-        "title": "Honeymoon Fund",
-        "description": "Contribute to our adventure"
-      },
-      "registry": {
-        "title": "Registry",
-        "description": "View our wish list"
-      },
-      "charity": {
-        "title": "Charity Donation",
-        "description": "Give in our honor"
-      }
-    },
     "note": {
       "title": "A Note About Gifts",
-      "description1": "We're truly honored that you will be celebrating our special day with us. Your presence is what matters most, and we're grateful for your love and support.",
-      "description2": "If you'd like to give a gift, we hope our registry provides some helpful guidance. We've created options that would be meaningful to us as we start this new chapter together."
-    },
-    "wishlist": {
-      "title": "View Our Amazon Wishlist",
-      "description": "We've created an Amazon wishlist with items we'd love to receive. When you purchase from this list, it will be automatically marked as bought to avoid duplicates.",
-      "button": "View Wishlist"
-    },
-    "registry": {
-      "title": "Registry Items",
-      "purchased": "Already Purchased",
-      "by": "by",
-      "viewOnAmazon": "View on Amazon"
-    },
-    "cashGifts": {
-      "title": "Cash Gift Options",
-      "progress": "Progress",
-      "goal": "Goal",
-      "contribute": "Contribute"
-    },
-    "contact": {
-      "title": "Need Additional Help?",
-      "description": "If you have any questions about our registry or gift preferences, please don't hesitate to contact us."
+      "description": "We're truly honored that you will be celebrating our special day with us. Your presence is what matters most, and we're grateful for your love and support. If you'd like to give a gift, we hope our registry provides some helpful guidance."
     }
   },
   "gallery": {
