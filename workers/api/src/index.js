@@ -994,6 +994,109 @@ async function handleGetGiftContributions(env, giftId, requestOrigin) {
 }
 
 /**
+ * Get page content by page ID (public)
+ * @param {string} pageId - Page identifier (e.g., 'home', 'christian-ceremony')
+ * @returns {Promise<Response>} Page content as JSON
+ */
+async function handleGetPageContent(env, pageId, requestOrigin) {
+    try {
+        // Input validation
+        if (!pageId || typeof pageId !== 'string' || !/^[a-z0-9-]+$/.test(pageId)) {
+            return new Response(
+                JSON.stringify({ error: 'Invalid page ID format' }),
+                { status: 400, headers: getAllHeaders(env, requestOrigin) }
+            );
+        }
+
+        // Query page content from D1
+        const result = await env.DB.prepare(
+            'SELECT content, updated_at FROM page_content WHERE page_id = ?'
+        ).bind(pageId).first();
+
+        if (!result) {
+            return new Response(
+                JSON.stringify({ error: 'Page content not found' }),
+                { status: 404, headers: getAllHeaders(env, requestOrigin) }
+            );
+        }
+
+        return new Response(
+            JSON.stringify({
+                pageId,
+                content: JSON.parse(result.content),
+                updatedAt: result.updated_at
+            }),
+            { status: 200, headers: getAllHeaders(env, requestOrigin) }
+        );
+    } catch (error) {
+        console.error('Get page content error:', error);
+        return new Response(
+            JSON.stringify({ error: 'Failed to fetch page content' }),
+            { status: 500, headers: getAllHeaders(env, requestOrigin) }
+        );
+    }
+}
+
+/**
+ * Update page content (admin only)
+ * @param {string} pageId - Page identifier to update
+ * @param {Request} request - Request with updated content
+ * @returns {Promise<Response>} Updated content confirmation
+ */
+async function handleUpdatePageContent(env, pageId, request, requestOrigin) {
+    try {
+        // Input validation
+        if (!pageId || typeof pageId !== 'string' || !/^[a-z0-9-]+$/.test(pageId)) {
+            return new Response(
+                JSON.stringify({ error: 'Invalid page ID format' }),
+                { status: 400, headers: getAllHeaders(env, requestOrigin) }
+            );
+        }
+
+        const body = await request.json();
+        const { content } = body;
+
+        if (!content || typeof content !== 'object') {
+            return new Response(
+                JSON.stringify({ error: 'Content is required and must be an object' }),
+                { status: 400, headers: getAllHeaders(env, requestOrigin) }
+            );
+        }
+
+        // Validate content size (max 1MB JSON)
+        const contentStr = JSON.stringify(content);
+        if (contentStr.length > 1048576) {
+            return new Response(
+                JSON.stringify({ error: 'Content too large. Maximum 1MB.' }),
+                { status: 400, headers: getAllHeaders(env, requestOrigin) }
+            );
+        }
+
+        const now = Date.now();
+
+        // Update or insert page content
+        await env.DB.prepare(
+            'INSERT OR REPLACE INTO page_content (page_id, content, updated_at) VALUES (?, ?, ?)'
+        ).bind(pageId, contentStr, now).run();
+
+        return new Response(
+            JSON.stringify({
+                success: true,
+                pageId,
+                updatedAt: now
+            }),
+            { status: 200, headers: getAllHeaders(env, requestOrigin) }
+        );
+    } catch (error) {
+        console.error('Update page content error:', error);
+        return new Response(
+            JSON.stringify({ error: 'Failed to update page content' }),
+            { status: 500, headers: getAllHeaders(env, requestOrigin) }
+        );
+    }
+}
+
+/**
  * Mark a gift as purchased directly (public with rate limiting)
  * Creates a contribution record for the full remaining amount
  * @param {number} giftId - ID of gift that was purchased
@@ -1175,6 +1278,12 @@ async function handleRequest(request, env) {
             return await handleMarkPurchased(env, giftId, request, rateLimiter, requestOrigin);
         }
 
+        // Page content endpoints - public read
+        if (path.startsWith('/api/content/') && method === 'GET') {
+            const pageId = path.split('/').pop();
+            return await handleGetPageContent(env, pageId, requestOrigin);
+        }
+
         // Protected routes (require admin authentication)
         const authError = await requireAdmin(env, request, requestOrigin);
         if (authError) return authError;
@@ -1214,6 +1323,12 @@ async function handleRequest(request, env) {
         if (path.startsWith('/api/gifts/') && path.endsWith('/contributions') && method === 'GET') {
             const giftId = parseInt(path.split('/')[3]);
             return await handleGetGiftContributions(env, giftId, requestOrigin);
+        }
+
+        // Page content endpoints - admin write
+        if (path.startsWith('/api/content/') && method === 'PUT') {
+            const pageId = path.split('/').pop();
+            return await handleUpdatePageContent(env, pageId, request, requestOrigin);
         }
 
         // 404 - Not found

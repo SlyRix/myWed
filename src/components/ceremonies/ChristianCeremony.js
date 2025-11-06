@@ -1,5 +1,5 @@
 // src/components/ceremonies/ChristianCeremony.js
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import { mdiMapMarker, mdiCalendar, mdiTshirtCrew } from '@mdi/js';
@@ -10,12 +10,33 @@ import MiniMap from '../map/MiniMap';
 import AddToCalendarButton from '../common/AddToCalendarButton';
 import { Link } from 'react-router-dom';
 import CeremonyAccessCheck from '../common/CeremonyAccessCheck';
+import ResponsiveCeremonyImage from '../common/ResponsiveCeremonyImage';
+import { getPageContent } from '../../api/contentApi';
 
 const ChristianCeremony = () => {
     const { t } = useTranslation();
+    const [cmsContent, setCmsContent] = useState(null);
+    const [isLoadingContent, setIsLoadingContent] = useState(true);
 
-    // Timeline events
-    const timelineEvents = [
+    // Load CMS content on mount
+    useEffect(() => {
+        const loadContent = async () => {
+            try {
+                const data = await getPageContent('christian-ceremony');
+                if (data && data.content) {
+                    setCmsContent(data.content);
+                }
+            } catch (error) {
+                console.error('Failed to load CMS content, using defaults:', error);
+            } finally {
+                setIsLoadingContent(false);
+            }
+        };
+        loadContent();
+    }, []);
+
+    // Timeline events - use CMS content if available, otherwise use translations
+    const timelineEvents = cmsContent?.timeline || [
         {
             time: t('christian.schedule.events.arrival.time'),
             title: t('christian.schedule.events.arrival.title'),
@@ -47,6 +68,9 @@ const ChristianCeremony = () => {
             description: t('christian.schedule.events.photos.description')
         }
     ];
+
+    // Hero image from CMS
+    const heroImage = cmsContent?.images?.hero || '/images/placeholder.jpg';
 
     // Animation for content sections
     const fadeIn = {
@@ -98,18 +122,13 @@ const ChristianCeremony = () => {
                         </Link>
                     </motion.div>
 
-                    <motion.div
-                        className="md:w-1/2 h-[350px] rounded-lg overflow-hidden shadow-lg"
-                        initial={{ opacity: 0, scale: 0.95 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ duration: 0.8, delay: 0.2 }}
-                    >
-                        <img
-                            src="/images/placeholder.jpg"
+                    <div className="md:w-1/2">
+                        <ResponsiveCeremonyImage
+                            src={heroImage}
                             alt={t('christian.title')}
-                            className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+                            delay={0.2}
                         />
-                    </motion.div>
+                    </div>
                 </div>
 
                 <motion.div

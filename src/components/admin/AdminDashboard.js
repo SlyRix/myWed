@@ -1,11 +1,12 @@
 // src/components/admin/AdminDashboard.js
 import React, { useState, useEffect } from 'react';
 import { QRCodeCanvas } from 'qrcode.react';
-import { mdiPlus, mdiContentSave, mdiTrashCan, mdiCross, mdiTempleHindu, mdiPencil, mdiQrcode, mdiAccountMultiple, mdiGift } from '@mdi/js';
+import { mdiPlus, mdiContentSave, mdiTrashCan, mdiCross, mdiTempleHindu, mdiPencil, mdiQrcode, mdiAccountMultiple, mdiGift, mdiFileEdit } from '@mdi/js';
 import Icon from '@mdi/react';
 import { fetchAllGuests, saveGuest, deleteGuest, generateGuestCode } from '../../api/guestApi';
 import ConfirmDialog from '../common/ConfirmDialog';
 import GiftsManager from './GiftsManager';
+import PageContentEditor from './PageContentEditor';
 
 const AdminDashboard = () => {
     const [activeTab, setActiveTab] = useState('guestList');
@@ -17,6 +18,7 @@ const AdminDashboard = () => {
     const [isSaving, setIsSaving] = useState(false);
     const [error, setError] = useState(null);
     const [deleteConfirm, setDeleteConfirm] = useState({ isOpen: false, guestCode: null, guestName: '' });
+    const [selectedPage, setSelectedPage] = useState('christian-ceremony');
 
     // Form state for adding/editing guests
     const [formData, setFormData] = useState({
@@ -224,6 +226,13 @@ const AdminDashboard = () => {
                     Gifts
                 </button>
                 <button
+                    className={`py-2 px-4 flex items-center whitespace-nowrap ${activeTab === 'content' ? 'border-b-2 border-christian-accent font-bold' : ''}`}
+                    onClick={() => setActiveTab('content')}
+                >
+                    <Icon path={mdiFileEdit} size={0.8} className="mr-1 hidden sm:inline" />
+                    Content
+                </button>
+                <button
                     className={`py-2 px-4 flex items-center whitespace-nowrap ${activeTab === 'qrCodes' ? 'border-b-2 border-christian-accent font-bold' : ''}`}
                     onClick={() => setActiveTab('qrCodes')}
                 >
@@ -414,6 +423,34 @@ const AdminDashboard = () => {
             {/* Gift Registry Management */}
             {activeTab === 'gifts' && (
                 <GiftsManager />
+            )}
+
+            {/* Page Content Management */}
+            {activeTab === 'content' && (
+                <div className="space-y-6">
+                    {/* Page selector */}
+                    <div className="bg-white p-6 rounded-lg shadow-md">
+                        <label className="block text-gray-700 font-medium mb-3">Select Page to Edit:</label>
+                        <select
+                            value={selectedPage}
+                            onChange={(e) => setSelectedPage(e.target.value)}
+                            className="w-full md:w-auto p-3 border border-gray-300 rounded-lg text-base"
+                        >
+                            <option value="christian-ceremony">Christian Ceremony</option>
+                            <option value="hindu-ceremony">Hindu Ceremony</option>
+                            <option value="reception">Reception</option>
+                            <option value="our-story">Our Story</option>
+                            <option value="home">Home Page</option>
+                        </select>
+                    </div>
+
+                    {/* Content editor */}
+                    <PageContentEditor
+                        key={selectedPage}
+                        pageId={selectedPage}
+                        pageTitle={selectedPage.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
+                    />
+                </div>
             )}
 
             {/* QR Code Generator - Mobile optimized */}

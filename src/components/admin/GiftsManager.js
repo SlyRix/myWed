@@ -368,11 +368,16 @@ const GiftsManager = () => {
                             onClick={() => setIsModalOpen(false)}
                         />
                         <motion.div
-                            initial={{ opacity: 0, scale: 0.9, y: 20 }}
-                            animate={{ opacity: 1, scale: 1, y: 0 }}
-                            exit={{ opacity: 0, scale: 0.9, y: 20 }}
-                            className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-lg shadow-xl z-50 max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto"
+                            initial={{ opacity: 0, scale: 0.9 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            exit={{ opacity: 0, scale: 0.9 }}
+                            className="fixed inset-0 z-50 flex items-center justify-center p-4 md:p-6"
+                            style={{ pointerEvents: 'none' }}
                         >
+                            <div
+                                className="relative bg-white rounded-lg shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto"
+                                style={{ pointerEvents: 'auto' }}
+                            >
                             <div className="sticky top-0 bg-white border-b border-gray-200 p-4 flex justify-between items-center">
                                 <h3 className="text-xl font-semibold">
                                     {editingGift ? 'Edit Gift' : 'Add New Gift'}
@@ -542,6 +547,7 @@ const GiftsManager = () => {
                                     </button>
                                 </div>
                             </form>
+                            </div>
                         </motion.div>
                     </>
                 )}

@@ -33,6 +33,17 @@ INSERT OR REPLACE INTO guests (code, name, ceremonies) VALUES
     ('RUSH', 'Rushel Family', '["christian"]'),
     ('TEST', 'Test User', '["hindu"]');
 
+-- Page content table - stores editable page content for CMS
+CREATE TABLE IF NOT EXISTS page_content (
+    page_id TEXT PRIMARY KEY,           -- Unique page identifier (e.g., 'home', 'christian-ceremony')
+    content TEXT NOT NULL,              -- JSON blob containing all page content
+    updated_at INTEGER NOT NULL,        -- Unix timestamp in milliseconds
+    updated_by TEXT DEFAULT 'admin'     -- Admin who made the last update
+);
+
+-- Create index for page content queries
+CREATE INDEX IF NOT EXISTS idx_page_content_updated ON page_content(updated_at);
+
 -- Cleanup query for expired sessions (run periodically)
 -- DELETE FROM sessions WHERE expires_at < unixepoch('now') * 1000;
 

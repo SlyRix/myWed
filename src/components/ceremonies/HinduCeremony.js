@@ -1,5 +1,5 @@
 // src/components/ceremonies/HinduCeremony.js
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {mdiMapMarker, mdiCalendar, mdiTshirtCrew} from '@mdi/js';
 import Icon from '@mdi/react';
 import {useTranslation} from 'react-i18next';
@@ -9,12 +9,30 @@ import AddToCalendarButton from '../common/AddToCalendarButton';
 import AnimatedSection from '../common/AnimatedSection';
 import {Link} from 'react-router-dom';
 import CeremonyAccessCheck from '../common/CeremonyAccessCheck';
+import ResponsiveCeremonyImage from '../common/ResponsiveCeremonyImage';
+import { getPageContent } from '../../api/contentApi';
 
 const HinduCeremony = () => {
     const {t} = useTranslation();
+    const [cmsContent, setCmsContent] = useState(null);
 
-    // Timeline events
-    const timelineEvents = [
+    // Load CMS content on mount
+    useEffect(() => {
+        const loadContent = async () => {
+            try {
+                const data = await getPageContent('hindu-ceremony');
+                if (data && data.content) {
+                    setCmsContent(data.content);
+                }
+            } catch (error) {
+                console.error('Failed to load CMS content, using defaults:', error);
+            }
+        };
+        loadContent();
+    }, []);
+
+    // Timeline events - use CMS content if available, otherwise use translations
+    const timelineEvents = cmsContent?.timeline || [
         {
             time: t('hindu.schedule.events.baraat.time'),
             title: t('hindu.schedule.events.baraat.title'),
@@ -57,6 +75,25 @@ const HinduCeremony = () => {
         }
     ];
 
+    // Rituals - use CMS content if available, otherwise use translations
+    const ritualsList = cmsContent?.rituals || [
+        {
+            title: t('hindu.rituals.items.mandap.title'),
+            description: t('hindu.rituals.items.mandap.description')
+        },
+        {
+            title: t('hindu.rituals.items.kanyadaan.title'),
+            description: t('hindu.rituals.items.kanyadaan.description')
+        },
+        {
+            title: t('hindu.rituals.items.mangalPhera.title'),
+            description: t('hindu.rituals.items.mangalPhera.description')
+        }
+    ];
+
+    // Hero image from CMS
+    const heroImage = cmsContent?.images?.hero || '/images/hindu-ceremony/HinduHero.jpg';
+
     // Parse ceremony date for calendar
     const ceremonyDate = new Date('2026-07-05T10:00:00');
     const ceremonyEndDate = new Date('2026-07-05T14:00:00');
@@ -90,14 +127,11 @@ const HinduCeremony = () => {
 
                     <div className="grid md:grid-cols-2 gap-12 items-center mb-16">
                         <AnimatedSection className="order-2 md:order-1">
-                            <div
-                                className="rounded-lg overflow-hidden shadow-lg transform transition-transform duration-500 hover:scale-[1.02]">
-                                <img
-                                    src="/images/placeholder.jpg"
-                                    alt={t('hindu.title')}
-                                    className="w-full h-[350px] object-cover"
-                                />
-                            </div>
+                            <ResponsiveCeremonyImage
+                                src={heroImage}
+                                alt={t('hindu.title')}
+                                delay={0}
+                            />
                         </AnimatedSection>
 
                         <AnimatedSection className="order-1 md:order-2" delay={0.2}>
@@ -181,20 +215,7 @@ const HinduCeremony = () => {
                         </p>
 
                         <div className="grid md:grid-cols-3 gap-6">
-                            {[
-                                {
-                                    title: t('hindu.rituals.items.mandap.title'),
-                                    description: t('hindu.rituals.items.mandap.description')
-                                },
-                                {
-                                    title: t('hindu.rituals.items.kanyadaan.title'),
-                                    description: t('hindu.rituals.items.kanyadaan.description')
-                                },
-                                {
-                                    title: t('hindu.rituals.items.mangalPhera.title'),
-                                    description: t('hindu.rituals.items.mangalPhera.description')
-                                }
-                            ].map((ritual, index) => (
+                            {ritualsList.map((ritual, index) => (
                                 <div
                                     key={index}
                                     className="bg-white p-6 rounded-lg shadow-md border-t-4 border-hindu-secondary"

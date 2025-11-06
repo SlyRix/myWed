@@ -165,20 +165,22 @@ const ContributionModal = ({ isOpen, onClose, gift, onSubmit }) => {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        className="fixed inset-0 bg-black bg-opacity-50 z-50"
+                        className="fixed inset-0 bg-black bg-opacity-50 z-[60]"
                         onClick={handleClose}
                     />
                     <motion.div
                         initial={{ opacity: 0, scale: 0.9 }}
                         animate={{ opacity: 1, scale: 1 }}
                         exit={{ opacity: 0, scale: 0.9 }}
-                        className="fixed inset-0 z-50 flex items-center justify-center p-4"
+                        className="fixed inset-0 z-[60] flex items-center justify-center p-2 sm:p-4 md:p-6"
                         style={{ pointerEvents: 'none' }}
                     >
-                        <div className="relative w-full max-w-md bg-white rounded-lg shadow-xl max-h-[90vh] overflow-y-auto" style={{ pointerEvents: 'auto' }}
-                    >
-                        <div className="sticky top-0 bg-white border-b border-gray-200 p-4 flex justify-between items-center">
-                            <h3 className="text-xl font-display text-gray-800">
+                        <div
+                            className="relative w-full max-w-[92vw] sm:max-w-md bg-white rounded-lg shadow-xl max-h-[85vh] overflow-y-auto mt-20"
+                            style={{ pointerEvents: 'auto' }}
+                        >
+                        <div className="sticky top-0 bg-white border-b border-gray-200 p-2.5 sm:p-4 flex justify-between items-center">
+                            <h3 className="text-base sm:text-xl font-display text-gray-800">
                                 {currentLanguage === 'de'
                                     ? 'Beitrag leisten'
                                     : currentLanguage === 'ta'
@@ -195,8 +197,8 @@ const ContributionModal = ({ isOpen, onClose, gift, onSubmit }) => {
                             </button>
                         </div>
 
-                        <div className="p-6">
-                            <div className="mb-6 p-4 bg-gray-50 rounded-lg">
+                        <div className="p-3 sm:p-6">
+                            <div className="mb-4 p-3 bg-gray-50 rounded-lg">
                                 <h4 className="font-semibold text-gray-800 mb-1">{giftName}</h4>
                                 <p className="text-sm text-gray-600">
                                     {currentLanguage === 'de' ? 'Verbleibend' :
@@ -207,19 +209,19 @@ const ContributionModal = ({ isOpen, onClose, gift, onSubmit }) => {
                                 </p>
                             </div>
 
-                            <div className="mb-6">
-                                <label className="block text-gray-700 font-medium mb-3">
+                            <div className="mb-4">
+                                <label className="block text-gray-700 font-medium mb-2">
                                     {currentLanguage === 'de'
                                         ? 'Wie möchten Sie beitragen?'
                                         : currentLanguage === 'ta'
                                             ? 'எப்படி பங்களிக்க விரும்புகிறீர்கள்?'
                                             : 'How would you like to contribute?'}
                                 </label>
-                                <div className="flex gap-3">
+                                <div className="flex flex-col sm:flex-row gap-2">
                                     <button
                                         type="button"
                                         onClick={() => setContributionType('partial')}
-                                        className={`flex-1 p-3 rounded-lg border-2 transition-all ${
+                                        className={`flex-1 p-2.5 rounded-lg border-2 transition-all ${
                                             contributionType === 'partial'
                                                 ? 'border-christian-accent bg-christian-accent bg-opacity-10'
                                                 : 'border-gray-300 hover:border-gray-400'
@@ -244,7 +246,7 @@ const ContributionModal = ({ isOpen, onClose, gift, onSubmit }) => {
                                     <button
                                         type="button"
                                         onClick={() => setContributionType('purchased')}
-                                        className={`flex-1 p-3 rounded-lg border-2 transition-all ${
+                                        className={`flex-1 p-2.5 rounded-lg border-2 transition-all ${
                                             contributionType === 'purchased'
                                                 ? 'border-hindu-secondary bg-hindu-secondary bg-opacity-10'
                                                 : 'border-gray-300 hover:border-gray-400'
@@ -284,7 +286,7 @@ const ContributionModal = ({ isOpen, onClose, gift, onSubmit }) => {
                                         name="contributorName"
                                         value={formData.contributorName}
                                         onChange={handleInputChange}
-                                        className={`w-full p-3 border rounded-lg focus:outline-none focus:ring-2 ${
+                                        className={`w-full p-2.5 border rounded-lg focus:outline-none focus:ring-2 ${
                                             errors.contributorName
                                                 ? 'border-red-500 focus:ring-red-500'
                                                 : 'border-gray-300 focus:ring-christian-accent'
@@ -321,7 +323,7 @@ const ContributionModal = ({ isOpen, onClose, gift, onSubmit }) => {
                                                 step="0.01"
                                                 min="0.01"
                                                 max={gift.remainingAmount}
-                                                className={`w-full p-3 border rounded-lg focus:outline-none focus:ring-2 ${
+                                                className={`w-full p-2.5 border rounded-lg focus:outline-none focus:ring-2 ${
                                                     errors.amount
                                                         ? 'border-red-500 focus:ring-red-500'
                                                         : 'border-gray-300 focus:ring-christian-accent'
@@ -335,7 +337,7 @@ const ContributionModal = ({ isOpen, onClose, gift, onSubmit }) => {
                                             )}
                                         </div>
 
-                                        <div className="mb-6">
+                                        <div className="mb-4">
                                             <label className="block text-gray-700 font-medium mb-2" htmlFor="message">
                                                 {currentLanguage === 'de'
                                                     ? 'Nachricht (optional)'
@@ -348,9 +350,9 @@ const ContributionModal = ({ isOpen, onClose, gift, onSubmit }) => {
                                                 name="message"
                                                 value={formData.message}
                                                 onChange={handleInputChange}
-                                                rows="3"
+                                                rows="2"
                                                 maxLength="200"
-                                                className={`w-full p-3 border rounded-lg focus:outline-none focus:ring-2 resize-none ${
+                                                className={`w-full p-2.5 border rounded-lg focus:outline-none focus:ring-2 resize-none ${
                                                     errors.message
                                                         ? 'border-red-500 focus:ring-red-500'
                                                         : 'border-gray-300 focus:ring-christian-accent'
@@ -371,7 +373,7 @@ const ContributionModal = ({ isOpen, onClose, gift, onSubmit }) => {
                                         </div>
                                     </>
                                 ) : (
-                                    <div className="mb-6">
+                                    <div className="mb-4">
                                         <label className="block text-gray-700 font-medium mb-2" htmlFor="storeName">
                                             {currentLanguage === 'de'
                                                 ? 'Wo haben Sie es gekauft? (optional)'
@@ -385,7 +387,7 @@ const ContributionModal = ({ isOpen, onClose, gift, onSubmit }) => {
                                             name="storeName"
                                             value={formData.storeName}
                                             onChange={handleInputChange}
-                                            className={`w-full p-3 border rounded-lg focus:outline-none focus:ring-2 ${
+                                            className={`w-full p-2.5 border rounded-lg focus:outline-none focus:ring-2 ${
                                                 errors.storeName
                                                     ? 'border-red-500 focus:ring-red-500'
                                                     : 'border-gray-300 focus:ring-christian-accent'
@@ -411,16 +413,16 @@ const ContributionModal = ({ isOpen, onClose, gift, onSubmit }) => {
                                 )}
 
                                 {errors.submit && (
-                                    <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded-lg">
+                                    <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded-lg text-sm">
                                         {errors.submit}
                                     </div>
                                 )}
 
-                                <div className="flex gap-3">
+                                <div className="flex flex-col-reverse sm:flex-row gap-2">
                                     <button
                                         type="button"
                                         onClick={handleClose}
-                                        className="flex-1 px-4 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                                        className="flex-1 px-3 py-2.5 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm sm:text-base"
                                         disabled={isSubmitting}
                                     >
                                         {currentLanguage === 'de'
@@ -431,7 +433,7 @@ const ContributionModal = ({ isOpen, onClose, gift, onSubmit }) => {
                                     </button>
                                     <button
                                         type="submit"
-                                        className="flex-1 px-4 py-3 bg-gradient-to-r from-christian-accent to-hindu-secondary text-white rounded-lg hover:opacity-90 transition-opacity disabled:opacity-50"
+                                        className="flex-1 px-3 py-2.5 bg-gradient-to-r from-christian-accent to-hindu-secondary text-white rounded-lg hover:opacity-90 transition-opacity disabled:opacity-50 text-sm sm:text-base"
                                         disabled={isSubmitting}
                                     >
                                         {isSubmitting ? (

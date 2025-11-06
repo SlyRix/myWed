@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next';
 import CountdownTimer from '../common/CountdownTimer';
 import BubbleBackground from '../common/BubbleBackground';
 import { useGuest } from '../../contexts/GuestContext';
+import { getPageContent } from '../../api/contentApi';
 
 // Fallback SVG pattern - only used if external SVG isn't available
 const FloralPatternSVG = () => (
@@ -98,17 +99,37 @@ const ParallaxElements = () => {
     );
 };
 
-const Hero = ({ backgroundImage = null, patternImage = "/images/floral-pattern.svg" }) => {
+const Hero = ({ backgroundImage: propBackgroundImage = null, patternImage: propPatternImage = "/images/floral-pattern.svg" }) => {
     const { t } = useTranslation();
     const { ceremonies: accessibleCeremonies } = useGuest();
+    const [cmsContent, setCmsContent] = useState(null);
 
     // Wedding date - July 4, 2026
     const weddingDate = new Date('May 9, 2026 14:00:00').getTime();
 
-    // Check if pattern image exists by creating an image object
-    const [patternExists, setPatternExists] = React.useState(false);
+    // Load CMS content on mount
+    useEffect(() => {
+        const loadContent = async () => {
+            try {
+                const data = await getPageContent('home');
+                if (data && data.content && data.content.hero) {
+                    setCmsContent(data.content.hero);
+                }
+            } catch (error) {
+                console.error('Failed to load CMS content, using defaults:', error);
+            }
+        };
+        loadContent();
+    }, []);
 
-    React.useEffect(() => {
+    // Use CMS content if available, otherwise use props
+    const backgroundImage = cmsContent?.backgroundImage || propBackgroundImage;
+    const patternImage = cmsContent?.patternImage || propPatternImage;
+
+    // Check if pattern image exists by creating an image object
+    const [patternExists, setPatternExists] = useState(false);
+
+    useEffect(() => {
         if (patternImage) {
             const img = new Image();
             img.onload = () => setPatternExists(true);

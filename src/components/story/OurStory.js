@@ -1,16 +1,34 @@
 // src/components/story/OurStory.js
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import StoryTimeline from './StoryTimeline';
 import AnimatedSection from '../common/AnimatedSection';
 import BubbleBackground from '../common/BubbleBackground';
 import ParallaxSection from '../common/ParallaxSection';
+import { getPageContent } from '../../api/contentApi';
 
 const OurStory = () => {
     const { t } = useTranslation();
+    const [cmsContent, setCmsContent] = useState(null);
 
-    const storyEvents = [
+    // Load CMS content on mount
+    useEffect(() => {
+        const loadContent = async () => {
+            try {
+                const data = await getPageContent('our-story');
+                if (data && data.content) {
+                    setCmsContent(data.content);
+                }
+            } catch (error) {
+                console.error('Failed to load CMS content, using defaults:', error);
+            }
+        };
+        loadContent();
+    }, []);
+
+    // Story events - use CMS content if available, otherwise use translations
+    const storyEvents = cmsContent?.timeline || [
         {
             date: t('story.events.met.date'),
             title: t('story.events.met.title'),
