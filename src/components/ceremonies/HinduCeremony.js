@@ -13,23 +13,33 @@ import ResponsiveCeremonyImage from '../common/ResponsiveCeremonyImage';
 import { getPageContent } from '../../api/contentApi';
 
 const HinduCeremony = () => {
-    const {t} = useTranslation();
+    const {t, i18n} = useTranslation();
     const [cmsContent, setCmsContent] = useState(null);
+    const [isLoadingContent, setIsLoadingContent] = useState(true);
 
-    // Load CMS content on mount
+    // Load CMS content on mount and when language changes
     useEffect(() => {
         const loadContent = async () => {
+            setIsLoadingContent(true);
             try {
-                const data = await getPageContent('hindu-ceremony');
+                // Get content for current language with fallback to English
+                const data = await getPageContent('hindu-ceremony', i18n.language);
                 if (data && data.content) {
                     setCmsContent(data.content);
+                } else {
+                    setCmsContent(null);
                 }
             } catch (error) {
-                console.error('Failed to load CMS content, using defaults:', error);
+                if (process.env.NODE_ENV === 'development') {
+                    console.error('Failed to load CMS content, using i18n defaults:', error);
+                }
+                setCmsContent(null);
+            } finally {
+                setIsLoadingContent(false);
             }
         };
         loadContent();
-    }, []);
+    }, [i18n.language]); // Re-load when language changes
 
     // Timeline events - use CMS content if available, otherwise use translations
     const timelineEvents = cmsContent?.timeline || [
@@ -135,12 +145,14 @@ const HinduCeremony = () => {
                         </AnimatedSection>
 
                         <AnimatedSection className="order-1 md:order-2" delay={0.2}>
-                            <h2 className="text-2xl md:text-3xl font-bold mb-6 text-hindu-secondary">{t('hindu.headline')}</h2>
+                            <h2 className="text-2xl md:text-3xl font-bold mb-6 text-hindu-secondary">
+                                {cmsContent?.headline || t('hindu.headline')}
+                            </h2>
                             <p className="text-gray-700 mb-4">
-                                {t('hindu.description')}
+                                {cmsContent?.description || t('hindu.description')}
                             </p>
                             <p className="text-gray-700 mb-6">
-                                {t('hindu.description2')}
+                                {cmsContent?.description2 || t('hindu.description2')}
                             </p>
                             <Link
                                 to="/rsvp?ceremony=hindu"
@@ -200,7 +212,9 @@ const HinduCeremony = () => {
                     </AnimatedSection>
 
                     <AnimatedSection className="mt-20" delay={0.4}>
-                        <h2 className="text-2xl font-bold mb-10 text-center text-hindu-secondary">{t('hindu.schedule.title')}</h2>
+                        <h2 className="text-2xl font-bold mb-10 text-center text-hindu-secondary">
+                            {cmsContent?.scheduleTitle || t('hindu.schedule.title')}
+                        </h2>
                         {/* Timeline with Ceremony Schedule */}
                         <CeremonyTimeline
                             events={timelineEvents}
@@ -209,9 +223,11 @@ const HinduCeremony = () => {
                     </AnimatedSection>
 
                     <AnimatedSection className="mt-16 text-center" delay={0.5}>
-                        <h2 className="text-2xl font-bold mb-6 text-hindu-secondary">{t('hindu.rituals.title')}</h2>
+                        <h2 className="text-2xl font-bold mb-6 text-hindu-secondary">
+                            {cmsContent?.ritualsTitle || t('hindu.rituals.title')}
+                        </h2>
                         <p className="text-gray-700 max-w-3xl mx-auto mb-8">
-                            {t('hindu.rituals.description')}
+                            {cmsContent?.ritualsDescription || t('hindu.rituals.description')}
                         </p>
 
                         <div className="grid md:grid-cols-3 gap-6">

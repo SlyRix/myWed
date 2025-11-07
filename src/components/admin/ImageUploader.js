@@ -13,6 +13,8 @@ const ImageUploader = ({ currentImage, onImageSelect, label = "Image" }) => {
     const [showUploadHelp, setShowUploadHelp] = useState(false);
     const [previewImage, setPreviewImage] = useState(currentImage);
     const [manualUrl, setManualUrl] = useState(currentImage || '');
+    const [isUploading, setIsUploading] = useState(false);
+    const [uploadError, setUploadError] = useState(null);
 
     // Common image suggestions based on existing patterns
     const commonImages = [
@@ -41,24 +43,69 @@ const ImageUploader = ({ currentImage, onImageSelect, label = "Image" }) => {
         setShowUploadHelp(false);
     };
 
-    const handleFileSelect = (e) => {
+    const handleFileSelect = async (e) => {
         const file = e.target.files[0];
-        if (file) {
-            // Create a preview
-            const reader = new FileReader();
-            reader.onload = (event) => {
-                setPreviewImage(event.target.result);
-            };
-            reader.readAsDataURL(file);
+        if (!file) return;
 
-            // Show instructions for where to save the file
-            const fileName = file.name;
-            const suggestedPath = `/images/${fileName}`;
-            setManualUrl(suggestedPath);
-            onImageSelect(suggestedPath);
+        // Validate file size (5MB max)
+        const maxSize = 5 * 1024 * 1024;
+        if (file.size > maxSize) {
+            setUploadError('File too large. Maximum size is 5MB.');
+            return;
+        }
 
-            // Show upload instructions
-            alert(`📋 Image selected: ${fileName}\n\n✅ To use this image:\n\n1. Copy "${fileName}" to:\n   public/images/${fileName}\n\n2. Rebuild and redeploy the website\n\n3. The image path is already set to:\n   ${suggestedPath}\n\nOR you can use any image hosting service and paste the URL in the field below.`);
+        // Validate file type
+        const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
+        if (!allowedTypes.includes(file.type)) {
+            setUploadError('Invalid file type. Only JPEG, PNG, GIF, and WebP are allowed.');
+            return;
+        }
+
+        setUploadError(null);
+        setIsUploading(true);
+
+        // Create preview
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            setPreviewImage(event.target.result);
+        };
+        reader.readAsDataURL(file);
+
+        try {
+            // Upload to API
+            const formData = new FormData();
+            formData.append('image', file);
+
+            const token = localStorage.getItem('adminToken');
+            const apiUrl = process.env.REACT_APP_API_URL || 'https://api.rushel.me/api';
+
+            const response = await fetch(`${apiUrl}/upload-image`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                },
+                body: formData
+            });
+
+            if (!response.ok) {
+                const error = await response.json();
+                throw new Error(error.error || 'Upload failed');
+            }
+
+            const result = await response.json();
+
+            // Set the uploaded image URL
+            setManualUrl(result.url);
+            onImageSelect(result.url);
+
+            // Show success message
+            alert(`✅ Image uploaded successfully!\n\nURL: ${result.url}\n\nThe image is now available immediately - no rebuild needed!`);
+        } catch (error) {
+            console.error('Upload error:', error);
+            setUploadError(error.message || 'Failed to upload image');
+            alert(`❌ Upload failed: ${error.message}\n\nPlease try again or use a URL instead.`);
+        } finally {
+            setIsUploading(false);
         }
     };
 
@@ -105,17 +152,34 @@ const ImageUploader = ({ currentImage, onImageSelect, label = "Image" }) => {
                 </p>
             </div>
 
+            {/* Upload Error */}
+            {uploadError && (
+                <div className="p-3 bg-red-100 border border-red-400 text-red-700 rounded text-sm">
+                    {uploadError}
+                </div>
+            )}
+
             {/* Action Buttons */}
             <div className="flex gap-2 flex-wrap">
                 {/* Upload New Image */}
-                <label className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 cursor-pointer flex items-center gap-2 text-sm">
-                    <Icon path={mdiUpload} size={0.7} />
-                    Upload New Image
+                <label className={`px-4 py-2 ${isUploading ? 'bg-gray-400' : 'bg-blue-500 hover:bg-blue-600'} text-white rounded-md cursor-pointer flex items-center gap-2 text-sm`}>
+                    {isUploading ? (
+                        <>
+                            <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></div>
+                            Uploading...
+                        </>
+                    ) : (
+                        <>
+                            <Icon path={mdiUpload} size={0.7} />
+                            Upload New Image
+                        </>
+                    )}
                     <input
                         type="file"
                         accept="image/*"
                         onChange={handleFileSelect}
                         className="hidden"
+                        disabled={isUploading}
                     />
                 </label>
 
@@ -165,19 +229,6 @@ const ImageUploader = ({ currentImage, onImageSelect, label = "Image" }) => {
                 </div>
             )}
 
-            {/* Help Text */}
-            <div className="text-xs text-gray-600 bg-blue-50 p-3 rounded border border-blue-200">
-                <strong>💡 How to add new images:</strong>
-                <ol className="list-decimal ml-4 mt-1 space-y-1">
-                    <li>Click "Upload New Image" and select your photo</li>
-                    <li>Copy the file to <code className="bg-white px-1 rounded">public/images/</code> folder on your computer</li>
-                    <li>Rebuild and redeploy the website (or ask developer)</li>
-                    <li>The image path is automatically set for you</li>
-                </ol>
-                <p className="mt-2">
-                    <strong>Or</strong> use any online image hosting (Imgur, Google Photos, etc.) and paste the URL.
-                </p>
-            </div>
         </div>
     );
 };

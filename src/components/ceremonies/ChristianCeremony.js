@@ -14,26 +14,33 @@ import ResponsiveCeremonyImage from '../common/ResponsiveCeremonyImage';
 import { getPageContent } from '../../api/contentApi';
 
 const ChristianCeremony = () => {
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
     const [cmsContent, setCmsContent] = useState(null);
     const [isLoadingContent, setIsLoadingContent] = useState(true);
 
-    // Load CMS content on mount
+    // Load CMS content on mount and when language changes
     useEffect(() => {
         const loadContent = async () => {
+            setIsLoadingContent(true);
             try {
-                const data = await getPageContent('christian-ceremony');
+                // Get content for current language with fallback to English
+                const data = await getPageContent('christian-ceremony', i18n.language);
                 if (data && data.content) {
                     setCmsContent(data.content);
+                } else {
+                    setCmsContent(null);
                 }
             } catch (error) {
-                console.error('Failed to load CMS content, using defaults:', error);
+                if (process.env.NODE_ENV === 'development') {
+                    console.error('Failed to load CMS content, using i18n defaults:', error);
+                }
+                setCmsContent(null);
             } finally {
                 setIsLoadingContent(false);
             }
         };
         loadContent();
-    }, []);
+    }, [i18n.language]); // Re-load when language changes
 
     // Timeline events - use CMS content if available, otherwise use translations
     const timelineEvents = cmsContent?.timeline || [
@@ -106,12 +113,14 @@ const ChristianCeremony = () => {
                         animate={textInView ? "visible" : "hidden"}
                         variants={fadeIn}
                     >
-                        <h3 className="text-2xl md:text-3xl font-bold mb-6 text-christian-accent">{t('christian.headline')}</h3>
+                        <h3 className="text-2xl md:text-3xl font-bold mb-6 text-christian-accent">
+                            {cmsContent?.headline || t('christian.headline')}
+                        </h3>
                         <p className="text-gray-700 mb-4">
-                            {t('christian.description')}
+                            {cmsContent?.description || t('christian.description')}
                         </p>
                         <p className="text-gray-700 mb-6">
-                            {t('christian.description2')}
+                            {cmsContent?.description2 || t('christian.description2')}
                         </p>
                         <Link
                             to="/rsvp?ceremony=christian"
@@ -198,7 +207,9 @@ const ChristianCeremony = () => {
                     animate={timelineInView ? "visible" : "hidden"}
                     variants={fadeIn}
                 >
-                    <h2 className="text-2xl font-bold mb-10 text-center text-christian-accent">{t('christian.schedule.title')}</h2>
+                    <h2 className="text-2xl font-bold mb-10 text-center text-christian-accent">
+                        {cmsContent?.scheduleTitle || t('christian.schedule.title')}
+                    </h2>
                     {/* Timeline with Ceremony Schedule */}
                     <CeremonyTimeline
                         events={timelineEvents}

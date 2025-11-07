@@ -13,23 +13,33 @@ import ResponsiveCeremonyImage from '../common/ResponsiveCeremonyImage';
 import { getPageContent } from '../../api/contentApi';
 
 const Reception = () => {
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
     const [cmsContent, setCmsContent] = useState(null);
+    const [isLoadingContent, setIsLoadingContent] = useState(true);
 
-    // Load CMS content on mount
+    // Load CMS content on mount and when language changes
     useEffect(() => {
         const loadContent = async () => {
+            setIsLoadingContent(true);
             try {
-                const data = await getPageContent('reception');
+                // Get content for current language with fallback to English
+                const data = await getPageContent('reception', i18n.language);
                 if (data && data.content) {
                     setCmsContent(data.content);
+                } else {
+                    setCmsContent(null);
                 }
             } catch (error) {
-                console.error('Failed to load CMS content, using defaults:', error);
+                if (process.env.NODE_ENV === 'development') {
+                    console.error('Failed to load CMS content, using i18n defaults:', error);
+                }
+                setCmsContent(null);
+            } finally {
+                setIsLoadingContent(false);
             }
         };
         loadContent();
-    }, []);
+    }, [i18n.language]); // Re-load when language changes
 
     // Timeline events - use CMS content if available, otherwise use translations
     const timelineEvents = cmsContent?.timeline || [
@@ -115,13 +125,13 @@ const Reception = () => {
                         variants={fadeIn}
                     >
                         <h3 className="text-2xl md:text-3xl font-bold mb-6 bg-gradient-to-r from-christian-accent via-wedding-love to-hindu-secondary bg-clip-text text-transparent">
-                            {t('reception.headline')}
+                            {cmsContent?.headline || t('reception.headline')}
                         </h3>
                         <p className="text-gray-700 mb-4">
-                            {t('reception.description')}
+                            {cmsContent?.description || t('reception.description')}
                         </p>
                         <p className="text-gray-700 mb-6">
-                            {t('reception.description2')}
+                            {cmsContent?.description2 || t('reception.description2')}
                         </p>
                         <Link
                             to="/rsvp?ceremony=reception"
@@ -208,7 +218,9 @@ const Reception = () => {
                     animate={timelineInView ? "visible" : "hidden"}
                     variants={fadeIn}
                 >
-                    <h2 className="text-2xl font-bold mb-10 text-center text-gray-800">{t('reception.schedule.title')}</h2>
+                    <h2 className="text-2xl font-bold mb-10 text-center text-gray-800">
+                        {cmsContent?.scheduleTitle || t('reception.schedule.title')}
+                    </h2>
                     {/* Timeline - using christian theme as default for reception */}
                     <CeremonyTimeline
                         events={timelineEvents}

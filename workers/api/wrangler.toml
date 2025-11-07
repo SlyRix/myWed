@@ -15,6 +15,11 @@ binding = "DB"
 database_name = "wedding-db"
 database_id = "71f98b31-6ee3-47cf-84e0-33be1a805975"
 
+# R2 Storage binding for image uploads
+[[r2_buckets]]
+binding = "IMAGES"
+bucket_name = "wedding-images"
+
 # Environment variables
 [vars]
 FRONTEND_URL = "https://rushel.me"
@@ -41,6 +46,10 @@ FRONTEND_URL = "https://wed.rushel.me"
 binding = "DB"
 database_name = "wedding-db"
 database_id = "71f98b31-6ee3-47cf-84e0-33be1a805975"
+
+[[env.production.r2_buckets]]
+binding = "IMAGES"
+bucket_name = "wedding-images"
 
 # Development environment
 [env.development]

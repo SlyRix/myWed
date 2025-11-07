@@ -994,11 +994,12 @@ async function handleGetGiftContributions(env, giftId, requestOrigin) {
 }
 
 /**
- * Get page content by page ID (public)
+ * Get page content by page ID and optional language (public)
  * @param {string} pageId - Page identifier (e.g., 'home', 'christian-ceremony')
+ * @param {string} language - Language code (optional: 'en', 'de', 'ta')
  * @returns {Promise<Response>} Page content as JSON
  */
-async function handleGetPageContent(env, pageId, requestOrigin) {
+async function handleGetPageContent(env, pageId, language, requestOrigin) {
     try {
         // Input validation
         if (!pageId || typeof pageId !== 'string' || !/^[a-z0-9-]+$/.test(pageId)) {
@@ -1008,26 +1009,86 @@ async function handleGetPageContent(env, pageId, requestOrigin) {
             );
         }
 
-        // Query page content from D1
-        const result = await env.DB.prepare(
-            'SELECT content, updated_at FROM page_content WHERE page_id = ?'
-        ).bind(pageId).first();
+        // Validate language if provided
+        const validLanguages = ['en', 'de', 'ta'];
+        if (language && !validLanguages.includes(language)) {
+            return new Response(
+                JSON.stringify({ error: 'Invalid language. Must be en, de, or ta' }),
+                { status: 400, headers: getAllHeaders(env, requestOrigin) }
+            );
+        }
 
-        if (!result) {
+        if (language) {
+            // Get content for specific language with fallback to 'en'
+            const result = await env.DB.prepare(
+                'SELECT content, updated_at, language FROM page_content WHERE page_id = ? AND language = ?'
+            ).bind(pageId, language).first();
+
+            if (result) {
+                return new Response(
+                    JSON.stringify({
+                        pageId,
+                        language: result.language,
+                        content: JSON.parse(result.content),
+                        updatedAt: result.updated_at
+                    }),
+                    { status: 200, headers: getAllHeaders(env, requestOrigin) }
+                );
+            }
+
+            // Fallback to English
+            const fallbackResult = await env.DB.prepare(
+                'SELECT content, updated_at, language FROM page_content WHERE page_id = ? AND language = ?'
+            ).bind(pageId, 'en').first();
+
+            if (fallbackResult) {
+                return new Response(
+                    JSON.stringify({
+                        pageId,
+                        language: fallbackResult.language,
+                        content: JSON.parse(fallbackResult.content),
+                        updatedAt: fallbackResult.updated_at,
+                        fallback: true
+                    }),
+                    { status: 200, headers: getAllHeaders(env, requestOrigin) }
+                );
+            }
+
+            // No content found
             return new Response(
                 JSON.stringify({ error: 'Page content not found' }),
                 { status: 404, headers: getAllHeaders(env, requestOrigin) }
             );
-        }
+        } else {
+            // Get all languages for the page
+            const results = await env.DB.prepare(
+                'SELECT content, updated_at, language FROM page_content WHERE page_id = ? ORDER BY language'
+            ).bind(pageId).all();
 
-        return new Response(
-            JSON.stringify({
-                pageId,
-                content: JSON.parse(result.content),
-                updatedAt: result.updated_at
-            }),
-            { status: 200, headers: getAllHeaders(env, requestOrigin) }
-        );
+            if (!results.results || results.results.length === 0) {
+                return new Response(
+                    JSON.stringify({ error: 'Page content not found' }),
+                    { status: 404, headers: getAllHeaders(env, requestOrigin) }
+                );
+            }
+
+            // Build response with all languages
+            const contentByLanguage = {};
+            for (const row of results.results) {
+                contentByLanguage[row.language] = {
+                    content: JSON.parse(row.content),
+                    updatedAt: row.updated_at
+                };
+            }
+
+            return new Response(
+                JSON.stringify({
+                    pageId,
+                    languages: contentByLanguage
+                }),
+                { status: 200, headers: getAllHeaders(env, requestOrigin) }
+            );
+        }
     } catch (error) {
         console.error('Get page content error:', error);
         return new Response(
@@ -1038,17 +1099,27 @@ async function handleGetPageContent(env, pageId, requestOrigin) {
 }
 
 /**
- * Update page content (admin only)
+ * Update page content for specific language (admin only)
  * @param {string} pageId - Page identifier to update
+ * @param {string} language - Language code ('en', 'de', 'ta')
  * @param {Request} request - Request with updated content
  * @returns {Promise<Response>} Updated content confirmation
  */
-async function handleUpdatePageContent(env, pageId, request, requestOrigin) {
+async function handleUpdatePageContent(env, pageId, language, request, requestOrigin) {
     try {
         // Input validation
         if (!pageId || typeof pageId !== 'string' || !/^[a-z0-9-]+$/.test(pageId)) {
             return new Response(
                 JSON.stringify({ error: 'Invalid page ID format' }),
+                { status: 400, headers: getAllHeaders(env, requestOrigin) }
+            );
+        }
+
+        // Validate language
+        const validLanguages = ['en', 'de', 'ta'];
+        if (!language || !validLanguages.includes(language)) {
+            return new Response(
+                JSON.stringify({ error: 'Invalid language. Must be en, de, or ta' }),
                 { status: 400, headers: getAllHeaders(env, requestOrigin) }
             );
         }
@@ -1074,15 +1145,16 @@ async function handleUpdatePageContent(env, pageId, request, requestOrigin) {
 
         const now = Date.now();
 
-        // Update or insert page content
+        // Update or insert page content for specific language
         await env.DB.prepare(
-            'INSERT OR REPLACE INTO page_content (page_id, content, updated_at) VALUES (?, ?, ?)'
-        ).bind(pageId, contentStr, now).run();
+            'INSERT OR REPLACE INTO page_content (page_id, language, content, updated_at) VALUES (?, ?, ?, ?)'
+        ).bind(pageId, language, contentStr, now).run();
 
         return new Response(
             JSON.stringify({
                 success: true,
                 pageId,
+                language,
                 updatedAt: now
             }),
             { status: 200, headers: getAllHeaders(env, requestOrigin) }
@@ -1091,6 +1163,78 @@ async function handleUpdatePageContent(env, pageId, request, requestOrigin) {
         console.error('Update page content error:', error);
         return new Response(
             JSON.stringify({ error: 'Failed to update page content' }),
+            { status: 500, headers: getAllHeaders(env, requestOrigin) }
+        );
+    }
+}
+
+/**
+ * Upload image to R2 storage (admin only)
+ * @param {Object} env - Environment bindings (includes R2 IMAGES bucket)
+ * @param {Request} request - Multipart form request with image file
+ * @returns {Promise<Response>} Upload result with public URL
+ */
+async function handleImageUpload(env, request, requestOrigin) {
+    try {
+        // Parse multipart form data
+        const formData = await request.formData();
+        const file = formData.get('image');
+
+        if (!file) {
+            return new Response(
+                JSON.stringify({ error: 'No image file provided' }),
+                { status: 400, headers: getAllHeaders(env, requestOrigin) }
+            );
+        }
+
+        // Validate file type
+        const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
+        if (!allowedTypes.includes(file.type)) {
+            return new Response(
+                JSON.stringify({ error: 'Invalid file type. Only JPEG, PNG, GIF, and WebP are allowed.' }),
+                { status: 400, headers: getAllHeaders(env, requestOrigin) }
+            );
+        }
+
+        // Validate file size (max 5MB)
+        const maxSize = 5 * 1024 * 1024; // 5MB
+        if (file.size > maxSize) {
+            return new Response(
+                JSON.stringify({ error: 'File too large. Maximum size is 5MB.' }),
+                { status: 400, headers: getAllHeaders(env, requestOrigin) }
+            );
+        }
+
+        // Generate unique filename
+        const timestamp = Date.now();
+        const originalName = file.name.replace(/[^a-zA-Z0-9.-]/g, '_'); // Sanitize filename
+        const extension = originalName.split('.').pop();
+        const filename = `${timestamp}-${originalName}`;
+
+        // Upload to R2
+        await env.IMAGES.put(filename, file.stream(), {
+            httpMetadata: {
+                contentType: file.type,
+            },
+        });
+
+        // Return public URL from R2.dev subdomain
+        const publicUrl = `https://pub-9104535923334686922936588689cb93.r2.dev/${filename}`;
+
+        return new Response(
+            JSON.stringify({
+                success: true,
+                url: publicUrl,
+                filename: filename,
+                size: file.size,
+                type: file.type
+            }),
+            { status: 200, headers: getAllHeaders(env, requestOrigin) }
+        );
+    } catch (error) {
+        console.error('Image upload error:', error);
+        return new Response(
+            JSON.stringify({ error: 'Failed to upload image' }),
             { status: 500, headers: getAllHeaders(env, requestOrigin) }
         );
     }
@@ -1279,9 +1423,13 @@ async function handleRequest(request, env) {
         }
 
         // Page content endpoints - public read
+        // GET /api/content/{pageId} - Get all languages
+        // GET /api/content/{pageId}/{language} - Get specific language
         if (path.startsWith('/api/content/') && method === 'GET') {
-            const pageId = path.split('/').pop();
-            return await handleGetPageContent(env, pageId, requestOrigin);
+            const parts = path.split('/').filter(p => p);
+            const pageId = parts[2];
+            const language = parts[3] || null;
+            return await handleGetPageContent(env, pageId, language, requestOrigin);
         }
 
         // Protected routes (require admin authentication)
@@ -1326,9 +1474,26 @@ async function handleRequest(request, env) {
         }
 
         // Page content endpoints - admin write
+        // PUT /api/content/{pageId}/{language}
         if (path.startsWith('/api/content/') && method === 'PUT') {
-            const pageId = path.split('/').pop();
-            return await handleUpdatePageContent(env, pageId, request, requestOrigin);
+            const parts = path.split('/').filter(p => p);
+            const pageId = parts[2];
+            const language = parts[3];
+
+            if (!language) {
+                return new Response(
+                    JSON.stringify({ error: 'Language parameter is required in URL: /api/content/{pageId}/{language}' }),
+                    { status: 400, headers: getAllHeaders(env, requestOrigin) }
+                );
+            }
+
+            return await handleUpdatePageContent(env, pageId, language, request, requestOrigin);
+        }
+
+        // Image upload endpoint - admin only
+        // POST /api/upload-image
+        if (path === '/api/upload-image' && method === 'POST') {
+            return await handleImageUpload(env, request, requestOrigin);
         }
 
         // 404 - Not found

@@ -9,23 +9,33 @@ import ParallaxSection from '../common/ParallaxSection';
 import { getPageContent } from '../../api/contentApi';
 
 const OurStory = () => {
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
     const [cmsContent, setCmsContent] = useState(null);
+    const [isLoadingContent, setIsLoadingContent] = useState(true);
 
-    // Load CMS content on mount
+    // Load CMS content on mount and when language changes
     useEffect(() => {
         const loadContent = async () => {
+            setIsLoadingContent(true);
             try {
-                const data = await getPageContent('our-story');
+                // Get content for current language with fallback to English
+                const data = await getPageContent('our-story', i18n.language);
                 if (data && data.content) {
                     setCmsContent(data.content);
+                } else {
+                    setCmsContent(null);
                 }
             } catch (error) {
-                console.error('Failed to load CMS content, using defaults:', error);
+                if (process.env.NODE_ENV === 'development') {
+                    console.error('Failed to load CMS content, using i18n defaults:', error);
+                }
+                setCmsContent(null);
+            } finally {
+                setIsLoadingContent(false);
             }
         };
         loadContent();
-    }, []);
+    }, [i18n.language]); // Re-load when language changes
 
     // Story events - use CMS content if available, otherwise use translations
     const storyEvents = cmsContent?.timeline || [
@@ -89,9 +99,11 @@ const OurStory = () => {
 
             <div className="container mx-auto max-w-6xl px-4 relative z-10">
                 <AnimatedSection className="text-center mb-16">
-                    <h1 className="text-4xl font-bold mb-6">{t('story.title')}</h1>
+                    <h1 className="text-4xl font-bold mb-6">
+                        {cmsContent?.headline || t('story.title')}
+                    </h1>
                     <p className="text-gray-700 max-w-2xl mx-auto">
-                        {t('story.description')}
+                        {cmsContent?.description || t('story.description')}
                     </p>
                 </AnimatedSection>
 
