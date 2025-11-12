@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { memo } from 'react';
+import PropTypes from 'prop-types';
 import { motion, AnimatePresence } from 'framer-motion';
 
-const ConfirmDialog = ({ isOpen, onClose, onConfirm, title, message, confirmText = 'Delete', cancelText = 'Cancel' }) => {
+const ConfirmDialog = memo(({ isOpen, onClose, onConfirm, title, message, confirmText = 'Delete', cancelText = 'Cancel' }) => {
     return (
         <AnimatePresence>
             {isOpen && (
@@ -43,6 +44,23 @@ const ConfirmDialog = ({ isOpen, onClose, onConfirm, title, message, confirmText
             )}
         </AnimatePresence>
     );
+});
+
+ConfirmDialog.displayName = 'ConfirmDialog';
+
+ConfirmDialog.propTypes = {
+    isOpen: PropTypes.bool.isRequired,
+    onClose: PropTypes.func.isRequired,
+    onConfirm: PropTypes.func.isRequired,
+    title: PropTypes.string.isRequired,
+    message: PropTypes.string.isRequired,
+    confirmText: PropTypes.string,
+    cancelText: PropTypes.string
+};
+
+ConfirmDialog.defaultProps = {
+    confirmText: 'Delete',
+    cancelText: 'Cancel'
 };
 
 export default ConfirmDialog;

@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { memo } from 'react';
+import PropTypes from 'prop-types';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 
@@ -8,8 +9,8 @@ import { useTranslation } from 'react-i18next';
  * @param {Object} gift - Gift object with all details
  * @param {Function} onClick - Handler when card is clicked
  */
-const GiftCard = ({ gift, onClick }) => {
-    const { i18n } = useTranslation();
+const GiftCard = memo(({ gift, onClick }) => {
+    const { t, i18n } = useTranslation();
     const currentLanguage = i18n.language;
 
     const name = gift.names[currentLanguage] || gift.names.en;
@@ -38,9 +39,7 @@ const GiftCard = ({ gift, onClick }) => {
                 {isFullyFunded && (
                     <div className="absolute inset-0 bg-green-500 bg-opacity-80 flex items-center justify-center">
                         <span className="text-white text-xl font-bold">
-                            {currentLanguage === 'de' ? 'Vollständig finanziert' :
-                             currentLanguage === 'ta' ? 'முழுமையாக நிதியளிக்கப்பட்டது' :
-                             'Fully Funded'}
+                            {t('gifts.fullyFunded')}
                         </span>
                     </div>
                 )}
@@ -57,9 +56,7 @@ const GiftCard = ({ gift, onClick }) => {
                 <div className="mb-3">
                     <div className="flex justify-between text-sm mb-1">
                         <span className="text-gray-600">
-                            {currentLanguage === 'de' ? 'Ziel' :
-                             currentLanguage === 'ta' ? 'இலக்கு' :
-                             'Goal'}:
+                            {t('gifts.goal')}:
                         </span>
                         <span className="font-semibold text-gray-800">
                             CHF {gift.price.toFixed(2)}
@@ -67,9 +64,7 @@ const GiftCard = ({ gift, onClick }) => {
                     </div>
                     <div className="flex justify-between text-sm mb-2">
                         <span className="text-gray-600">
-                            {currentLanguage === 'de' ? 'Beigetragen' :
-                             currentLanguage === 'ta' ? 'பங்களிக்கப்பட்டது' :
-                             'Contributed'}:
+                            {t('gifts.contributed')}:
                         </span>
                         <span className="font-semibold text-green-600">
                             CHF {gift.totalContributed.toFixed(2)}
@@ -85,18 +80,14 @@ const GiftCard = ({ gift, onClick }) => {
                         />
                     </div>
                     <p className="text-xs text-gray-500 mt-1 text-right">
-                        {progressPercentage}% {currentLanguage === 'de' ? 'finanziert' :
-                                              currentLanguage === 'ta' ? 'நிதியளிக்கப்பட்டது' :
-                                              'funded'}
+                        {progressPercentage}% {t('gifts.funded')}
                     </p>
                 </div>
 
                 {!isFullyFunded && (
                     <div className="flex justify-between items-center">
                         <span className="text-sm text-gray-600">
-                            {currentLanguage === 'de' ? 'Verbleibend' :
-                             currentLanguage === 'ta' ? 'மீதமுள்ளது' :
-                             'Remaining'}:
+                            {t('gifts.remaining')}:
                         </span>
                         <span className="text-lg font-bold text-hindu-secondary">
                             CHF {gift.remainingAmount.toFixed(2)}
@@ -107,12 +98,8 @@ const GiftCard = ({ gift, onClick }) => {
                 {gift.contributionCount > 0 && (
                     <p className="text-xs text-gray-500 mt-2">
                         {gift.contributionCount} {gift.contributionCount === 1
-                            ? (currentLanguage === 'de' ? 'Beitrag' :
-                               currentLanguage === 'ta' ? 'பங்களிப்பு' :
-                               'contribution')
-                            : (currentLanguage === 'de' ? 'Beiträge' :
-                               currentLanguage === 'ta' ? 'பங்களிப்புகள்' :
-                               'contributions')}
+                            ? t('gifts.contribution')
+                            : t('gifts.contributions')}
                     </p>
                 )}
 
@@ -124,9 +111,7 @@ const GiftCard = ({ gift, onClick }) => {
                         className="block w-full mt-4 py-2 bg-gray-100 text-gray-800 rounded-lg hover:bg-gray-200 transition-colors text-center border border-gray-300"
                         onClick={(e) => e.stopPropagation()}
                     >
-                        {currentLanguage === 'de' ? 'Produkt ansehen' :
-                         currentLanguage === 'ta' ? 'தயாரிப்பு பார்க்க' :
-                         'View Product'}
+                        {t('gifts.viewProduct')}
                     </a>
                 )}
 
@@ -138,14 +123,38 @@ const GiftCard = ({ gift, onClick }) => {
                             onClick(gift);
                         }}
                     >
-                        {currentLanguage === 'de' ? 'Beitragen' :
-                         currentLanguage === 'ta' ? 'பங்களிக்கவும்' :
-                         'Contribute'}
+                        {t('gifts.contribute')}
                     </button>
                 )}
             </div>
         </motion.div>
     );
+});
+
+GiftCard.displayName = 'GiftCard';
+
+GiftCard.propTypes = {
+    gift: PropTypes.shape({
+        id: PropTypes.string.isRequired,
+        imageUrl: PropTypes.string.isRequired,
+        names: PropTypes.shape({
+            en: PropTypes.string.isRequired,
+            de: PropTypes.string,
+            ta: PropTypes.string
+        }).isRequired,
+        descriptions: PropTypes.shape({
+            en: PropTypes.string.isRequired,
+            de: PropTypes.string,
+            ta: PropTypes.string
+        }).isRequired,
+        price: PropTypes.number.isRequired,
+        totalContributed: PropTypes.number.isRequired,
+        remainingAmount: PropTypes.number.isRequired,
+        percentageFunded: PropTypes.number.isRequired,
+        contributionCount: PropTypes.number.isRequired,
+        productUrl: PropTypes.string
+    }).isRequired,
+    onClick: PropTypes.func.isRequired
 };
 
 export default GiftCard;

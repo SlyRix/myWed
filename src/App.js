@@ -66,7 +66,9 @@ function App() {
                         // Token validated and stored successfully
                     }
                 } catch (error) {
-                    console.error('Error validating invitation code:', error);
+                    if (process.env.NODE_ENV === 'development') {
+                        console.error('Error validating invitation code:', error);
+                    }
                 } finally {
                     // Clean URL (remove query parameters)
                     window.history.replaceState({}, document.title, window.location.pathname);
@@ -97,7 +99,8 @@ function App() {
         return (
             <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-r from-christian-accent/10 to-hindu-secondary/10">
                 <div className="text-center">
-                    <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-christian-accent mx-auto mb-4"></div>
+                    <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-christian-accent mx-auto mb-4" aria-hidden="true"></div>
+                    <span className="sr-only">Loading</span>
                     <p className="text-gray-700">Validating your invitation code...</p>
                 </div>
             </div>

@@ -1,5 +1,5 @@
 // src/components/gallery/PhotoGallery.js
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import PhotoUpload from './PhotoUpload';
@@ -9,6 +9,7 @@ const PhotoGallery = () => {
     const { t } = useTranslation();
     const [photos, setPhotos] = useState([]);
     const [selectedPhoto, setSelectedPhoto] = useState(null);
+    const modalRef = useRef(null);
 
     // In a real app, you'd fetch photos from storage
     useEffect(() => {
@@ -26,6 +27,25 @@ const PhotoGallery = () => {
         // Add new photos to the gallery
         setPhotos(prevPhotos => [...newPhotos, ...prevPhotos]);
     };
+
+    // Focus management and keyboard navigation for modal
+    useEffect(() => {
+        if (selectedPhoto && modalRef.current) {
+            // Focus the close button when modal opens
+            const closeButton = modalRef.current.querySelector('button[aria-label="Close photo viewer"]');
+            closeButton?.focus();
+
+            // Handle keyboard navigation
+            const handleKeyDown = (e) => {
+                if (e.key === 'Escape') {
+                    setSelectedPhoto(null);
+                }
+            };
+
+            document.addEventListener('keydown', handleKeyDown);
+            return () => document.removeEventListener('keydown', handleKeyDown);
+        }
+    }, [selectedPhoto]);
 
     return (
         <section className="pt-24 pb-20 bg-gray-50">
@@ -66,6 +86,10 @@ const PhotoGallery = () => {
                             onClick={() => setSelectedPhoto(null)}
                         >
                             <div
+                                ref={modalRef}
+                                role="dialog"
+                                aria-modal="true"
+                                aria-label="Photo viewer"
                                 className="relative max-w-4xl w-full bg-white rounded-lg overflow-hidden shadow-2xl"
                                 onClick={e => e.stopPropagation()}
                             >
@@ -77,6 +101,8 @@ const PhotoGallery = () => {
                                 <button
                                     className="absolute top-4 right-4 w-10 h-10 rounded-full bg-black bg-opacity-50 text-white flex items-center justify-center hover:bg-opacity-70 transition-colors"
                                     onClick={() => setSelectedPhoto(null)}
+                                    aria-label="Close photo viewer"
+                                    title="Close"
                                 >
                                     ×
                                 </button>

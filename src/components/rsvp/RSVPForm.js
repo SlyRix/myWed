@@ -7,6 +7,7 @@ import { useLocation, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { sendRSVPEmail } from '../../utils/emailService';
 import { useGuest } from '../../contexts/GuestContext';
+import { MAX_GUESTS_PER_CEREMONY } from '../../constants';
 
 const RSVPForm = () => {
     const { t } = useTranslation();
@@ -155,14 +156,18 @@ const RSVPForm = () => {
                     source: ceremonySrc || 'direct'
                 });
             } else {
-                console.error('Failed to send email:', result.error);
+                if (process.env.NODE_ENV === 'development') {
+                    console.error('Failed to send email:', result.error);
+                }
                 setSubmitted(false);
-                setSubmitError(`Failed to send your RSVP. Error: ${result.error?.text || 'Unknown error'}`);
+                setSubmitError('Failed to send your RSVP. Please try again.');
             }
         } catch (error) {
-            console.error('Unexpected error sending email:', error);
+            if (process.env.NODE_ENV === 'development') {
+                console.error('Unexpected error sending email:', error);
+            }
             setSubmitted(false);
-            setSubmitError(`An unexpected error occurred: ${error.message}`);
+            setSubmitError('An unexpected error occurred. Please try again.');
         }
     };
 
@@ -329,7 +334,7 @@ const RSVPForm = () => {
                                                 type="number"
                                                 name="christianGuests"
                                                 min="0"
-                                                max="10"
+                                                max={MAX_GUESTS_PER_CEREMONY}
                                                 value={formData.christianGuests}
                                                 onChange={handleChange}
                                                 disabled={submitted}
@@ -354,7 +359,7 @@ const RSVPForm = () => {
                                                 type="number"
                                                 name="hinduGuests"
                                                 min="0"
-                                                max="10"
+                                                max={MAX_GUESTS_PER_CEREMONY}
                                                 value={formData.hinduGuests}
                                                 onChange={handleChange}
                                                 disabled={submitted}
@@ -379,7 +384,7 @@ const RSVPForm = () => {
                                             type="number"
                                             name="receptionGuests"
                                             min="0"
-                                            max="10"
+                                            max={MAX_GUESTS_PER_CEREMONY}
                                             value={formData.receptionGuests}
                                             onChange={handleChange}
                                             disabled={submitted}

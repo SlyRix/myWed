@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { memo } from 'react';
+import PropTypes from 'prop-types';
 import { motion } from 'framer-motion';
 
-const GalleryItem = ({ photo, onClick }) => {
+const GalleryItem = memo(({ photo, onClick }) => {
     return (
         <motion.div
             className="relative h-48 overflow-hidden rounded-lg cursor-pointer shadow-md"
@@ -12,6 +13,8 @@ const GalleryItem = ({ photo, onClick }) => {
             <img
                 src={photo.src}
                 alt={photo.alt}
+                loading="lazy"
+                decoding="async"
                 className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
             />
             <div className="absolute inset-0 bg-black bg-opacity-30 opacity-0 hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
@@ -23,6 +26,17 @@ const GalleryItem = ({ photo, onClick }) => {
             </div>
         </motion.div>
     );
+});
+
+GalleryItem.displayName = 'GalleryItem';
+
+GalleryItem.propTypes = {
+    photo: PropTypes.shape({
+        id: PropTypes.number,
+        src: PropTypes.string.isRequired,
+        alt: PropTypes.string.isRequired
+    }).isRequired,
+    onClick: PropTypes.func.isRequired
 };
 
 export default GalleryItem;

@@ -303,7 +303,16 @@
     "note": {
       "title": "Eine Notiz zu Geschenken",
       "description": "Wir fühlen uns wirklich geehrt, dass Sie unseren besonderen Tag mit uns feiern werden. Ihre Anwesenheit ist das Wichtigste, und wir sind dankbar für Ihre Liebe und Unterstützung. Wenn Sie ein Geschenk machen möchten, hoffen wir, dass unsere Geschenkliste einige hilfreiche Orientierung bietet."
-    }
+    },
+    "fullyFunded": "Vollständig finanziert",
+    "goal": "Ziel",
+    "contributed": "Beigetragen",
+    "funded": "finanziert",
+    "remaining": "Verbleibend",
+    "contribution": "Beitrag",
+    "contributions": "Beiträge",
+    "viewProduct": "Produkt ansehen",
+    "contribute": "Beitragen"
   },
   "gallery": {
     "title": "Fotogalerie",

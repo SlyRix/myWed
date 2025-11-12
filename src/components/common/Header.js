@@ -1,11 +1,12 @@
 // src/components/common/Header.js
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { mdiHeart, mdiMenu, mdiClose } from '@mdi/js';
 import Icon from '@mdi/react';
 import { useTranslation } from 'react-i18next';
 import LanguageSwitcher from './LanguageSwitcher';
 import { useGuest } from '../../contexts/GuestContext';
+import { SCROLL_THRESHOLD } from '../../constants';
 
 const Header = () => {
     const { t } = useTranslation();
@@ -20,7 +21,7 @@ const Header = () => {
     // Handle scroll effect
     useEffect(() => {
         const handleScroll = () => {
-            setScrolled(window.scrollY > 50);
+            setScrolled(window.scrollY > SCROLL_THRESHOLD);
         };
 
         window.addEventListener('scroll', handleScroll);
@@ -67,16 +68,19 @@ const Header = () => {
         { path: '/rsvp', label: t('header.rsvp'), requiresAccess: true }
     ];
 
-    // Filter links based on access
-    const filteredNavLinks = navLinks.filter(link => {
-        if (link.ceremonyType) {
-            return accessibleCeremonies.includes(link.ceremonyType);
-        }
-        if (link.requiresAccess) {
-            return accessibleCeremonies.length > 0;
-        }
-        return true;
-    });
+    // Filter links based on access - memoized to avoid recomputation
+    const filteredNavLinks = useMemo(() =>
+        navLinks.filter(link => {
+            if (link.ceremonyType) {
+                return accessibleCeremonies.includes(link.ceremonyType);
+            }
+            if (link.requiresAccess) {
+                return accessibleCeremonies.length > 0;
+            }
+            return true;
+        }),
+        [accessibleCeremonies, t]
+    );
 
     // Toggle mobile menu
     const toggleMobileMenu = () => {

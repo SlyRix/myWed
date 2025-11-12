@@ -1,5 +1,6 @@
 // src/components/common/CeremonyAccessCheck.js
 import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { validateAccessCode } from '../../api/guestApi';
@@ -28,7 +29,9 @@ const CeremonyAccessCheck = ({ ceremony }) => {
                         setHasAccess(true);
                     }
                 } catch (error) {
-                    console.error('Error validating access:', error);
+                    if (process.env.NODE_ENV === 'development') {
+                        console.error('Error validating access:', error);
+                    }
                 }
             }
             setIsLoading(false);
@@ -58,7 +61,9 @@ const CeremonyAccessCheck = ({ ceremony }) => {
                 setError('Invalid invitation code. Please check and try again.');
             }
         } catch (error) {
-            console.error('Error validating code:', error);
+            if (process.env.NODE_ENV === 'development') {
+                console.error('Error validating code:', error);
+            }
             setError('An error occurred. Please try again.');
         } finally {
             setChecking(false);
@@ -132,6 +137,10 @@ const CeremonyAccessCheck = ({ ceremony }) => {
             </div>
         </motion.div>
     );
+};
+
+CeremonyAccessCheck.propTypes = {
+    ceremony: PropTypes.oneOf(['christian', 'hindu']).isRequired
 };
 
 export default CeremonyAccessCheck;

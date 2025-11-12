@@ -2,7 +2,14 @@
 // RSVP notification service using n8n webhook
 
 // Get webhook URL from environment variables
-const WEBHOOK_URL = process.env.REACT_APP_WEBHOOK_URL || 'https://n8n.rushel.me/webhook/8c933f37-7a58-404c-96d8-c3c7a2ea641b';
+const WEBHOOK_URL = process.env.REACT_APP_WEBHOOK_URL;
+
+// Validate that webhook URL is configured
+if (!WEBHOOK_URL) {
+    if (process.env.NODE_ENV === 'development') {
+        console.error('REACT_APP_WEBHOOK_URL environment variable is not set');
+    }
+}
 
 /**
  * Sends RSVP notification via n8n webhook
@@ -20,6 +27,14 @@ const WEBHOOK_URL = process.env.REACT_APP_WEBHOOK_URL || 'https://n8n.rushel.me/
  * @returns {Promise<{success: boolean, response?: any, error?: any}>} Result object
  */
 export const sendRSVPEmail = async (formData) => {
+    // Check if webhook URL is configured
+    if (!WEBHOOK_URL) {
+        return {
+            success: false,
+            error: new Error('Email service is not configured. Please contact the administrator.')
+        };
+    }
+
     try {
         // Format the attendance information for better readability
         let attendanceInfo = '';

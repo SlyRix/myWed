@@ -4,6 +4,7 @@ import { mdiContentSave, mdiPlus, mdiDelete, mdiImageEdit, mdiArrowUp, mdiArrowD
 import Icon from '@mdi/react';
 import { getAllPageContent, updatePageContent, getAvailableLanguages } from '../../api/contentApi';
 import ImageUploader from './ImageUploader';
+import ConfirmDialog from '../common/ConfirmDialog';
 
 /**
  * Page Content Editor Component with Multi-Language Support
@@ -18,6 +19,8 @@ const PageContentEditor = ({ pageId, pageTitle }) => {
     const [error, setError] = useState(null);
     const [successMessage, setSuccessMessage] = useState('');
     const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
+    const [showConfirmDialog, setShowConfirmDialog] = useState(false);
+    const [pendingLanguage, setPendingLanguage] = useState(null);
 
     const languages = [
         { code: 'en', label: 'English', flag: '🇬🇧' },
@@ -57,13 +60,19 @@ const PageContentEditor = ({ pageId, pageTitle }) => {
 
     const handleLanguageSwitch = (newLanguage) => {
         if (hasUnsavedChanges) {
-            const confirmSwitch = window.confirm(
-                'You have unsaved changes. Switching languages will discard them. Continue?'
-            );
-            if (!confirmSwitch) return;
+            setPendingLanguage(newLanguage);
+            setShowConfirmDialog(true);
+        } else {
+            setSelectedLanguage(newLanguage);
         }
-        setSelectedLanguage(newLanguage);
-        setHasUnsavedChanges(false);
+    };
+
+    const confirmLanguageSwitch = () => {
+        if (pendingLanguage) {
+            setSelectedLanguage(pendingLanguage);
+            setHasUnsavedChanges(false);
+            setPendingLanguage(null);
+        }
     };
 
     const handleSave = async () => {
@@ -374,6 +383,20 @@ const PageContentEditor = ({ pageId, pageTitle }) => {
                     updateArrayItem
                 })}
             </div>
+
+            {/* Confirmation Dialog for Language Switch */}
+            <ConfirmDialog
+                isOpen={showConfirmDialog}
+                onClose={() => {
+                    setShowConfirmDialog(false);
+                    setPendingLanguage(null);
+                }}
+                onConfirm={confirmLanguageSwitch}
+                title="Unsaved Changes"
+                message="You have unsaved changes. Switching languages will discard them. Continue?"
+                confirmText="Switch Language"
+                cancelText="Cancel"
+            />
         </div>
     );
 };

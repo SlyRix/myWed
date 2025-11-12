@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { memo } from 'react';
+import PropTypes from 'prop-types';
 import { motion } from 'framer-motion';
 import Icon from '@mdi/react';
 import CalendarLink from '../common/CalendarLink';
 
-const CeremonyDetails = ({ details, theme }) => {
+const CeremonyDetails = memo(({ details, theme }) => {
     // Animation variants
     const containerVariants = {
         hidden: { opacity: 0 },
@@ -125,6 +126,24 @@ const CeremonyDetails = ({ details, theme }) => {
             ))}
         </motion.div>
     );
+});
+
+CeremonyDetails.displayName = 'CeremonyDetails';
+
+CeremonyDetails.propTypes = {
+    details: PropTypes.arrayOf(PropTypes.shape({
+        icon: PropTypes.string,
+        title: PropTypes.string.isRequired,
+        content: PropTypes.oneOfType([
+            PropTypes.arrayOf(PropTypes.string),
+            PropTypes.string
+        ]),
+        link: PropTypes.shape({
+            url: PropTypes.string.isRequired,
+            text: PropTypes.string.isRequired
+        })
+    })).isRequired,
+    theme: PropTypes.oneOf(['christian', 'hindu']).isRequired
 };
 
 export default CeremonyDetails;

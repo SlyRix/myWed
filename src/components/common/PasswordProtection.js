@@ -1,5 +1,6 @@
 // src/components/common/PasswordProtection.js
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import { motion } from 'framer-motion';
 import { mdiHeart } from '@mdi/js';
 import Icon from '@mdi/react';
@@ -77,6 +78,10 @@ const PasswordProtection = ({ onAuthenticate }) => {
             </motion.div>
         </div>
     );
+};
+
+PasswordProtection.propTypes = {
+    onAuthenticate: PropTypes.func.isRequired
 };
 
 export default PasswordProtection;

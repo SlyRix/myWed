@@ -1,8 +1,9 @@
 // src/components/common/CountdownTimer.js
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, memo } from 'react';
+import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 
-const CountdownTimer = ({ targetDate }) => {
+const CountdownTimer = memo(({ targetDate }) => {
     const { t } = useTranslation();
     const [timeLeft, setTimeLeft] = useState({
         days: 0,
@@ -51,6 +52,12 @@ const CountdownTimer = ({ targetDate }) => {
             ))}
         </div>
     );
+});
+
+CountdownTimer.displayName = 'CountdownTimer';
+
+CountdownTimer.propTypes = {
+    targetDate: PropTypes.number.isRequired
 };
 
 export default CountdownTimer;

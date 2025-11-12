@@ -4,6 +4,8 @@
  * @module guestApi
  */
 
+import { API_TIMEOUT_MS } from '../constants';
+
 const API_URL = process.env.REACT_APP_API_URL || 'https://api.rushel.me/api';
 
 /**
@@ -24,12 +26,12 @@ const getAuthHeaders = () => {
  * Wrapper for fetch with automatic timeout handling
  * @param {string} url - The URL to fetch
  * @param {Object} options - Fetch options (method, headers, body, etc.)
- * @param {number} timeout - Timeout in milliseconds (default: 10000)
+ * @param {number} timeout - Timeout in milliseconds (default: API_TIMEOUT_MS)
  * @returns {Promise<Response>} Fetch response
  * @throws {Error} If request times out or network error occurs
  * @private
  */
-const fetchWithTimeout = async (url, options = {}, timeout = 10000) => {
+const fetchWithTimeout = async (url, options = {}, timeout = API_TIMEOUT_MS) => {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), timeout);
 
@@ -70,7 +72,9 @@ export const fetchAllGuests = async () => {
 
         return await response.json();
     } catch (error) {
-        console.error('Error fetching guests:', error);
+        if (process.env.NODE_ENV === 'development') {
+            console.error('Error fetching guests:', error);
+        }
         throw error;
     }
 };
@@ -103,7 +107,9 @@ export const saveGuest = async (code, guestData) => {
 
         return await response.json();
     } catch (error) {
-        console.error('Error saving guest:', error);
+        if (process.env.NODE_ENV === 'development') {
+            console.error('Error saving guest:', error);
+        }
         throw error;
     }
 };
@@ -128,7 +134,9 @@ export const deleteGuest = async (code) => {
 
         return await response.json();
     } catch (error) {
-        console.error('Error deleting guest:', error);
+        if (process.env.NODE_ENV === 'development') {
+            console.error('Error deleting guest:', error);
+        }
         throw error;
     }
 };
@@ -160,7 +168,9 @@ export const validateAccessCode = async (code) => {
 
         return await response.json();
     } catch (error) {
-        console.error('Error validating code:', error);
+        if (process.env.NODE_ENV === 'development') {
+            console.error('Error validating code:', error);
+        }
         return { valid: false, error: error.message };
     }
 };
@@ -190,7 +200,9 @@ export const generateGuestCode = async (name) => {
         const result = await response.json();
         return result.code;
     } catch (error) {
-        console.error('Error generating code:', error);
+        if (process.env.NODE_ENV === 'development') {
+            console.error('Error generating code:', error);
+        }
         throw error;
     }
 };

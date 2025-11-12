@@ -6,7 +6,9 @@ export function register() {
             navigator.serviceWorker
                 .register(swUrl)
                 .then(registration => {
-                    console.log('ServiceWorker registration successful');
+                    if (process.env.NODE_ENV === 'development') {
+                        console.log('ServiceWorker registration successful');
+                    }
                     registration.onupdatefound = () => {
                         const installingWorker = registration.installing;
                         if (installingWorker == null) {
@@ -18,18 +20,24 @@ export function register() {
                                     // At this point, the updated precached content has been fetched,
                                     // but the previous service worker will still serve the older
                                     // content until all client tabs are closed.
-                                    console.log('New content is available and will be used when all tabs for this page are closed.');
+                                    if (process.env.NODE_ENV === 'development') {
+                                        console.log('New content is available and will be used when all tabs for this page are closed.');
+                                    }
                                 } else {
                                     // At this point, everything has been precached.
                                     // It's the perfect time to display a "Content is cached for offline use." message.
-                                    console.log('Content is cached for offline use.');
+                                    if (process.env.NODE_ENV === 'development') {
+                                        console.log('Content is cached for offline use.');
+                                    }
                                 }
                             }
                         };
                     };
                 })
                 .catch(error => {
-                    console.error('Error during service worker registration:', error);
+                    if (process.env.NODE_ENV === 'development') {
+                        console.error('Error during service worker registration:', error);
+                    }
                 });
         });
     }
@@ -42,7 +50,9 @@ export function unregister() {
                 registration.unregister();
             })
             .catch(error => {
-                console.error(error.message);
+                if (process.env.NODE_ENV === 'development') {
+                    console.error(error.message);
+                }
             });
     }
 }

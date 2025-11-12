@@ -7,6 +7,7 @@ import { fetchAllGuests, saveGuest, deleteGuest, generateGuestCode } from '../..
 import ConfirmDialog from '../common/ConfirmDialog';
 import GiftsManager from './GiftsManager';
 import PageContentEditor from './PageContentEditor';
+import { MOBILE_BREAKPOINT, QR_CODE_SIZE, QR_CODE_ERROR_CORRECTION_LEVEL, QR_CODE_MARGIN } from '../../constants';
 
 const AdminDashboard = () => {
     const [activeTab, setActiveTab] = useState('guestList');
@@ -36,7 +37,9 @@ const AdminDashboard = () => {
                 const guests = await fetchAllGuests();
                 setGuestList(guests);
             } catch (error) {
-                console.error('Error loading guests:', error);
+                if (process.env.NODE_ENV === 'development') {
+                    console.error('Error loading guests:', error);
+                }
                 setError('Failed to load guest list. Please check your connection and try again.');
             } finally {
                 setIsLoading(false);
@@ -114,7 +117,9 @@ const AdminDashboard = () => {
                 resetForm();
             }
         } catch (error) {
-            console.error('Error saving guest:', error);
+            if (process.env.NODE_ENV === 'development') {
+                console.error('Error saving guest:', error);
+            }
             setError('Failed to save guest. Please try again.');
         } finally {
             setIsSaving(false);
@@ -144,7 +149,7 @@ const AdminDashboard = () => {
         setEditingGuest(code);
 
         // On mobile, scroll to the form when editing
-        if (window.innerWidth < 768) {
+        if (window.innerWidth < MOBILE_BREAKPOINT) {
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
     };
@@ -175,7 +180,9 @@ const AdminDashboard = () => {
                 resetForm();
             }
         } catch (error) {
-            console.error('Error deleting guest:', error);
+            if (process.env.NODE_ENV === 'development') {
+                console.error('Error deleting guest:', error);
+            }
             setError('Failed to delete guest. Please try again.');
         }
     };
@@ -192,7 +199,8 @@ const AdminDashboard = () => {
             <div className="container mx-auto pt-24 pb-12 px-4 text-center">
                 <h1 className="text-2xl md:text-3xl font-bold mb-6">Wedding Admin Dashboard</h1>
                 <div className="flex justify-center items-center h-64">
-                    <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-christian-accent"></div>
+                    <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-christian-accent" aria-hidden="true"></div>
+                    <span className="sr-only">Loading</span>
                 </div>
                 <p className="text-gray-600">Loading guest list...</p>
             </div>
@@ -204,7 +212,7 @@ const AdminDashboard = () => {
             <h1 className="text-2xl md:text-3xl font-bold mb-8 text-center md:text-left">Wedding Admin Dashboard</h1>
 
             {error && (
-                <div className="mb-6 p-4 bg-red-100 border border-red-400 text-red-700 rounded">
+                <div role="alert" aria-live="polite" className="mb-6 p-4 bg-red-100 border border-red-400 text-red-700 rounded">
                     {error}
                 </div>
             )}
@@ -396,6 +404,7 @@ const AdminDashboard = () => {
                                                         <button
                                                             onClick={() => handleEditGuest(code)}
                                                             className="text-indigo-600 hover:text-indigo-900 p-1"
+                                                            aria-label={`Edit guest ${guest.name}`}
                                                             title="Edit Guest"
                                                         >
                                                             <Icon path={mdiPencil} size={0.9} />
@@ -403,6 +412,7 @@ const AdminDashboard = () => {
                                                         <button
                                                             onClick={() => handleDeleteGuest(code)}
                                                             className="text-red-600 hover:text-red-900 p-1"
+                                                            aria-label={`Delete guest ${guest.name}`}
                                                             title="Delete Guest"
                                                         >
                                                             <Icon path={mdiTrashCan} size={0.9} />
@@ -480,9 +490,9 @@ const AdminDashboard = () => {
                                 <QRCodeCanvas
                                     id="qr-code"
                                     value={getInvitationUrl(selectedGuest)}
-                                    size={200}
-                                    level="H"
-                                    includeMargin={true}
+                                    size={QR_CODE_SIZE}
+                                    level={QR_CODE_ERROR_CORRECTION_LEVEL}
+                                    includeMargin={QR_CODE_MARGIN}
                                     fgColor="#333333"
                                 />
                             </div>
@@ -552,7 +562,9 @@ const AdminDashboard = () => {
                                             downloadLink.click();
                                             document.body.removeChild(downloadLink);
                                         } catch (error) {
-                                            console.error('Error downloading QR code:', error);
+                                            if (process.env.NODE_ENV === 'development') {
+                                                console.error('Error downloading QR code:', error);
+                                            }
                                             setError('Failed to download QR code. Please try again.');
                                         }
                                     }}

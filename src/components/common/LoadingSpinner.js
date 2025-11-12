@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { motion } from 'framer-motion';
 import { mdiHeart } from '@mdi/js';
 import Icon from '@mdi/react';
 
-const LoadingSpinner = () => {
+const LoadingSpinner = memo(() => {
     return (
         <div className="flex flex-col items-center">
             <motion.div
@@ -59,6 +59,8 @@ const LoadingSpinner = () => {
             </motion.div>
         </div>
     );
-};
+});
+
+LoadingSpinner.displayName = 'LoadingSpinner';
 
 export default LoadingSpinner;

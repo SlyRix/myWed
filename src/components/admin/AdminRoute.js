@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
 import { Navigate } from 'react-router-dom';
-
-const API_URL = process.env.REACT_APP_API_URL || 'https://api.rushel.me/api';
+import { ENDPOINTS, buildApiUrl } from '../../config/api';
 
 /**
  * Protected route component for admin-only pages
@@ -30,7 +30,7 @@ const AdminRoute = ({ children }) => {
 
             try {
                 // Validate token with backend by attempting to fetch guest list
-                const response = await fetch(`${API_URL}/guests`, {
+                const response = await fetch(buildApiUrl(ENDPOINTS.guests), {
                     method: 'GET',
                     headers: {
                         'Authorization': `Bearer ${token}`,
@@ -48,7 +48,9 @@ const AdminRoute = ({ children }) => {
                 }
             } catch (error) {
                 // Network error or server down - deny access and clear token
-                console.error('Token validation failed:', error);
+                if (process.env.NODE_ENV === 'development') {
+                    console.error('Token validation failed:', error);
+                }
                 localStorage.removeItem('adminToken');
                 setHasAccess(false);
             } finally {
@@ -77,6 +79,10 @@ const AdminRoute = ({ children }) => {
 
     // If has access, render the children (admin component)
     return children;
+};
+
+AdminRoute.propTypes = {
+    children: PropTypes.node.isRequired
 };
 
 export default AdminRoute;

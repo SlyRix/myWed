@@ -64,7 +64,9 @@ export const GuestProvider = ({ children }) => {
                         });
                     }
                 } catch (error) {
-                    console.error('Error validating invitation code:', error);
+                    if (process.env.NODE_ENV === 'development') {
+                        console.error('Error validating invitation code:', error);
+                    }
                     setGuestData({
                         code: null,
                         name: null,

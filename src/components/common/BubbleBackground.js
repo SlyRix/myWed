@@ -1,15 +1,26 @@
 // src/components/common/BubbleBackground.js - Consolidated version
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, memo } from 'react';
+import PropTypes from 'prop-types';
 import { motion } from 'framer-motion';
+import {
+    BUBBLE_DEFAULT_COUNT,
+    BUBBLE_MIN_SIZE,
+    BUBBLE_MAX_SIZE,
+    BUBBLE_MIN_DURATION,
+    BUBBLE_MAX_DURATION,
+    BUBBLE_MIN_OPACITY,
+    BUBBLE_MAX_OPACITY,
+    BUBBLE_MOUSE_STRENGTH
+} from '../../constants';
 
-const BubbleBackground = ({
-                              count = 10,
+const BubbleBackground = memo(({
+                              count = BUBBLE_DEFAULT_COUNT,
                               colors = ['#d4b08c', '#f0b429', '#d93f0b'],
-                              size = { min: 50, max: 200 },
-                              duration = { min: 10, max: 25 },
-                              opacity = { min: 0.03, max: 0.08 },
+                              size = { min: BUBBLE_MIN_SIZE, max: BUBBLE_MAX_SIZE },
+                              duration = { min: BUBBLE_MIN_DURATION / 1000, max: BUBBLE_MAX_DURATION / 1000 },
+                              opacity = { min: BUBBLE_MIN_OPACITY, max: BUBBLE_MAX_OPACITY },
                               mouseInteraction = false,
-                              mouseStrength = 20 // How much bubbles follow the mouse
+                              mouseStrength = BUBBLE_MOUSE_STRENGTH
                           }) => {
     const [bubbles, setBubbles] = useState([]);
     const [mousePosition, setMousePosition] = useState({ x: 0.5, y: 0.5 });
@@ -139,6 +150,27 @@ const BubbleBackground = ({
             })}
         </div>
     );
+});
+
+BubbleBackground.displayName = 'BubbleBackground';
+
+BubbleBackground.propTypes = {
+    count: PropTypes.number,
+    colors: PropTypes.arrayOf(PropTypes.string),
+    size: PropTypes.shape({
+        min: PropTypes.number,
+        max: PropTypes.number
+    }),
+    duration: PropTypes.shape({
+        min: PropTypes.number,
+        max: PropTypes.number
+    }),
+    opacity: PropTypes.shape({
+        min: PropTypes.number,
+        max: PropTypes.number
+    }),
+    mouseInteraction: PropTypes.bool,
+    mouseStrength: PropTypes.number
 };
 
 export default BubbleBackground;

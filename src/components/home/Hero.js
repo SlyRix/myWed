@@ -1,5 +1,6 @@
 // src/components/home/Hero.js
 import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { mdiChevronDown } from '@mdi/js';
@@ -9,6 +10,7 @@ import CountdownTimer from '../common/CountdownTimer';
 import BubbleBackground from '../common/BubbleBackground';
 import { useGuest } from '../../contexts/GuestContext';
 import { getPageContent } from '../../api/contentApi';
+import { COUNTDOWN_DATE } from '../../config/wedding';
 
 // Fallback SVG pattern - only used if external SVG isn't available
 const FloralPatternSVG = () => (
@@ -104,8 +106,8 @@ const Hero = ({ backgroundImage: propBackgroundImage = null, patternImage: propP
     const { ceremonies: accessibleCeremonies } = useGuest();
     const [cmsContent, setCmsContent] = useState(null);
 
-    // Wedding date - July 4, 2026
-    const weddingDate = new Date('May 9, 2026 14:00:00').getTime();
+    // Wedding date from centralized config
+    const weddingDate = COUNTDOWN_DATE.getTime();
 
     // Load CMS content on mount
     useEffect(() => {
@@ -116,7 +118,9 @@ const Hero = ({ backgroundImage: propBackgroundImage = null, patternImage: propP
                     setCmsContent(data.content.hero);
                 }
             } catch (error) {
-                console.error('Failed to load CMS content, using defaults:', error);
+                if (process.env.NODE_ENV === 'development') {
+                    console.error('Failed to load CMS content, using defaults:', error);
+                }
             }
         };
         loadContent();
@@ -243,6 +247,16 @@ const Hero = ({ backgroundImage: propBackgroundImage = null, patternImage: propP
             )}
         </section>
     );
+};
+
+Hero.propTypes = {
+    backgroundImage: PropTypes.string,
+    patternImage: PropTypes.string
+};
+
+Hero.defaultProps = {
+    backgroundImage: null,
+    patternImage: '/images/floral-pattern.svg'
 };
 
 export default Hero;

@@ -303,7 +303,16 @@
     "note": {
       "title": "A Note About Gifts",
       "description": "We're truly honored that you will be celebrating our special day with us. Your presence is what matters most, and we're grateful for your love and support. If you'd like to give a gift, we hope our registry provides some helpful guidance."
-    }
+    },
+    "fullyFunded": "Fully Funded",
+    "goal": "Goal",
+    "contributed": "Contributed",
+    "funded": "funded",
+    "remaining": "Remaining",
+    "contribution": "contribution",
+    "contributions": "contributions",
+    "viewProduct": "View Product",
+    "contribute": "Contribute"
   },
   "gallery": {
     "title": "Photo Gallery",

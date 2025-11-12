@@ -1,8 +1,7 @@
 // src/components/admin/AdminLogin.js
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:3001/api';
+import { ENDPOINTS, buildApiUrl, API_CONFIG } from '../../config/api';
 
 const AdminLogin = () => {
     const [password, setPassword] = useState('');
@@ -17,11 +16,9 @@ const AdminLogin = () => {
 
         try {
             // Call backend authentication endpoint
-            const response = await fetch(`${API_URL}/admin/login`, {
+            const response = await fetch(buildApiUrl(ENDPOINTS.adminLogin), {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
+                headers: API_CONFIG.headers,
                 body: JSON.stringify({ password }),
             });
 
@@ -37,7 +34,9 @@ const AdminLogin = () => {
                 setPassword('');
             }
         } catch (err) {
-            console.error('Login error:', err);
+            if (process.env.NODE_ENV === 'development') {
+                console.error('Login error:', err);
+            }
             setError('Failed to connect to server. Please try again.');
             setPassword('');
         } finally {
@@ -71,7 +70,7 @@ const AdminLogin = () => {
                     </div>
 
                     {error && (
-                        <div className="text-red-500 text-sm">{error}</div>
+                        <div role="alert" aria-live="polite" className="text-red-500 text-sm">{error}</div>
                     )}
 
                     <div>
