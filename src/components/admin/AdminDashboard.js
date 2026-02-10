@@ -1,189 +1,34 @@
 // src/components/admin/AdminDashboard.js
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { QRCodeCanvas } from 'qrcode.react';
-import { mdiPlus, mdiContentSave, mdiTrashCan, mdiCross, mdiTempleHindu, mdiPencil, mdiQrcode, mdiAccountMultiple, mdiGift, mdiFileEdit } from '@mdi/js';
+import { mdiCross, mdiTempleHindu, mdiQrcode, mdiAccountMultiple, mdiGift, mdiFileEdit } from '@mdi/js';
 import Icon from '@mdi/react';
-import { fetchAllGuests, saveGuest, deleteGuest, generateGuestCode } from '../../api/guestApi';
-import ConfirmDialog from '../common/ConfirmDialog';
 import GiftsManager from './GiftsManager';
 import PageContentEditor from './PageContentEditor';
-import { MOBILE_BREAKPOINT, QR_CODE_SIZE, QR_CODE_ERROR_CORRECTION_LEVEL, QR_CODE_MARGIN } from '../../constants';
+import { QR_CODE_SIZE, QR_CODE_ERROR_CORRECTION_LEVEL, QR_CODE_MARGIN } from '../../constants';
 
 const AdminDashboard = () => {
-    const [activeTab, setActiveTab] = useState('guestList');
-    const [guestList, setGuestList] = useState({});
+    const [activeTab, setActiveTab] = useState('codes');
     const [selectedGuest, setSelectedGuest] = useState('');
-    const [isEditing, setIsEditing] = useState(false);
-    const [editingGuest, setEditingGuest] = useState(null);
-    const [isLoading, setIsLoading] = useState(true);
-    const [isSaving, setIsSaving] = useState(false);
     const [error, setError] = useState(null);
-    const [deleteConfirm, setDeleteConfirm] = useState({ isOpen: false, guestCode: null, guestName: '' });
     const [selectedPage, setSelectedPage] = useState('christian-ceremony');
 
-    // Form state for adding/editing guests
-    const [formData, setFormData] = useState({
-        name: '',
-        christianAccess: false,
-        hinduAccess: false
-    });
-
-    // Load guest list from API on component mount
-    useEffect(() => {
-        const loadGuests = async () => {
-            setIsLoading(true);
-            setError(null);
-            try {
-                const guests = await fetchAllGuests();
-                setGuestList(guests);
-            } catch (error) {
-                if (process.env.NODE_ENV === 'development') {
-                    console.error('Error loading guests:', error);
-                }
-                setError('Failed to load guest list. Please check your connection and try again.');
-            } finally {
-                setIsLoading(false);
-            }
-        };
-
-        loadGuests();
-    }, []);
-
-    // Handle form input changes
-    const handleInputChange = (e) => {
-        const { name, value, type, checked } = e.target;
-        setFormData({
-            ...formData,
-            [name]: type === 'checkbox' ? checked : value
-        });
-    };
-
-    // Handle form submission
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-
-        if (!formData.name.trim()) {
-            setError('Please enter a guest name');
-            return;
-        }
-
-        // Create ceremonies array based on checkboxes
-        const ceremonies = [];
-        if (formData.christianAccess) ceremonies.push('christian');
-        if (formData.hinduAccess) ceremonies.push('hindu');
-
-        if (ceremonies.length === 0) {
-            setError('Please select at least one ceremony');
-            return;
-        }
-
-        setIsSaving(true);
-        setError(null);
-
-        try {
-            if (isEditing && editingGuest) {
-                // Update existing guest
-                const guestData = {
-                    name: formData.name,
-                    ceremonies
-                };
-
-                await saveGuest(editingGuest, guestData);
-
-                // Update local state
-                setGuestList(prev => ({
-                    ...prev,
-                    [editingGuest]: guestData
-                }));
-
-                resetForm();
-            } else {
-                // Add new guest - generate code
-                const guestCode = await generateGuestCode(formData.name);
-
-                const guestData = {
-                    name: formData.name,
-                    ceremonies
-                };
-
-                await saveGuest(guestCode, guestData);
-
-                // Update local state
-                setGuestList(prev => ({
-                    ...prev,
-                    [guestCode]: guestData
-                }));
-
-                resetForm();
-            }
-        } catch (error) {
-            if (process.env.NODE_ENV === 'development') {
-                console.error('Error saving guest:', error);
-            }
-            setError('Failed to save guest. Please try again.');
-        } finally {
-            setIsSaving(false);
-        }
-    };
-
-    // Reset form and editing state
-    const resetForm = () => {
-        setFormData({
-            name: '',
-            christianAccess: false,
-            hinduAccess: false
-        });
-        setIsEditing(false);
-        setEditingGuest(null);
-    };
-
-    // Edit guest
-    const handleEditGuest = (code) => {
-        const guest = guestList[code];
-        setFormData({
-            name: guest.name,
-            christianAccess: guest.ceremonies.includes('christian'),
-            hinduAccess: guest.ceremonies.includes('hindu')
-        });
-        setIsEditing(true);
-        setEditingGuest(code);
-
-        // On mobile, scroll to the form when editing
-        if (window.innerWidth < MOBILE_BREAKPOINT) {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-    };
-
-    // Delete guest - shows confirmation dialog
-    const handleDeleteGuest = (code) => {
-        setDeleteConfirm({
-            isOpen: true,
-            guestCode: code,
-            guestName: guestList[code].name
-        });
-    };
-
-    // Confirm delete guest
-    const confirmDeleteGuest = async () => {
-        const { guestCode } = deleteConfirm;
-
-        try {
-            await deleteGuest(guestCode);
-
-            // Update local state
-            const updatedGuestList = { ...guestList };
-            delete updatedGuestList[guestCode];
-            setGuestList(updatedGuestList);
-
-            // If we're deleting the guest we're currently editing, reset the form
-            if (editingGuest === guestCode) {
-                resetForm();
-            }
-        } catch (error) {
-            if (process.env.NODE_ENV === 'development') {
-                console.error('Error deleting guest:', error);
-            }
-            setError('Failed to delete guest. Please try again.');
+    // Fixed invitation codes for ceremony access
+    const INVITATION_CODES = {
+        'HINDU': {
+            name: 'Hindu Ceremony Guest',
+            ceremonies: ['hindu'],
+            description: 'Grants access to Hindu ceremony only'
+        },
+        'CHRISTIAN': {
+            name: 'Christian Ceremony Guest',
+            ceremonies: ['christian'],
+            description: 'Grants access to Christian ceremony only'
+        },
+        'ALL': {
+            name: 'All Ceremonies Guest',
+            ceremonies: ['christian', 'hindu'],
+            description: 'Grants access to both Hindu and Christian ceremonies'
         }
     };
 
@@ -192,20 +37,6 @@ const AdminDashboard = () => {
         // Use window.location.origin to get the base URL of the current site
         return `${window.location.origin}?code=${code}`;
     };
-
-    // Show loading state
-    if (isLoading) {
-        return (
-            <div className="container mx-auto pt-24 pb-12 px-4 text-center">
-                <h1 className="text-2xl md:text-3xl font-bold mb-6">Wedding Admin Dashboard</h1>
-                <div className="flex justify-center items-center h-64">
-                    <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-christian-accent" aria-hidden="true"></div>
-                    <span className="sr-only">Loading</span>
-                </div>
-                <p className="text-gray-600">Loading guest list...</p>
-            </div>
-        );
-    }
 
     return (
         <div className="container mx-auto pt-24 pb-12 px-4">
@@ -220,11 +51,11 @@ const AdminDashboard = () => {
             {/* Tabs - Improved mobile design */}
             <div className="flex justify-center md:justify-start border-b mb-6 overflow-x-auto">
                 <button
-                    className={`py-2 px-4 flex items-center whitespace-nowrap ${activeTab === 'guestList' ? 'border-b-2 border-christian-accent font-bold' : ''}`}
-                    onClick={() => setActiveTab('guestList')}
+                    className={`py-2 px-4 flex items-center whitespace-nowrap ${activeTab === 'codes' ? 'border-b-2 border-christian-accent font-bold' : ''}`}
+                    onClick={() => setActiveTab('codes')}
                 >
                     <Icon path={mdiAccountMultiple} size={0.8} className="mr-1 hidden sm:inline" />
-                    Guest List
+                    Invitation Codes
                 </button>
                 <button
                     className={`py-2 px-4 flex items-center whitespace-nowrap ${activeTab === 'gifts' ? 'border-b-2 border-christian-accent font-bold' : ''}`}
@@ -249,183 +80,112 @@ const AdminDashboard = () => {
                 </button>
             </div>
 
-            {/* Guest List Management - Mobile optimized */}
-            {activeTab === 'guestList' && (
-                <div className="space-y-8 md:grid md:grid-cols-2 md:gap-8 md:space-y-0">
-                    {/* Add/Edit Guest Form */}
-                    <div className="bg-white p-4 md:p-6 rounded-lg shadow-md">
-                        <h2 className="text-xl font-bold mb-4">
-                            {isEditing ? 'Edit Guest' : 'Add New Guest'}
-                        </h2>
-                        <form onSubmit={handleSubmit}>
-                            <div className="mb-4">
-                                <label className="block text-gray-700 mb-2" htmlFor="name">
-                                    Guest Name
-                                </label>
-                                <input
-                                    type="text"
-                                    id="name"
-                                    name="name"
-                                    value={formData.name}
-                                    onChange={handleInputChange}
-                                    className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-christian-accent"
-                                    placeholder="Enter guest name"
-                                    required
-                                    disabled={isSaving}
-                                />
-                            </div>
+            {/* Invitation Codes Display */}
+            {activeTab === 'codes' && (
+                <div className="bg-white p-6 rounded-lg shadow-md max-w-4xl mx-auto">
+                    <h2 className="text-2xl font-bold mb-4">Invitation Codes</h2>
+                    <p className="text-gray-600 mb-6">
+                        Share these codes with guests via email, WhatsApp, or printed invitations. Each code grants access to specific ceremonies.
+                    </p>
 
-                            <div className="mb-6">
-                                <p className="block text-gray-700 mb-2">Ceremonies Access</p>
-                                <div className="flex flex-col space-y-3">
-                                    <label className="inline-flex items-center">
-                                        <input
-                                            type="checkbox"
-                                            name="christianAccess"
-                                            checked={formData.christianAccess}
-                                            onChange={handleInputChange}
-                                            className="form-checkbox h-5 w-5 text-christian-accent"
-                                            disabled={isSaving}
-                                        />
-                                        <span className="ml-2 flex items-center text-base">
-                                            <Icon path={mdiCross} size={0.8} className="mr-1 text-christian-accent" />
-                                            Christian Ceremony
-                                        </span>
-                                    </label>
-                                    <label className="inline-flex items-center">
-                                        <input
-                                            type="checkbox"
-                                            name="hinduAccess"
-                                            checked={formData.hinduAccess}
-                                            onChange={handleInputChange}
-                                            className="form-checkbox h-5 w-5 text-hindu-secondary"
-                                            disabled={isSaving}
-                                        />
-                                        <span className="ml-2 flex items-center text-base">
-                                            <Icon path={mdiTempleHindu} size={0.8} className="mr-1 text-hindu-secondary" />
-                                            Hindu Ceremony
-                                        </span>
-                                    </label>
+                    <div className="space-y-6">
+                        {/* HINDU Code Card */}
+                        <div className="border-l-4 border-hindu-secondary p-6 bg-orange-50 rounded-r-lg">
+                            <div className="flex items-start justify-between flex-wrap gap-4">
+                                <div className="flex-grow">
+                                    <div className="flex items-center mb-2">
+                                        <Icon path={mdiTempleHindu} size={1.2} className="mr-2 text-hindu-secondary" />
+                                        <h3 className="text-xl font-bold text-gray-900">HINDU</h3>
+                                    </div>
+                                    <p className="text-gray-700 mb-3">{INVITATION_CODES.HINDU.description}</p>
+                                    <div className="bg-white p-3 rounded-lg border border-orange-200 inline-block">
+                                        <code className="text-sm text-gray-800 font-mono">
+                                            {window.location.origin}?code=HINDU
+                                        </code>
+                                    </div>
                                 </div>
-                            </div>
-
-                            <div className="flex flex-wrap gap-3">
                                 <button
-                                    type="submit"
-                                    className="px-4 py-3 bg-gradient-to-r from-christian-accent to-hindu-secondary text-white rounded-md hover:opacity-90 flex items-center"
-                                    disabled={isSaving}
+                                    onClick={() => {
+                                        navigator.clipboard.writeText(`${window.location.origin}?code=HINDU`)
+                                            .then(() => alert('Link copied to clipboard!'))
+                                            .catch(() => setError('Failed to copy link'));
+                                    }}
+                                    className="px-4 py-2 bg-hindu-secondary text-white rounded-lg hover:opacity-90 transition-opacity whitespace-nowrap"
                                 >
-                                    {isSaving ? (
-                                        <>
-                                            <div className="animate-spin h-4 w-4 mr-2 border-2 border-white border-t-transparent rounded-full"></div>
-                                            {isEditing ? 'Updating...' : 'Adding...'}
-                                        </>
-                                    ) : (
-                                        <>
-                                            <Icon path={isEditing ? mdiContentSave : mdiPlus} size={0.8} className="mr-1" />
-                                            {isEditing ? 'Update Guest' : 'Add Guest'}
-                                        </>
-                                    )}
+                                    Copy Link
                                 </button>
-
-                                {isEditing && (
-                                    <button
-                                        type="button"
-                                        onClick={resetForm}
-                                        className="px-4 py-3 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300"
-                                        disabled={isSaving}
-                                    >
-                                        Cancel
-                                    </button>
-                                )}
                             </div>
-                        </form>
+                        </div>
+
+                        {/* CHRISTIAN Code Card */}
+                        <div className="border-l-4 border-christian-accent p-6 bg-blue-50 rounded-r-lg">
+                            <div className="flex items-start justify-between flex-wrap gap-4">
+                                <div className="flex-grow">
+                                    <div className="flex items-center mb-2">
+                                        <Icon path={mdiCross} size={1.2} className="mr-2 text-christian-accent" />
+                                        <h3 className="text-xl font-bold text-gray-900">CHRISTIAN</h3>
+                                    </div>
+                                    <p className="text-gray-700 mb-3">{INVITATION_CODES.CHRISTIAN.description}</p>
+                                    <div className="bg-white p-3 rounded-lg border border-blue-200 inline-block">
+                                        <code className="text-sm text-gray-800 font-mono">
+                                            {window.location.origin}?code=CHRISTIAN
+                                        </code>
+                                    </div>
+                                </div>
+                                <button
+                                    onClick={() => {
+                                        navigator.clipboard.writeText(`${window.location.origin}?code=CHRISTIAN`)
+                                            .then(() => alert('Link copied to clipboard!'))
+                                            .catch(() => setError('Failed to copy link'));
+                                    }}
+                                    className="px-4 py-2 bg-christian-accent text-white rounded-lg hover:opacity-90 transition-opacity whitespace-nowrap"
+                                >
+                                    Copy Link
+                                </button>
+                            </div>
+                        </div>
+
+                        {/* ALL Code Card */}
+                        <div className="border-l-4 border-wedding-love p-6 bg-purple-50 rounded-r-lg">
+                            <div className="flex items-start justify-between flex-wrap gap-4">
+                                <div className="flex-grow">
+                                    <div className="flex items-center mb-2">
+                                        <Icon path={mdiAccountMultiple} size={1.2} className="mr-2 text-wedding-love" />
+                                        <h3 className="text-xl font-bold text-gray-900">ALL</h3>
+                                    </div>
+                                    <p className="text-gray-700 mb-3">{INVITATION_CODES.ALL.description}</p>
+                                    <div className="bg-white p-3 rounded-lg border border-purple-200 inline-block">
+                                        <code className="text-sm text-gray-800 font-mono">
+                                            {window.location.origin}?code=ALL
+                                        </code>
+                                    </div>
+                                </div>
+                                <button
+                                    onClick={() => {
+                                        navigator.clipboard.writeText(`${window.location.origin}?code=ALL`)
+                                            .then(() => alert('Link copied to clipboard!'))
+                                            .catch(() => setError('Failed to copy link'));
+                                    }}
+                                    className="px-4 py-2 bg-wedding-love text-white rounded-lg hover:opacity-90 transition-opacity whitespace-nowrap"
+                                >
+                                    Copy Link
+                                </button>
+                            </div>
+                        </div>
                     </div>
 
-                    {/* Guest List - Mobile optimized */}
-                    <div>
-                        <h2 className="text-xl font-bold mb-4">Guest List</h2>
-
-                        {Object.keys(guestList).length === 0 ? (
-                            <div className="bg-white p-6 rounded-lg shadow-md text-center text-gray-500">
-                                No guests added yet. Add your first guest using the form.
-                            </div>
-                        ) : (
-                            <div className="bg-white rounded-lg shadow-md overflow-hidden">
-                                <div className="w-full">
-                                    <table className="w-full table-fixed divide-y divide-gray-200">
-                                        <thead className="bg-gray-50">
-                                        <tr>
-                                            <th className="w-2/5 px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                Name
-                                            </th>
-                                            <th className="w-1/5 px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                Code
-                                            </th>
-                                            <th className="w-1/5 px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                Access
-                                            </th>
-                                            <th className="w-1/5 px-2 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                                Actions
-                                            </th>
-                                        </tr>
-                                        </thead>
-                                        <tbody className="bg-white divide-y divide-gray-200">
-                                        {Object.entries(guestList).map(([code, guest]) => (
-                                            <tr key={code} className="hover:bg-gray-50">
-                                                <td className="px-3 py-3 text-sm">
-                                                    <div className="font-medium text-gray-900 truncate">
-                                                        {guest.name}
-                                                    </div>
-                                                </td>
-                                                <td className="px-3 py-3 text-sm">
-                                                    <div className="text-gray-900 font-mono truncate">{code}</div>
-                                                </td>
-                                                <td className="px-3 py-3">
-                                                    <div className="flex flex-wrap gap-1">
-                                                        {guest.ceremonies.includes('christian') && (
-                                                            <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                                                                <Icon path={mdiCross} size={0.5} className="mr-1" />
-                                                                <span className="hidden sm:inline">Christian</span>
-                                                                <span className="sm:hidden">C</span>
-                                                            </span>
-                                                        )}
-                                                        {guest.ceremonies.includes('hindu') && (
-                                                            <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-orange-100 text-orange-800">
-                                                                <Icon path={mdiTempleHindu} size={0.5} className="mr-1" />
-                                                                <span className="hidden sm:inline">Hindu</span>
-                                                                <span className="sm:hidden">H</span>
-                                                            </span>
-                                                        )}
-                                                    </div>
-                                                </td>
-                                                <td className="px-2 py-3 text-right">
-                                                    <div className="flex justify-end gap-3">
-                                                        <button
-                                                            onClick={() => handleEditGuest(code)}
-                                                            className="text-indigo-600 hover:text-indigo-900 p-1"
-                                                            aria-label={`Edit guest ${guest.name}`}
-                                                            title="Edit Guest"
-                                                        >
-                                                            <Icon path={mdiPencil} size={0.9} />
-                                                        </button>
-                                                        <button
-                                                            onClick={() => handleDeleteGuest(code)}
-                                                            className="text-red-600 hover:text-red-900 p-1"
-                                                            aria-label={`Delete guest ${guest.name}`}
-                                                            title="Delete Guest"
-                                                        >
-                                                            <Icon path={mdiTrashCan} size={0.9} />
-                                                        </button>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        ))}
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        )}
+                    {/* Important Notes */}
+                    <div className="mt-8 p-6 bg-gray-50 rounded-lg border border-gray-200">
+                        <h4 className="font-semibold text-lg mb-3 flex items-center">
+                            <Icon path={mdiFileEdit} size={0.9} className="mr-2" />
+                            Important Notes
+                        </h4>
+                        <ul className="list-disc list-inside text-gray-700 space-y-2">
+                            <li>Reception is fully public - no code required</li>
+                            <li>Codes are case-insensitive (HINDU = hindu = Hindu)</li>
+                            <li>Share links directly or generate QR codes in the QR Codes tab</li>
+                            <li>Each guest only needs one code - choose based on which ceremony they're invited to</li>
+                        </ul>
                     </div>
                 </div>
             )}
@@ -469,18 +229,16 @@ const AdminDashboard = () => {
                     <h2 className="text-xl font-bold mb-6 text-center">QR Code Generator</h2>
 
                     <div className="mb-6">
-                        <label className="block mb-2 font-medium">Select Guest:</label>
+                        <label className="block mb-2 font-medium">Select Invitation Type:</label>
                         <select
                             value={selectedGuest}
                             onChange={(e) => setSelectedGuest(e.target.value)}
                             className="w-full p-3 border border-gray-300 rounded-lg text-base"
                         >
-                            <option value="">-- Select a guest --</option>
-                            {Object.entries(guestList).map(([code, guest]) => (
-                                <option key={code} value={code}>
-                                    {guest.name} - {code}
-                                </option>
-                            ))}
+                            <option value="">-- Select invitation type --</option>
+                            <option value="HINDU">Hindu Ceremony Only</option>
+                            <option value="CHRISTIAN">Christian Ceremony Only</option>
+                            <option value="ALL">All Ceremonies</option>
                         </select>
                     </div>
 
@@ -498,8 +256,12 @@ const AdminDashboard = () => {
                             </div>
 
                             <div className="space-y-4">
-                                <p className="mb-2 text-base">Invitation Code: <strong>{selectedGuest}</strong></p>
-                                <p className="mb-2 text-base">Guest: <strong>{guestList[selectedGuest].name}</strong></p>
+                                <p className="mb-2 text-base"><strong>Code:</strong> {selectedGuest}</p>
+                                <p className="mb-2 text-sm text-gray-600">
+                                    {selectedGuest === 'HINDU' && 'Hindu ceremony access'}
+                                    {selectedGuest === 'CHRISTIAN' && 'Christian ceremony access'}
+                                    {selectedGuest === 'ALL' && 'All ceremonies access'}
+                                </p>
 
                                 {/* Direct invitation link section */}
                                 <div className="mt-4 p-4 bg-gray-50 rounded-lg text-left">
@@ -577,17 +339,6 @@ const AdminDashboard = () => {
                     )}
                 </div>
             )}
-
-            {/* Confirmation Dialog for Deleting Guests */}
-            <ConfirmDialog
-                isOpen={deleteConfirm.isOpen}
-                onClose={() => setDeleteConfirm({ isOpen: false, guestCode: null, guestName: '' })}
-                onConfirm={confirmDeleteGuest}
-                title="Delete Guest"
-                message={`Are you sure you want to delete ${deleteConfirm.guestName}? This action cannot be undone.`}
-                confirmText="Delete"
-                cancelText="Cancel"
-            />
         </div>
     );
 };

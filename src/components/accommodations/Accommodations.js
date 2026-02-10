@@ -2,7 +2,7 @@
 // Created for wedding guests coming from foreign countries who need accommodations
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { mdiMapMarker, mdiBed, mdiCurrencyEur, mdiStar, mdiWifi, mdiFridge, mdiParking, mdiCar } from '@mdi/js';
+import { mdiMapMarker, mdiBed, mdiCurrencyEur, mdiStar, mdiWifi, mdiFridge, mdiParking, mdiCar, mdiSnowflake, mdiClockOutline, mdiSpa, mdiWeightLifter , mdiFoodForkDrink } from '@mdi/js';
 import Icon from '@mdi/react';
 import { useTranslation } from 'react-i18next';
 import AnimatedSection from '../common/AnimatedSection';
@@ -13,124 +13,314 @@ const Accommodations = () => {
     const [venueFilter, setVenueFilter] = useState('all'); // 'all', 'christian', 'hindu'
     const [priceFilter, setPriceFilter] = useState('all'); // 'all', 'budget', 'mid', 'luxury'
 
-    // Define accommodations data
+    // Define accommodations data from hotels_hochzeit.csv
     const accommodations = [
+        // Budget Category (Günstig)
         {
             id: 1,
-            name: 'Hotel Schwanen Lachen',
-            description: 'This elegant hotel is just a short walk from the Christian ceremony venue, offering beautiful lake views and comfortable rooms.',
-            address: 'Seestrasse 8, 8853 Lachen',
-            priceRange: 'mid', // budget, mid, luxury
-            priceIndicator: '$$',
-            stars: 4,
-            amenities: ['wifi', 'parking', 'breakfast'],
-            imageUrl: '/images/placeholder.jpg',
-            bookingUrl: 'https://www.hotel-schwanen.ch',
-            nearChristian: true,
-            nearHindu: false,
-            distanceChristian: '400m (5 min walk)',
-            distanceHindu: '38km (40 min drive)',
-            coordinates: {
-                lat: 47.194237,
-                lng: 8.852632
-            }
-        },
-        {
-            id: 2,
-            name: 'Gasthof Rössli',
-            description: 'A family-run guesthouse with cozy rooms and authentic Swiss ambiance, convenient to the Christian ceremony.',
-            address: 'Seestrasse 38, 8853 Lachen',
+            name: 'Hotel Tivoli',
+            description: 'Neu renoviertes Mittelklassehotel in Schlieren, ideal für Geschäfts- und Privatreisende. Persönlich geführt mit 60 Zimmern.',
+            address: 'Zürcherstrasse 26, 8952 Schlieren',
             priceRange: 'budget',
             priceIndicator: '$',
             stars: 3,
-            amenities: ['wifi', 'parking', 'breakfast'],
+            amenities: ['wifi', 'parking', 'breakfast', 'bar', '24h'],
             imageUrl: '/images/placeholder.jpg',
-            bookingUrl: 'https://www.gasthof-roessli.ch',
-            nearChristian: true,
+            bookingUrl: '#',
+            nearChristian: false,
             nearHindu: false,
-            distanceChristian: '600m (8 min walk)',
-            distanceHindu: '38km (40 min drive)',
-            coordinates: {
-                lat: 47.195612,
-                lng: 8.853744
-            }
+            distanceChristian: '25 km',
+            distanceHindu: '30 km',
+            distanceReception: '1 km',
+            distanceCoupleHome: '35 km',
+            coordinates: { lat: 47.3969, lng: 8.4486 }
+        },
+        {
+            id: 2,
+            name: 'ibis Zürich City-West',
+            description: 'Modernes Budget-Hotel nahe Technopark, 10 Min. nach Schlieren. Klimatisierte Zimmer mit 24h-Bar.',
+            address: 'Schiffbaustrasse 11, 8005 Zürich',
+            priceRange: 'budget',
+            priceIndicator: '$',
+            stars: 3,
+            amenities: ['wifi', 'parking', 'breakfast', 'restaurant', 'bar', 'ac', '24h'],
+            imageUrl: '/images/placeholder.jpg',
+            bookingUrl: '#',
+            nearChristian: false,
+            nearHindu: false,
+            distanceChristian: '22 km',
+            distanceHindu: '27 km',
+            distanceReception: '8 km',
+            distanceCoupleHome: '30 km',
+            coordinates: { lat: 47.3871, lng: 8.5285 }
         },
         {
             id: 3,
-            name: 'Sorell Hotel Merian',
-            description: 'Located in Olten, offering easy access to the Hindu ceremony venue with comfortable accommodations.',
-            address: 'Bahnhofquai 3, 4600 Olten',
-            priceRange: 'mid',
-            priceIndicator: '$$',
-            stars: 3,
-            amenities: ['wifi', 'parking', 'breakfast', 'restaurant'],
+            name: 'easy Hotel Zürich',
+            description: 'Zentral gelegenes Budget-Hotel mit einfachen, komfortablen Zimmern. Viele Restaurants in der Nähe.',
+            address: 'Leonhardstrasse 2, 8001 Zürich',
+            priceRange: 'budget',
+            priceIndicator: '$',
+            stars: 2,
+            amenities: ['wifi', '24h'],
             imageUrl: '/images/placeholder.jpg',
-            bookingUrl: 'https://www.sorellhotels.com/en/merian',
+            bookingUrl: '#',
             nearChristian: false,
-            nearHindu: true,
-            distanceChristian: '90km (1 hour drive)',
-            distanceHindu: '5km (10 min drive)',
-            coordinates: {
-                lat: 47.349759,
-                lng: 7.903748
-            }
+            nearHindu: false,
+            distanceChristian: '24 km',
+            distanceHindu: '29 km',
+            distanceReception: '10 km',
+            distanceCoupleHome: '32 km',
+            coordinates: { lat: 47.3769, lng: 8.5417 }
         },
         {
             id: 4,
-            name: 'Hotel Arte Olten',
-            description: 'Modern hotel with contemporary design close to the Hindu venue, offering comfort and convenience.',
-            address: 'Riggenbachstrasse 10, 4600 Olten',
-            priceRange: 'luxury',
-            priceIndicator: '$$$',
-            stars: 4,
-            amenities: ['wifi', 'parking', 'breakfast', 'restaurant', 'spa'],
+            name: 'Jugendherberge Rapperswil-Jona',
+            description: 'Moderne Jugendherberge mit Einzel- bis Mehrbettzimmern, Garten und Terrasse. 5 Min. von Altendorf.',
+            address: 'Seegubel 5, 8640 Rapperswil',
+            priceRange: 'budget',
+            priceIndicator: '$',
+            stars: 2,
+            amenities: ['wifi', 'parking', 'breakfast', 'restaurant', '24h'],
             imageUrl: '/images/placeholder.jpg',
-            bookingUrl: 'https://www.hotelarte.ch',
-            nearChristian: false,
-            nearHindu: true,
-            distanceChristian: '90km (1 hour drive)',
-            distanceHindu: '4km (8 min drive)',
-            coordinates: {
-                lat: 47.347112,
-                lng: 7.907845
-            }
+            bookingUrl: '#',
+            nearChristian: true,
+            nearHindu: false,
+            distanceChristian: '5 km',
+            distanceHindu: '10 km',
+            distanceReception: '33 km',
+            distanceCoupleHome: '1 km',
+            coordinates: { lat: 47.2269, lng: 8.8184 }
         },
         {
             id: 5,
-            name: 'Holiday Inn Zürich',
-            description: 'Located in Zürich, this hotel offers a convenient midpoint between both ceremony venues with excellent transportation options.',
-            address: 'Flughofstrasse 75, 8152 Glattbrugg, Zürich',
-            priceRange: 'mid',
-            priceIndicator: '$$',
-            stars: 4,
-            amenities: ['wifi', 'parking', 'breakfast', 'restaurant', 'shuttle'],
+            name: 'Hotel Neufeld',
+            description: 'Hotel in Zürich-Wiedikon, 10 Min. mit Tram ins Zentrum. Restaurant mit Terrasse, gutes Frühstücksbuffet.',
+            address: 'Friesenbergstrasse 15, 8055 Zürich',
+            priceRange: 'budget',
+            priceIndicator: '$',
+            stars: 3,
+            amenities: ['wifi', 'parking', 'breakfast', 'restaurant', '24h'],
             imageUrl: '/images/placeholder.jpg',
-            bookingUrl: 'https://www.ihg.com/holidayinn/hotels/us/en/zurich/zrhga/hoteldetail',
-            nearChristian: true,
-            nearHindu: true,
-            distanceChristian: '40km (30 min drive)',
-            distanceHindu: '60km (45 min drive)',
-            coordinates: {
-                lat: 47.434471,
-                lng: 8.560483
-            }
+            bookingUrl: '#',
+            nearChristian: false,
+            nearHindu: false,
+            distanceChristian: '26 km',
+            distanceHindu: '31 km',
+            distanceReception: '12 km',
+            distanceCoupleHome: '34 km',
+            coordinates: { lat: 47.3688, lng: 8.5075 }
         },
         {
             id: 6,
-            name: 'Airbnb Options',
-            description: 'For guests who prefer a homelier stay or are traveling with family, we recommend checking Airbnb options in Lachen or Seegräben areas.',
-            address: 'Various locations',
-            priceRange: 'all', // covers all price ranges
-            priceIndicator: '$-$$$',
-            stars: null,
-            amenities: ['variable'],
+            name: 'ibis Zürich-Adliswil',
+            description: 'Modernes Budget-Hotel mit Grillrestaurant, 30 Min. von Zürich. Gute Autobahnanbindung.',
+            address: 'Soodstrasse 55b, 8134 Adliswil',
+            priceRange: 'budget',
+            priceIndicator: '$',
+            stars: 3,
+            amenities: ['wifi', 'parking', 'breakfast', 'restaurant', '24h'],
             imageUrl: '/images/placeholder.jpg',
-            bookingUrl: 'https://www.airbnb.com',
+            bookingUrl: '#',
+            nearChristian: false,
+            nearHindu: false,
+            distanceChristian: '23 km',
+            distanceHindu: '28 km',
+            distanceReception: '15 km',
+            distanceCoupleHome: '28 km',
+            coordinates: { lat: 47.3113, lng: 8.5246 }
+        },
+        {
+            id: 7,
+            name: 'Hotel Kronenhof',
+            description: 'Boutique-Hotel im 60er-Jahre Stil in Zürich-Nord. Liebevoll eingerichtet, charmant.',
+            address: 'Wehntalerstrasse 551, 8046 Zürich',
+            priceRange: 'budget',
+            priceIndicator: '$',
+            stars: 3,
+            amenities: ['wifi', 'parking', 'breakfast', '24h'],
+            imageUrl: '/images/placeholder.jpg',
+            bookingUrl: '#',
+            nearChristian: false,
+            nearHindu: false,
+            distanceChristian: '30 km',
+            distanceHindu: '35 km',
+            distanceReception: '14 km',
+            distanceCoupleHome: '38 km',
+            coordinates: { lat: 47.4244, lng: 8.4979 }
+        },
+        {
+            id: 8,
+            name: 'Hotel Olympia',
+            description: 'Einfaches Budget-Hotel, 3 km von Bahnhofstrasse. Stadtblick, 24h-Rezeption.',
+            address: 'Badenerstrasse 324, 8004 Zürich',
+            priceRange: 'budget',
+            priceIndicator: '$',
+            stars: 2,
+            amenities: ['wifi', '24h'],
+            imageUrl: '/images/placeholder.jpg',
+            bookingUrl: '#',
+            nearChristian: false,
+            nearHindu: false,
+            distanceChristian: '24 km',
+            distanceHindu: '29 km',
+            distanceReception: '11 km',
+            distanceCoupleHome: '32 km',
+            coordinates: { lat: 47.3787, lng: 8.5123 }
+        },
+
+        // Mid-range Category (Mittel)
+        {
+            id: 9,
+            name: 'Hotel Restaurant Schiff',
+            description: 'Am Zürichsee mit 30 individuell gestalteten Zimmern. Bekannte Fischküche, Seerosenbar, Hüsler Nest Betten.',
+            address: 'Seedammstrasse 23, 8808 Pfäffikon',
+            priceRange: 'mid',
+            priceIndicator: '$$',
+            stars: 3,
+            amenities: ['wifi', 'parking', 'breakfast', 'restaurant', 'bar', '24h'],
+            imageUrl: '/images/placeholder.jpg',
+            bookingUrl: '#',
             nearChristian: true,
             nearHindu: true,
-            distanceChristian: 'Varies',
-            distanceHindu: 'Varies',
-            coordinates: null
+            distanceChristian: '6 km',
+            distanceHindu: '9 km',
+            distanceReception: '32 km',
+            distanceCoupleHome: '6 km',
+            coordinates: { lat: 47.2011, lng: 8.7797 }
+        },
+        {
+            id: 10,
+            name: 'Sorell Hotel Speer',
+            description: 'Im historischen Zentrum von Rapperswil, 5 Min. von Altendorf. Asiatisches Restaurant, Wellness mit Sauna.',
+            address: 'Untere Bahnhofstrasse 5, 8640 Rapperswil',
+            priceRange: 'mid',
+            priceIndicator: '$$',
+            stars: 4,
+            amenities: ['wifi', 'parking', 'breakfast', 'restaurant', 'sauna', '24h'],
+            imageUrl: '/images/placeholder.jpg',
+            bookingUrl: '#',
+            nearChristian: true,
+            nearHindu: false,
+            distanceChristian: '5 km',
+            distanceHindu: '10 km',
+            distanceReception: '33 km',
+            distanceCoupleHome: '0.5 km',
+            coordinates: { lat: 47.2269, lng: 8.8184 }
+        },
+        {
+            id: 11,
+            name: 'Hotel Garni Seehof',
+            description: 'Direkt in Altendorf zwischen See und Bergen. Familiär geführt, perfekt für christliche Zeremonie.',
+            address: 'Churerstr. 64, 8852 Altendorf',
+            priceRange: 'mid',
+            priceIndicator: '$$',
+            stars: 3,
+            amenities: ['wifi', 'parking', 'breakfast', '24h'],
+            imageUrl: '/images/placeholder.jpg',
+            bookingUrl: '#',
+            nearChristian: true,
+            nearHindu: false,
+            distanceChristian: '0.5 km',
+            distanceHindu: '8 km',
+            distanceReception: '25 km',
+            distanceCoupleHome: '7 km',
+            coordinates: { lat: 47.1907, lng: 8.8561 }
+        },
+        {
+            id: 12,
+            name: 'Moxy Rapperswil',
+            description: 'Modernes Lifestyle-Hotel mit 90 Zimmern, 24/7 Bar, Fitness. Stylisch und zentral in Rapperswil.',
+            address: 'Neue Jonastrasse 66, 8640 Rapperswil',
+            priceRange: 'mid',
+            priceIndicator: '$$',
+            stars: 3,
+            amenities: ['wifi', 'parking', 'breakfast', 'bar', 'fitness', '24h'],
+            imageUrl: '/images/placeholder.jpg',
+            bookingUrl: '#',
+            nearChristian: true,
+            nearHindu: false,
+            distanceChristian: '5 km',
+            distanceHindu: '10 km',
+            distanceReception: '33 km',
+            distanceCoupleHome: '0.5 km',
+            coordinates: { lat: 47.2269, lng: 8.8184 }
+        },
+        {
+            id: 13,
+            name: 'Hotel Marina Lachen',
+            description: 'Direkt am Zürichsee mit 2 Restaurants und Bar-Lounge. Elegante Zimmer mit Klimaanlage, Seeblick.',
+            address: 'Seedammstrasse 1, 8853 Lachen',
+            priceRange: 'mid',
+            priceIndicator: '$$',
+            stars: 4,
+            amenities: ['wifi', 'parking', 'breakfast', 'restaurant', 'bar', 'ac', '24h'],
+            imageUrl: '/images/placeholder.jpg',
+            bookingUrl: '#',
+            nearChristian: true,
+            nearHindu: false,
+            distanceChristian: '3 km',
+            distanceHindu: '11 km',
+            distanceReception: '30 km',
+            distanceCoupleHome: '8 km',
+            coordinates: { lat: 47.1947, lng: 8.8530 }
+        },
+        {
+            id: 14,
+            name: 'Hotel & Restaurant Jakob',
+            description: 'In der autofreien Altstadt Rapperswil, 2 Min. vom Bahnhof. Freundliches Personal, historischer Charme.',
+            address: 'Knie-Platz 1, 8640 Rapperswil',
+            priceRange: 'mid',
+            priceIndicator: '$$',
+            stars: 3,
+            amenities: ['wifi', 'breakfast', 'restaurant', '24h'],
+            imageUrl: '/images/placeholder.jpg',
+            bookingUrl: '#',
+            nearChristian: true,
+            nearHindu: false,
+            distanceChristian: '5 km',
+            distanceHindu: '10 km',
+            distanceReception: '33 km',
+            distanceCoupleHome: '0.5 km',
+            coordinates: { lat: 47.2269, lng: 8.8184 }
+        },
+        {
+            id: 15,
+            name: 'Hotel Drei Könige',
+            description: 'Traditionelles Hotel nahe Kloster Einsiedeln, ca. 20 Min. von Pfäffikon. Schweizer Gastfreundschaft.',
+            address: 'Hauptstrasse 64, 8840 Einsiedeln',
+            priceRange: 'mid',
+            priceIndicator: '$$',
+            stars: 3,
+            amenities: ['wifi', 'parking', 'breakfast', 'restaurant', '24h'],
+            imageUrl: '/images/placeholder.jpg',
+            bookingUrl: '#',
+            nearChristian: false,
+            nearHindu: false,
+            distanceChristian: '17 km',
+            distanceHindu: '21 km',
+            distanceReception: '44 km',
+            distanceCoupleHome: '22 km',
+            coordinates: { lat: 47.1281, lng: 8.7466 }
+        },
+        {
+            id: 16,
+            name: 'Hotel Seedamm Plaza',
+            description: '4-Sterne Hotel am Zürichsee mit 142 Zimmern, Casino, mehrere Restaurants. Sauna und Fitnesscenter.',
+            address: 'Seedammstrasse 3, 8808 Pfäffikon',
+            priceRange: 'mid',
+            priceIndicator: '$$',
+            stars: 4,
+            amenities: ['wifi', 'parking', 'breakfast', 'restaurant', 'bar', 'fitness', 'sauna', 'ac', '24h'],
+            imageUrl: '/images/placeholder.jpg',
+            bookingUrl: '#',
+            nearChristian: true,
+            nearHindu: true,
+            distanceChristian: '6 km',
+            distanceHindu: '9 km',
+            distanceReception: '32 km',
+            distanceCoupleHome: '6 km',
+            coordinates: { lat: 47.2011, lng: 8.7797 }
         }
     ];
 
@@ -160,8 +350,13 @@ const Accommodations = () => {
             wifi: { icon: mdiWifi, label: 'Wi-Fi' },
             parking: { icon: mdiParking, label: 'Parking' },
             breakfast: { icon: mdiFridge, label: 'Breakfast' },
-            restaurant: { icon: mdiFridge, label: 'Restaurant' },
-            spa: { icon: mdiWifi, label: 'Spa' },
+            restaurant: { icon: mdiFoodForkDrink, label: 'Restaurant' },
+            bar: { icon: mdiFoodForkDrink, label: 'Bar' },
+            spa: { icon: mdiSpa, label: 'Spa' },
+            sauna: { icon: mdiSpa, label: 'Sauna' },
+            fitness: { icon: mdiWeightLifter, label: 'Fitness' },
+            ac: { icon: mdiSnowflake, label: 'AC' },
+            '24h': { icon: mdiClockOutline, label: '24h Reception' },
             shuttle: { icon: mdiCar, label: 'Shuttle' }
         };
 
@@ -212,21 +407,29 @@ const Accommodations = () => {
                 <AnimatedSection className="mb-12">
                     <div className="max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-md">
                         <h2 className="text-2xl font-bold mb-4 text-center">{t('accommodations.travelInfo.title')}</h2>
-                        <div className="grid md:grid-cols-2 gap-6">
+                        <div className="grid md:grid-cols-3 gap-6">
                             <div>
                                 <h3 className="text-xl font-semibold mb-2 text-christian-accent">{t('accommodations.travelInfo.christianVenue')}</h3>
-                                <p className="mb-2"><strong>Venue:</strong>{t('accommodations.travelInfo.venue')}</p>
-                                <p className="mb-2"><strong>Address:</strong>{t('accommodations.travelInfo.address')}</p>
-                                <p className="mb-1"><strong>Nearest Airport:</strong>{t('accommodations.travelInfo.nearestAirport')}</p>
-                                <p className="text-sm text-gray-600 mb-3">{t('accommodations.travelInfo.distance')}</p>
+                                <p className="mb-2"><strong>{t('accommodations.travelInfo.venue')}:</strong> {t('christian.location.address1')}</p>
+                                <p className="mb-2"><strong>{t('accommodations.travelInfo.address')}:</strong> {t('christian.location.address2')}</p>
+                                <p className="mb-1"><strong>{t('accommodations.travelInfo.nearestAirport')}:</strong> Zürich Airport (ZRH)</p>
+                                <p className="text-sm text-gray-600 mb-3">{t('accommodations.travelInfo.distance', { distance: '50', time: '40 min' })}</p>
                             </div>
 
                             <div>
-                                <h3 className="text-xl font-semibold mb-2 text-hindu-secondary">{t('accommodations.travelInfo.christianVenue')}</h3>
-                                <p className="mb-2"><strong>Venue:</strong>{t('accommodations.travelInfo.venue')}</p>
-                                <p className="mb-2"><strong>Address:</strong>{t('accommodations.travelInfo.address')}</p>
-                                <p className="mb-1"><strong>Nearest Airport:</strong>{t('accommodations.travelInfo.nearestAirport')}</p>
-                                <p className="text-sm text-gray-600 mb-3">{t('accommodations.travelInfo.distance')}</p>
+                                <h3 className="text-xl font-semibold mb-2 text-hindu-secondary">{t('accommodations.travelInfo.hinduVenue')}</h3>
+                                <p className="mb-2"><strong>{t('accommodations.travelInfo.venue')}:</strong> {t('hindu.location.address1')}</p>
+                                <p className="mb-2"><strong>{t('accommodations.travelInfo.address')}:</strong> {t('hindu.location.address2')}</p>
+                                <p className="mb-1"><strong>{t('accommodations.travelInfo.nearestAirport')}:</strong> Zürich Airport (ZRH)</p>
+                                <p className="text-sm text-gray-600 mb-3">{t('accommodations.travelInfo.distance', { distance: '30', time: '25 min' })}</p>
+                            </div>
+
+                            <div>
+                                <h3 className="text-xl font-semibold mb-2 text-purple-700">{t('accommodations.travelInfo.receptionVenue')}</h3>
+                                <p className="mb-2"><strong>{t('accommodations.travelInfo.venue')}:</strong> {t('reception.location.address1')}</p>
+                                <p className="mb-2"><strong>{t('accommodations.travelInfo.address')}:</strong> {t('reception.location.address2')}</p>
+                                <p className="mb-1"><strong>{t('accommodations.travelInfo.nearestAirport')}:</strong> Zürich Airport (ZRH)</p>
+                                <p className="text-sm text-gray-600 mb-3">{t('accommodations.travelInfo.distance', { distance: '15', time: '15 min' })}</p>
                             </div>
                         </div>
 
@@ -367,9 +570,9 @@ const Accommodations = () => {
                                                 </div>
                                             </div>
 
-                                            <div className="grid grid-cols-2 gap-2 mb-4">
+                                            <div className="space-y-2 mb-4">
                                                 <div className={`flex items-center ${accommodation.nearChristian ? 'text-christian-accent' : 'text-gray-500'}`}>
-                                                    <Icon path={mdiBed} size={0.8} className="mr-2" />
+                                                    <Icon path={mdiBed} size={0.8} className="mr-2 flex-shrink-0" />
                                                     <div>
                                                         <p className="text-sm font-medium">{t('accommodations.hotelCard.christianVenue')}</p>
                                                         <p className="text-xs">{accommodation.distanceChristian}</p>
@@ -377,10 +580,26 @@ const Accommodations = () => {
                                                 </div>
 
                                                 <div className={`flex items-center ${accommodation.nearHindu ? 'text-hindu-secondary' : 'text-gray-500'}`}>
-                                                    <Icon path={mdiBed} size={0.8} className="mr-2" />
+                                                    <Icon path={mdiBed} size={0.8} className="mr-2 flex-shrink-0" />
                                                     <div>
                                                         <p className="text-sm font-medium">{t('accommodations.hotelCard.hinduVenue')}</p>
                                                         <p className="text-xs">{accommodation.distanceHindu}</p>
+                                                    </div>
+                                                </div>
+
+                                                <div className="flex items-center text-purple-700">
+                                                    <Icon path={mdiBed} size={0.8} className="mr-2 flex-shrink-0" />
+                                                    <div>
+                                                        <p className="text-sm font-medium">{t('accommodations.hotelCard.receptionVenue')}</p>
+                                                        <p className="text-xs">{accommodation.distanceReception}</p>
+                                                    </div>
+                                                </div>
+
+                                                <div className="flex items-center text-pink-700">
+                                                    <Icon path={mdiMapMarker} size={0.8} className="mr-2 flex-shrink-0" />
+                                                    <div>
+                                                        <p className="text-sm font-medium">{t('accommodations.hotelCard.coupleHome')}</p>
+                                                        <p className="text-xs">{accommodation.distanceCoupleHome}</p>
                                                     </div>
                                                 </div>
                                             </div>

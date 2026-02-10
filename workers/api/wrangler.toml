@@ -22,7 +22,7 @@ bucket_name = "wedding-images"
 
 # Environment variables
 [vars]
-FRONTEND_URL = "https://rushel.me"
+FRONTEND_URL = "https://rushelwedsivani.com"
 
 # Secrets (set these using: wrangler secret put <KEY>)
 # ADMIN_PASSWORD_HASH = "your_password_hash_here"
@@ -36,11 +36,11 @@ FRONTEND_URL = "https://rushel.me"
 [env.production]
 name = "wedding-api"
 routes = [
-    { pattern = "api.rushel.me/*", zone_name = "rushel.me" }
+    { pattern = "api.rushelwedsivani.com/*", zone_name = "rushelwedsivani.com" }
 ]
 
 [env.production.vars]
-FRONTEND_URL = "https://wed.rushel.me"
+FRONTEND_URL = "https://rushelwedsivani.com"
 
 [[env.production.d1_databases]]
 binding = "DB"

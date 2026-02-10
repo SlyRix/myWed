@@ -30,6 +30,17 @@ export const LOGIN_RATE_LIMIT_WINDOW_MS = 15 * 60 * 1000; // 15 minutes
 export const API_RATE_LIMIT_REQUESTS = 100;
 export const API_RATE_LIMIT_WINDOW_MS = 15 * 60 * 1000; // 15 minutes
 
+// ========== SPLASH SCREEN ==========
+export const SPLASH_PHASE_DELAYS = {
+    CLOSED: 800,
+    OPENING: 1700,
+    REVEALED: 2000,
+    EXIT: 800,
+    SKIP_EXIT: 500
+};
+export const SPLASH_CARD_PERSPECTIVE = 1200;
+export const SPLASH_REDUCED_MOTION_DURATION = 2000;
+
 // ========== ANIMATION ==========
 export const BUBBLE_MIN_DURATION = 10000; // 10 seconds
 export const BUBBLE_MAX_DURATION = 25000; // 25 seconds

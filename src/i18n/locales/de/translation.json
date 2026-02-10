@@ -395,6 +395,7 @@
       "title": "Reiseinformationen",
       "christianVenue": "Ort der christlichen Zeremonie",
       "hinduVenue": "Ort der hinduistischen Zeremonie",
+      "receptionVenue": "Ort des Empfangs",
       "venue": "Ort",
       "address": "Adresse",
       "nearestAirport": "Nächster Flughafen",
@@ -425,6 +426,8 @@
       "amenities": "Annehmlichkeiten",
       "christianVenue": "Christlicher Veranstaltungsort",
       "hinduVenue": "Hinduistischer Veranstaltungsort",
+      "receptionVenue": "Empfang",
+      "coupleHome": "Zuhause des Paares (Rapperswil)",
       "bookNow": "Jetzt buchen",
       "varies": "Variiert je nach Unterkunft"
     },
@@ -470,6 +473,15 @@
       "copied": "Link in die Zwischenablage kopiert!"
     }
   },
+  "splash": {
+    "weddingInvitation": "Hochzeitseinladung",
+    "youreInvited": "Ihr seid eingeladen",
+    "weds": "heiratet",
+    "slideToOpen": "Nach oben wischen zum \u00d6ffnen",
+    "tapToOpen": "Tippen zum \u00d6ffnen",
+    "enter": "Eintreten"
+  },
+
   "ceremony": {
     "access": {
       "title": "Zugang erforderlich",

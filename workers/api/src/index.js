@@ -7,6 +7,8 @@ const getAllowedOrigins = (env) => {
     const origins = [
         'https://rushel.me',
         'https://wed.rushel.me',
+        'https://rushelwedsivani.com',
+        'https://www.rushelwedsivani.com',
         'http://localhost:3000',
         'http://localhost:3001',
         'http://127.0.0.1:3000',
@@ -48,6 +50,22 @@ const getAllHeaders = (env, requestOrigin) => ({
     ...securityHeaders,
     'Content-Type': 'application/json',
 });
+
+// Fixed invitation codes for ceremony access
+const CODE_MAPPING = {
+    'HINDU': {
+        name: 'Hindu Ceremony Guest',
+        ceremonies: ['hindu']
+    },
+    'CHRISTIAN': {
+        name: 'Christian Ceremony Guest',
+        ceremonies: ['christian']
+    },
+    'ALL': {
+        name: 'All Ceremonies Guest',
+        ceremonies: ['christian', 'hindu']
+    }
+};
 
 // Rate limiting storage (using in-memory for simplicity, could use KV for persistence)
 class RateLimiter {
@@ -230,140 +248,40 @@ async function handleAdminLogin(env, request, rateLimiter, requestOrigin) {
     }
 }
 
-// Get all guests (admin only)
+// Get all guests (admin only) - DEPRECATED
 async function handleGetGuests(env, requestOrigin) {
-    try {
-        const results = await env.DB.prepare(
-            'SELECT code, name, ceremonies FROM guests ORDER BY name'
-        ).all();
-
-        // Convert ceremonies from JSON string to array
-        const guestList = {};
-        for (const row of results.results) {
-            guestList[row.code] = {
-                name: row.name,
-                ceremonies: JSON.parse(row.ceremonies)
-            };
-        }
-
-        return new Response(
-            JSON.stringify(guestList),
-            { status: 200, headers: getAllHeaders(env, requestOrigin) }
-        );
-    } catch (error) {
-        console.error('Get guests error:', error);
-        return new Response(
-            JSON.stringify({ error: 'Failed to fetch guest list' }),
-            { status: 500, headers: getAllHeaders(env, requestOrigin) }
-        );
-    }
+    // Return empty guest list for backward compatibility
+    return new Response(
+        JSON.stringify({}),
+        { status: 200, headers: getAllHeaders(env, requestOrigin) }
+    );
 }
 
-// Save guest (admin only)
+// Save guest (admin only) - DEPRECATED
 async function handleSaveGuest(env, request, requestOrigin) {
-    try {
-        const body = await request.json();
-        const { code, guestData } = body;
-
-        // Input validation
-        if (!code || typeof code !== 'string' || !/^[A-Z0-9]{4,10}$/.test(code)) {
-            return new Response(
-                JSON.stringify({ error: 'Invalid code format. Must be 4-10 uppercase alphanumeric characters.' }),
-                { status: 400, headers: getAllHeaders(env, requestOrigin) }
-            );
-        }
-
-        if (!guestData || !guestData.name || typeof guestData.name !== 'string') {
-            return new Response(
-                JSON.stringify({ error: 'Invalid guest data. Name is required.' }),
-                { status: 400, headers: getAllHeaders(env, requestOrigin) }
-            );
-        }
-
-        if (guestData.name.length > 100) {
-            return new Response(
-                JSON.stringify({ error: 'Guest name too long. Maximum 100 characters.' }),
-                { status: 400, headers: getAllHeaders(env, requestOrigin) }
-            );
-        }
-
-        if (!Array.isArray(guestData.ceremonies)) {
-            return new Response(
-                JSON.stringify({ error: 'Invalid ceremonies data. Must be an array.' }),
-                { status: 400, headers: getAllHeaders(env, requestOrigin) }
-            );
-        }
-
-        // Validate ceremonies array values
-        const validCeremonies = ['christian', 'hindu'];
-        for (const ceremony of guestData.ceremonies) {
-            if (!validCeremonies.includes(ceremony)) {
-                return new Response(
-                    JSON.stringify({ error: 'Invalid ceremony type. Must be "christian" or "hindu".' }),
-                    { status: 400, headers: getAllHeaders(env, requestOrigin) }
-                );
-            }
-        }
-
-        // Save to D1 (INSERT OR REPLACE for upsert)
-        await env.DB.prepare(
-            'INSERT OR REPLACE INTO guests (code, name, ceremonies) VALUES (?, ?, ?)'
-        ).bind(code, guestData.name, JSON.stringify(guestData.ceremonies)).run();
-
-        return new Response(
-            JSON.stringify({ success: true, code, guest: guestData }),
-            { status: 200, headers: getAllHeaders(env, requestOrigin) }
-        );
-    } catch (error) {
-        console.error('Save guest error:', error);
-        return new Response(
-            JSON.stringify({ error: 'Failed to save guest' }),
-            { status: 500, headers: getAllHeaders(env, requestOrigin) }
-        );
-    }
+    return new Response(
+        JSON.stringify({
+            error: 'Guest management has been deprecated. The system now uses fixed invitation codes (HINDU, CHRISTIAN, ALL).'
+        }),
+        { status: 410, headers: getAllHeaders(env, requestOrigin) }
+    );
 }
 
-// Delete guest (admin only)
+// Delete guest (admin only) - DEPRECATED
 async function handleDeleteGuest(env, code, requestOrigin) {
-    try {
-        // Input validation
-        if (!code || typeof code !== 'string' || !/^[A-Z0-9]{4,10}$/.test(code)) {
-            return new Response(
-                JSON.stringify({ error: 'Invalid code format' }),
-                { status: 400, headers: getAllHeaders(env, requestOrigin) }
-            );
-        }
-
-        // Delete from D1
-        const result = await env.DB.prepare(
-            'DELETE FROM guests WHERE code = ?'
-        ).bind(code).run();
-
-        if (result.meta.changes === 0) {
-            return new Response(
-                JSON.stringify({ error: 'Guest not found or could not be deleted' }),
-                { status: 404, headers: getAllHeaders(env, requestOrigin) }
-            );
-        }
-
-        return new Response(
-            JSON.stringify({ success: true }),
-            { status: 200, headers: getAllHeaders(env, requestOrigin) }
-        );
-    } catch (error) {
-        console.error('Delete guest error:', error);
-        return new Response(
-            JSON.stringify({ error: 'Failed to delete guest' }),
-            { status: 500, headers: getAllHeaders(env, requestOrigin) }
-        );
-    }
+    return new Response(
+        JSON.stringify({
+            error: 'Guest management has been deprecated. The system now uses fixed invitation codes (HINDU, CHRISTIAN, ALL).'
+        }),
+        { status: 410, headers: getAllHeaders(env, requestOrigin) }
+    );
 }
 
 // Validate access code (public)
 async function handleValidateCode(env, code, requestOrigin) {
     try {
-        // Input validation - strict format for security
-        if (!code || typeof code !== 'string' || !/^[A-Z0-9]{4,10}$/.test(code.trim().toUpperCase())) {
+        // Input validation - strict format for security (3-10 chars to support "ALL")
+        if (!code || typeof code !== 'string' || !/^[A-Z0-9]{3,10}$/.test(code.trim().toUpperCase())) {
             return new Response(
                 JSON.stringify({ valid: false, error: 'Invalid code format' }),
                 { status: 400, headers: getAllHeaders(env, requestOrigin) }
@@ -372,20 +290,18 @@ async function handleValidateCode(env, code, requestOrigin) {
 
         const upperCode = code.trim().toUpperCase();
 
-        // Query D1
-        const result = await env.DB.prepare(
-            'SELECT name, ceremonies FROM guests WHERE code = ?'
-        ).bind(upperCode).first();
+        // Check against hardcoded CODE_MAPPING
+        const guestData = CODE_MAPPING[upperCode];
 
-        if (result) {
+        if (guestData) {
             return new Response(
                 JSON.stringify({
                     valid: true,
                     guest: {
-                        name: result.name,
-                        ceremonies: JSON.parse(result.ceremonies)
+                        name: guestData.name,
+                        ceremonies: guestData.ceremonies
                     },
-                    ceremonies: JSON.parse(result.ceremonies)
+                    ceremonies: guestData.ceremonies
                 }),
                 { status: 200, headers: getAllHeaders(env, requestOrigin) }
             );
@@ -405,78 +321,14 @@ async function handleValidateCode(env, code, requestOrigin) {
 }
 
 // Generate guest code (admin only)
+// Generate guest code (admin only) - DEPRECATED
 async function handleGenerateCode(env, request, requestOrigin) {
-    try {
-        const body = await request.json();
-        const { name } = body;
-
-        // Input validation
-        if (!name || typeof name !== 'string') {
-            return new Response(
-                JSON.stringify({ error: 'Name is required' }),
-                { status: 400, headers: getAllHeaders(env, requestOrigin) }
-            );
-        }
-
-        if (name.length > 100) {
-            return new Response(
-                JSON.stringify({ error: 'Name too long. Maximum 100 characters.' }),
-                { status: 400, headers: getAllHeaders(env, requestOrigin) }
-            );
-        }
-
-        // Generate a unique code
-        let newCode;
-        let attempts = 0;
-        const maxAttempts = 20;
-
-        while (attempts < maxAttempts) {
-            // Generate 8-character alphanumeric code
-            const array = new Uint8Array(6);
-            crypto.getRandomValues(array);
-            newCode = Array.from(array)
-                .map(b => b.toString(36).toUpperCase())
-                .join('')
-                .replace(/[^A-Z0-9]/g, '')
-                .substring(0, 8);
-
-            // Ensure it's 8 characters
-            if (newCode.length !== 8) {
-                attempts++;
-                continue;
-            }
-
-            // Check uniqueness
-            const existing = await env.DB.prepare(
-                'SELECT code FROM guests WHERE code = ?'
-            ).bind(newCode).first();
-
-            if (!existing) {
-                return new Response(
-                    JSON.stringify({ code: newCode }),
-                    { status: 200, headers: getAllHeaders(env, requestOrigin) }
-                );
-            }
-
-            attempts++;
-        }
-
-        // Fallback: use name-based code with timestamp
-        const timestamp = Date.now().toString(36).toUpperCase();
-        const namePrefix = name.trim().substring(0, 4).toUpperCase().replace(/[^A-Z]/g, '');
-        newCode = `${namePrefix}${timestamp}`.substring(0, 8);
-
-        return new Response(
-            JSON.stringify({ code: newCode }),
-            { status: 200, headers: getAllHeaders(env, requestOrigin) }
-        );
-    } catch (error) {
-        console.error('Generate code error:', error);
-        return new Response(
-            JSON.stringify({ error: 'Failed to generate code' }),
-            { status: 500, headers: getAllHeaders(env, requestOrigin) }
-        );
-    }
+    return new Response(
+        JSON.stringify({
+            error: 'Guest code generation has been deprecated. The system now uses fixed invitation codes (HINDU, CHRISTIAN, ALL).'
+        }),
+        { status: 410, headers: getAllHeaders(env, requestOrigin) }
+    );
 }
 
 /**

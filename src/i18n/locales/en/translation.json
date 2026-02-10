@@ -395,6 +395,7 @@
       "title": "Travel Information",
       "christianVenue": "Christian Ceremony Location",
       "hinduVenue": "Hindu Ceremony Location",
+      "receptionVenue": "Reception Location",
       "venue": "Venue",
       "address": "Address",
       "nearestAirport": "Nearest Airport",
@@ -425,6 +426,8 @@
       "amenities": "Amenities",
       "christianVenue": "Christian Venue",
       "hinduVenue": "Hindu Venue",
+      "receptionVenue": "Reception",
+      "coupleHome": "Couple's Home (Rapperswil)",
       "bookNow": "Book Now",
       "varies": "Varies by property"
     },
@@ -469,6 +472,15 @@
       "copy": "Copy",
       "copied": "Link copied to clipboard!"
     }
+  },
+
+  "splash": {
+    "weddingInvitation": "Wedding Invitation",
+    "youreInvited": "You're Invited",
+    "weds": "weds",
+    "slideToOpen": "Slide up to open invitation",
+    "tapToOpen": "Tap to open invitation",
+    "enter": "Enter"
   },
 
   "ceremony": {
