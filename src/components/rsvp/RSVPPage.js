@@ -44,12 +44,12 @@ const RSVPPage = () => {
     // Determine colors for bubbles based on ceremony source or use mixed colors if not specified
     const getBubbleColors = () => {
         if (ceremony === 'hindu') {
-            return ['#ffcb05', '#ff5722', '#9c27b0'];  // Hindu colors
+            return ['#1a3a5c', '#d4af37', '#e8d48b'];  // Hindu colors
         } else if (ceremony === 'christian') {
-            return ['#fff', '#d4b08c', '#8c6c55'];    // Christian colors
+            return ['#faf9f6', '#1a3a5c', '#d4af37'];    // Christian colors
         } else {
             // Mixed colors for general RSVP page
-            return ['#fff', '#d4b08c', '#ffcb05', '#d93f0b'];
+            return ['#faf9f6', '#1a3a5c', '#d4af37', '#e8d48b'];
         }
     };
 

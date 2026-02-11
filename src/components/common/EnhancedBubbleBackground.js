@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 
 const EnhancedBubbleBackground = ({
                                       count = 10,
-                                      colors = ['#d4b08c', '#f0b429', '#d93f0b'],
+                                      colors = ['#1a3a5c', '#d4af37', '#e8d48b'],
                                       size = { min: 50, max: 200 },
                                       duration = { min: 10, max: 25 },
                                       opacity = { min: 0.03, max: 0.08 },

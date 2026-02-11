@@ -441,7 +441,7 @@ const RSVPForm = () => {
                         className={`w-full py-3 px-6 rounded-full font-semibold transition-all duration-300 ${
                             submitted
                                 ? 'bg-gray-400 cursor-not-allowed'
-                                : 'bg-gradient-to-r from-christian-accent to-hindu-secondary text-white hover:shadow-lg'
+                                : 'bg-christian-accent text-white hover:shadow-lg'
                         }`}
                     >
                         {submitted ? (

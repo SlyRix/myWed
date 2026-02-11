@@ -5,16 +5,16 @@ export const ThemeContext = createContext();
 export const ThemeProvider = ({ children }) => {
     const [theme, setTheme] = useState({
         christianColors: {
-            primary: '#fff',
-            secondary: '#f0f4f8',
-            accent: '#d4b08c',
-            text: '#2d3748'
+            primary: '#faf9f6',
+            secondary: '#d4af37',
+            accent: '#1a3a5c',
+            text: '#0f1c2e'
         },
         hinduColors: {
-            primary: '#ffcb05',
-            secondary: '#ff5722',
-            accent: '#9c27b0',
-            text: '#2d3748'
+            primary: '#faf9f6',
+            secondary: '#d4af37',
+            accent: '#1a3a5c',
+            text: '#0f1c2e'
         }
     });
 

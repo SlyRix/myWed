@@ -85,14 +85,14 @@ const OurStory = () => {
 
     return (
         <ParallaxSection
-            bgColor="#f9f7f7"
+            bgColor="#faf9f6"
             height="min-h-screen"
             className="pt-24 pb-20 relative"
         >
             {/* Bubble Background */}
             <BubbleBackground
                 count={12}
-                colors={['#d4b08c', '#f0b429', '#b08968']}
+                colors={['#1a3a5c', '#d4af37', '#e8d48b']}
                 opacity={{ min: 0.02, max: 0.06 }}
                 size={{ min: 80, max: 250 }}
             />

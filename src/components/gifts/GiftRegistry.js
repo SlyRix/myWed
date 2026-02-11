@@ -14,7 +14,7 @@ const GiftRegistry = () => {
             {/* Bubble Background */}
             <BubbleBackground
                 count={20}
-                colors={['#d4b08c', '#f0b429', '#b08968']}
+                colors={['#1a3a5c', '#d4af37', '#e8d48b']}
                 opacity={{ min: 0.02, max: 0.06 }}
                 size={{ min: 80, max: 250 }}
             />

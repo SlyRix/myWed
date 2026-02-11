@@ -36,9 +36,9 @@ const CeremonyVideoTimeline = ({ events, theme, videoUrl, videoType = 'youtube',
             return {
                 primary: 'wedding-love',
                 secondary: 'gray-800',
-                gradient: 'from-christian-accent via-wedding-love to-hindu-secondary',
-                dotBorder: 'border-wedding-love',
-                dotInner: 'from-christian-accent to-hindu-secondary'
+                gradient: 'from-christian-accent via-christian-accent to-christian-accent',
+                dotBorder: 'border-christian-accent',
+                dotInner: 'from-christian-accent to-christian-accent'
             };
         } else {
             return {

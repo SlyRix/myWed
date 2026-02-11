@@ -115,7 +115,7 @@ const HinduCeremony = () => {
 
 
             <section
-                className="pt-24 pb-16 bg-gradient-to-br from-christian-secondary to-white relative overflow-hidden">
+                className="pt-24 pb-16 bg-gradient-to-br from-white via-white to-wedding-gold/10 relative overflow-hidden">
                 {/* Decorative elements */}
                 <div
                     className="hidden md:block absolute top-24 left-6 w-32 h-32 bg-hindu-primary/10 rounded-full blur-lg"></div>

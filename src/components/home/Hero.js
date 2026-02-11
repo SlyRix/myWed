@@ -3,12 +3,12 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { mdiChevronDown } from '@mdi/js';
+import { mdiHeart } from '@mdi/js';
 import Icon from '@mdi/react';
 import { useTranslation } from 'react-i18next';
 import CountdownTimer from '../common/CountdownTimer';
 import BubbleBackground from '../common/BubbleBackground';
-import { useGuest } from '../../contexts/GuestContext';
+
 import { getPageContent } from '../../api/contentApi';
 import { COUNTDOWN_DATE } from '../../config/wedding';
 
@@ -103,7 +103,6 @@ const ParallaxElements = () => {
 
 const Hero = ({ backgroundImage: propBackgroundImage = null, patternImage: propPatternImage = "/images/floral-pattern.svg" }) => {
     const { t } = useTranslation();
-    const { ceremonies: accessibleCeremonies } = useGuest();
     const [cmsContent, setCmsContent] = useState(null);
 
     // Wedding date from centralized config
@@ -156,7 +155,7 @@ const Hero = ({ backgroundImage: propBackgroundImage = null, patternImage: propP
                 </div>
             ) : (
                 // Otherwise show a gradient background
-                <div className="absolute inset-0 bg-gradient-to-br from-christian-accent/90 to-hindu-accent/80 z-0"></div>
+                <div className="absolute inset-0 bg-christian-accent/85 z-0"></div>
             )}
 
             {/* Overlay to ensure text readability */}
@@ -178,7 +177,7 @@ const Hero = ({ backgroundImage: propBackgroundImage = null, patternImage: propP
             {/* Animated Bubble Background */}
             <BubbleBackground
                 count={15}
-                colors={['#d4b08c', '#f0b429', '#d93f0b', '#fff']}
+                colors={['#1a3a5c', '#d4af37', '#e8d48b', '#faf9f6']}
                 mouseInteraction={true}
             />
 
@@ -210,41 +209,23 @@ const Hero = ({ backgroundImage: propBackgroundImage = null, patternImage: propP
                     <CountdownTimer targetDate={weddingDate} />
                 </div>
 
-                {/* Dynamic ceremony buttons based on user access */}
-                {accessibleCeremonies.length > 0 && (
-                    <div className="flex flex-col sm:flex-row justify-center gap-4">
-                        {accessibleCeremonies.includes('christian') && (
-                            <Link to="/christian-ceremony" className="btn btn-primary btn-christian">
-                                {t('header.christianCeremony')}
-                            </Link>
-                        )}
-                        {accessibleCeremonies.includes('hindu') && (
-                            <Link to="/hindu-ceremony" className="btn btn-primary btn-hindu">
-                                {t('header.hinduCeremony')}
-                            </Link>
-                        )}
-                    </div>
-                )}
+                {/* Gold ornamental divider */}
+                <div className="flex items-center justify-center mb-8">
+                    <div className="h-px w-16 bg-wedding-gold/50"></div>
+                    <div className="mx-3 w-1.5 h-1.5 rounded-full bg-wedding-love"></div>
+                    <div className="h-px w-16 bg-wedding-gold/50"></div>
+                </div>
 
-                {/* If no ceremonies are accessible, show alternative button */}
-                {accessibleCeremonies.length === 0 && (
-                    <Link to="/our-story" className="btn btn-primary btn-christian">
-                        {t('home.readStory')}
-                    </Link>
-                )}
+                {/* RSVP Button with gold accent */}
+                <Link
+                    to="/rsvp"
+                    className="group inline-flex items-center gap-3 px-10 py-4 text-lg font-semibold text-white bg-christian-accent rounded-full shadow-lg hover:shadow-[0_8px_30px_rgba(212,175,55,0.3)] transform hover:scale-105 transition-all duration-300 ring-2 ring-wedding-love/30 ring-offset-2 ring-offset-transparent"
+                >
+                    <Icon path={mdiHeart} size={1} className="text-wedding-gold group-hover:animate-pulse" />
+                    <span>{t('home.rsvp.button')}</span>
+                </Link>
             </motion.div>
 
-            {/* Only show the scroll down indicator if there's content below */}
-            {false && (
-                <motion.a
-                    href="#about-section"
-                    className="absolute bottom-8 left-1/2 -translate-x-1/2 text-white opacity-80 hover:opacity-100 transition-opacity w-10 h-10 flex items-center justify-center z-20"
-                    animate={{ y: [0, 10, 0] }}
-                    transition={{ repeat: Infinity, duration: 1.5 }}
-                >
-                    <Icon path={mdiChevronDown} size={1.5} />
-                </motion.a>
-            )}
         </section>
     );
 };

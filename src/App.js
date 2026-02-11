@@ -88,7 +88,7 @@ function App() {
 
     // Loading fallback component with wedding-themed design
     const PageLoader = () => (
-        <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-r from-christian-accent/10 to-hindu-secondary/10">
+        <div className="min-h-screen flex flex-col items-center justify-center bg-white">
             <LoadingSpinner />
             <p className="mt-4 text-gray-600 animate-pulse">Loading our love story...</p>
         </div>
@@ -97,7 +97,7 @@ function App() {
     // If checking invitation code, show a loading indicator
     if (isCheckingCode) {
         return (
-            <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-r from-christian-accent/10 to-hindu-secondary/10">
+            <div className="min-h-screen flex flex-col items-center justify-center bg-white">
                 <div className="text-center">
                     <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-christian-accent mx-auto mb-4" aria-hidden="true"></div>
                     <span className="sr-only">Loading</span>

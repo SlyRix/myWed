@@ -96,22 +96,22 @@ export const WEDDING_DATE = new Date('2024-09-07T14:00:00'); // Adjust to actual
 // ========== COLORS (for programmatic use) ==========
 export const COLORS = {
     christian: {
-        primary: '#f5f1e8',
-        secondary: '#e5d9c8',
-        accent: '#d4b08c',
-        text: '#4a4a4a'
+        primary: '#faf9f6',
+        secondary: '#d4af37',
+        accent: '#1a3a5c',
+        text: '#0f1c2e'
     },
     hindu: {
-        primary: '#fff8f0',
-        secondary: '#ffe5cc',
-        accent: '#ff5722',
-        text: '#2d3748'
+        primary: '#faf9f6',
+        secondary: '#d4af37',
+        accent: '#1a3a5c',
+        text: '#0f1c2e'
     },
     wedding: {
-        love: '#ff6b9d',
-        gold: '#c19a5b',
-        gray: '#4a4a4a',
-        background: '#fdfbf7'
+        love: '#d4af37',
+        gold: '#e8d48b',
+        gray: '#0f1c2e',
+        background: '#faf9f6'
     }
 };
 

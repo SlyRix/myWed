@@ -94,7 +94,7 @@ const PhotoUpload = ({ onPhotoUpload }) => {
             />
             <label
                 htmlFor="photo-upload"
-                className="flex items-center justify-center gap-2 cursor-pointer bg-gradient-to-r from-christian-accent to-hindu-secondary text-white py-3 px-6 rounded-lg hover:shadow-md transition-shadow duration-300 mb-4"
+                className="flex items-center justify-center gap-2 cursor-pointer bg-christian-accent text-white py-3 px-6 rounded-lg hover:shadow-md transition-shadow duration-300 mb-4"
             >
                 <Icon path={mdiCloudUpload} size={1} />
                 <span>Upload Your Photos</span>
@@ -103,7 +103,7 @@ const PhotoUpload = ({ onPhotoUpload }) => {
             {isUploading && (
                 <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
                     <motion.div
-                        className="h-full bg-gradient-to-r from-christian-accent to-hindu-secondary"
+                        className="h-full bg-christian-accent"
                         initial={{ width: 0 }}
                         animate={{ width: `${uploadProgress}%` }}
                     >

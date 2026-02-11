@@ -10,10 +10,10 @@ const StoryTimeline = ({ events }) => {
     return (
         <div className="relative py-8">
             {/* Mobile: Left-aligned vertical line */}
-            <div className="absolute h-full w-0.5 bg-gradient-to-b from-christian-accent via-hindu-secondary to-christian-accent left-6 top-0 md:hidden"></div>
+            <div className="absolute h-full w-0.5 bg-christian-accent left-6 top-0 md:hidden"></div>
 
             {/* Desktop: Center line */}
-            <div className="absolute h-full w-1 bg-gradient-to-b from-christian-accent to-hindu-secondary left-1/2 -translate-x-1/2 hidden md:block"></div>
+            <div className="absolute h-full w-1 bg-christian-accent left-1/2 -translate-x-1/2 hidden md:block"></div>
 
             {/* Timeline items */}
             <div className="relative">
@@ -42,7 +42,7 @@ const StoryTimeline = ({ events }) => {
                                     transition={{ duration: 0.5, delay: index * 0.1 + 0.2 }}
                                 >
                                     <motion.div
-                                        className="w-3 h-3 rounded-full bg-gradient-to-br from-christian-accent to-hindu-secondary"
+                                        className="w-3 h-3 rounded-full bg-christian-accent"
                                         animate={{
                                             scale: [1, 1.2, 1],
                                             opacity: [0.8, 1, 0.8]
@@ -70,7 +70,7 @@ const StoryTimeline = ({ events }) => {
                                     zIndex: index % 3 + 1
                                 }}
                             >
-                                <div className={`text-lg font-bold mb-2 bg-gradient-to-r from-christian-accent to-hindu-secondary bg-clip-text text-transparent`}>
+                                <div className={`text-lg font-bold mb-2 text-christian-accent`}>
                                     {event.date}
                                 </div>
                                 <h3 className={`text-xl font-bold mb-3 text-gray-800`}>

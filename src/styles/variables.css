@@ -1,24 +1,24 @@
 :root {
     /* Christian ceremony theme */
-    --christian-primary: #f9f7f5;
-    --christian-secondary: #e8e6e1;
-    --christian-accent: #b08968;
-    --christian-accent2: #d4c1a9;
-    --christian-text: #3d3d3d;
+    --christian-primary: #faf9f6;
+    --christian-secondary: #d4af37;
+    --christian-accent: #1a3a5c;
+    --christian-accent2: #e8d48b;
+    --christian-text: #0f1c2e;
 
     /* Hindu ceremony theme */
-    --hindu-primary: #fff9e6;
-    --hindu-secondary: #ffe0b5;
-    --hindu-accent: #d93f0b;
-    --hindu-accent2: #f0b429;
-    --hindu-text: #3d3d3d;
+    --hindu-primary: #faf9f6;
+    --hindu-secondary: #d4af37;
+    --hindu-accent: #1a3a5c;
+    --hindu-accent2: #e8d48b;
+    --hindu-text: #0f1c2e;
 
     /* Shared colors */
-    --wedding-background: #f9f7f7;
-    --wedding-love: #d8315b;
-    --wedding-gold: #c19a5b;
-    --wedding-cream: #fff8e7;
-    --wedding-gray: #6b7280;
+    --wedding-background: #faf9f6;
+    --wedding-love: #d4af37;
+    --wedding-gold: #e8d48b;
+    --wedding-cream: #faf9f6;
+    --wedding-gray: #0f1c2e;
 
     /* Font family */
     --font-display: 'Cormorant Garamond', Georgia, serif;

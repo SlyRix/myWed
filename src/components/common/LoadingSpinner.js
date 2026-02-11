@@ -51,7 +51,7 @@ const LoadingSpinner = memo(() => {
                                 }
                             }
                         }}
-                        style={{ color: index === 0 ? '#d4b08c' : index === 2 ? '#ff5722' : '#2d3748' }}
+                        style={{ color: index === 0 ? '#1a3a5c' : index === 2 ? '#d4af37' : '#0f1c2e' }}
                     >
                         {letter}
                     </motion.span>

@@ -18,7 +18,7 @@ class ErrorBoundary extends React.Component {
     render() {
         if (this.state.hasError) {
             return (
-                <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-christian-accent/10 to-hindu-secondary/10">
+                <div className="min-h-screen flex items-center justify-center bg-white">
                     <div className="text-center p-8 bg-white rounded-lg shadow-lg max-w-md">
                         <h1 className="text-2xl font-display text-gray-800 mb-4">Oops! Something went wrong</h1>
                         <p className="text-gray-600 mb-6">We apologize for the inconvenience. Please try refreshing the page.</p>

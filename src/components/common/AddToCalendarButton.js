@@ -156,7 +156,7 @@ const AddToCalendarButton = ({
             case 'hindu':
                 return 'bg-hindu-secondary hover:bg-hindu-accent text-white';
             case 'reception':
-                return 'bg-gradient-to-r from-christian-accent via-wedding-love to-hindu-secondary hover:shadow-lg text-white';
+                return 'bg-christian-accent hover:shadow-lg text-white';
             case 'christian':
             default:
                 return 'bg-christian-accent hover:bg-christian-primary text-white';

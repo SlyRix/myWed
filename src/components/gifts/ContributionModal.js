@@ -433,7 +433,7 @@ const ContributionModal = ({ isOpen, onClose, gift, onSubmit }) => {
                                     </button>
                                     <button
                                         type="submit"
-                                        className="flex-1 px-3 py-2.5 bg-gradient-to-r from-christian-accent to-hindu-secondary text-white rounded-lg hover:opacity-90 transition-opacity disabled:opacity-50 text-sm sm:text-base"
+                                        className="flex-1 px-3 py-2.5 bg-christian-accent text-white rounded-lg hover:opacity-90 transition-opacity disabled:opacity-50 text-sm sm:text-base"
                                         disabled={isSubmitting}
                                     >
                                         {isSubmitting ? (

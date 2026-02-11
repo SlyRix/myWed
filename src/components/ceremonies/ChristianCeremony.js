@@ -98,7 +98,7 @@ const ChristianCeremony = () => {
     return (
         <>
             <CeremonyAccessCheck ceremony="christian" />
-            <section className="pt-24 pb-16 bg-gradient-to-br from-christian-secondary to-white relative overflow-hidden">
+            <section className="pt-24 pb-16 bg-gradient-to-br from-white via-white to-christian-accent/5 relative overflow-hidden">
             <div className="container mx-auto px-4 max-w-6xl">
                 <h2 className="text-3xl md:text-4xl text-center mb-12 relative pb-4 font-bold text-christian-text">
                     {t('christian.title')}

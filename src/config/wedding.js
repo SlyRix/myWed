@@ -147,16 +147,16 @@ export const NEAREST_AIRPORT = {
  */
 export const THEME_COLORS = {
     christian: {
-        primary: '#d4b08c',   // Soft cream/golden brown
-        accent: '#8b7355'      // Darker brown
+        primary: '#1a3a5c',    // Royal navy
+        accent: '#d4af37'      // Classic gold
     },
     hindu: {
-        primary: '#f0b429',    // Gold
-        secondary: '#d93f0b'   // Vermillion/deep orange
+        primary: '#1a3a5c',    // Royal navy
+        secondary: '#d4af37'   // Classic gold
     },
     shared: {
-        love: '#ff69b4',       // Wedding pink
-        gold: '#ffd700'        // Gold accent
+        love: '#d4af37',       // Classic gold
+        gold: '#e8d48b'        // Champagne gold accent
     }
 };
 

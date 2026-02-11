@@ -395,7 +395,7 @@ const Accommodations = () => {
     };
 
     return (
-        <section className="pt-24 pb-20 bg-gradient-to-br from-christian-secondary/30 to-hindu-primary/20 overflow-hidden">
+        <section className="pt-24 pb-20 bg-gradient-to-br from-white via-white to-christian-accent/5 overflow-hidden">
             <div className="container mx-auto max-w-6xl px-4">
                 <AnimatedSection className="text-center mb-12">
                     <h1 className="text-4xl font-bold mb-6">{t('accommodations.title')}</h1>
@@ -625,7 +625,7 @@ const Accommodations = () => {
                                                     href={accommodation.bookingUrl}
                                                     target="_blank"
                                                     rel="noopener noreferrer"
-                                                    className="inline-block py-2 px-6 bg-gradient-to-r from-christian-accent to-hindu-secondary text-white rounded-full font-semibold hover:shadow-md transition-shadow"
+                                                    className="inline-block py-2 px-6 bg-christian-accent text-white rounded-full font-semibold hover:shadow-md transition-shadow"
                                                 >
                                                     {t('accommodations.hotelCard.bookNow')}
                                                 </a>

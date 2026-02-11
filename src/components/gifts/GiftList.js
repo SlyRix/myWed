@@ -168,7 +168,7 @@ const GiftList = () => {
                             key={category.id}
                             className={`px-6 py-2 rounded-full transition-all duration-300 ${
                                 activeCategory === category.id
-                                    ? 'bg-gradient-to-r from-christian-accent to-hindu-secondary text-white font-medium shadow-md'
+                                    ? 'bg-christian-accent text-white font-medium shadow-md'
                                     : 'bg-white text-gray-700 hover:bg-gray-100 border border-gray-200 shadow-sm'
                             }`}
                             onClick={() => setActiveCategory(category.id)}

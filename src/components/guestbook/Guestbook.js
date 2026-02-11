@@ -134,7 +134,7 @@ const Guestbook = () => {
                             className={`py-2 px-6 rounded-full font-semibold flex items-center space-x-2 ml-auto ${
                                 isSubmitting
                                     ? 'bg-gray-400 cursor-not-allowed'
-                                    : 'bg-gradient-to-r from-christian-accent to-hindu-secondary text-white hover:shadow-md'
+                                    : 'bg-christian-accent text-white hover:shadow-md'
                             }`}
                         >
                             {isSubmitting ? (

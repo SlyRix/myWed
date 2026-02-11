@@ -294,7 +294,7 @@ const PageContentEditor = ({ pageId, pageTitle }) => {
                 <button
                     onClick={handleSave}
                     disabled={isSaving}
-                    className="px-6 py-3 bg-gradient-to-r from-christian-accent to-hindu-secondary text-white rounded-md hover:opacity-90 flex items-center disabled:opacity-50"
+                    className="px-6 py-3 bg-christian-accent text-white rounded-md hover:opacity-90 flex items-center disabled:opacity-50"
                 >
                     {isSaving ? (
                         <>

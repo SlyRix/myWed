@@ -118,11 +118,11 @@
 
   /* Page sections */
   .christian-section {
-    @apply bg-gradient-to-br from-christian-primary to-christian-secondary/70;
+    @apply bg-gradient-to-br from-white to-christian-accent/5;
   }
 
   .hindu-section {
-    @apply bg-gradient-to-br from-hindu-primary to-hindu-secondary/70;
+    @apply bg-gradient-to-br from-white to-wedding-gold/10;
   }
 
   /* Pattern backgrounds - No external files needed */
@@ -131,7 +131,7 @@
   }
 
   .bg-ornament {
-    @apply bg-[repeating-linear-gradient(45deg,#c19a5b,#c19a5b_1px,transparent_1px,transparent_15px),repeating-linear-gradient(-45deg,#c19a5b,#c19a5b_1px,transparent_1px,transparent_15px)];
+    @apply bg-[repeating-linear-gradient(45deg,#e8d48b,#e8d48b_1px,transparent_1px,transparent_15px),repeating-linear-gradient(-45deg,#e8d48b,#e8d48b_1px,transparent_1px,transparent_15px)];
   }
 }
 

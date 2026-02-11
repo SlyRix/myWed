@@ -30,7 +30,7 @@ const PasswordProtection = ({ onAuthenticate }) => {
     };
 
     return (
-        <div className="fixed inset-0 flex items-center justify-center min-h-screen bg-gradient-to-r from-christian-accent/20 to-hindu-secondary/20 bg-white p-4">
+        <div className="fixed inset-0 flex items-center justify-center min-h-screen bg-white p-4">
             {/* Language switcher at the top */}
             <div className="absolute top-4 right-4">
                 <LanguageSwitcher />
@@ -66,7 +66,7 @@ const PasswordProtection = ({ onAuthenticate }) => {
 
                         <button
                             type="submit"
-                            className="w-full bg-gradient-to-r from-christian-accent to-hindu-secondary text-white py-3 rounded-full font-semibold transition-all duration-300 hover:shadow-lg disabled:opacity-70"
+                            className="w-full bg-christian-accent text-white py-3 rounded-full font-semibold transition-all duration-300 hover:shadow-lg disabled:opacity-70"
                             disabled={isLoading}
                         >
                             {isLoading ? t('passwordProtection.checking') : t('passwordProtection.submit')}

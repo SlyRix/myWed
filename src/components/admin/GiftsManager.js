@@ -217,7 +217,7 @@ const GiftsManager = () => {
                     </button>
                     <button
                         onClick={handleAddGift}
-                        className="px-4 py-2 bg-gradient-to-r from-christian-accent to-hindu-secondary text-white rounded-lg hover:opacity-90 transition-opacity flex items-center"
+                        className="px-4 py-2 bg-christian-accent text-white rounded-lg hover:opacity-90 transition-opacity flex items-center"
                     >
                         <Icon path={mdiPlus} size={0.8} className="mr-1" />
                         Add Gift
@@ -298,7 +298,7 @@ const GiftsManager = () => {
 
                                         <div className="w-full bg-gray-200 rounded-full h-2 mb-3">
                                             <div
-                                                className="h-full bg-gradient-to-r from-christian-accent to-hindu-secondary rounded-full"
+                                                className="h-full bg-christian-accent rounded-full"
                                                 style={{ width: `${Math.min(gift.percentageFunded, 100)}%` }}
                                             />
                                         </div>
@@ -541,7 +541,7 @@ const GiftsManager = () => {
                                     </button>
                                     <button
                                         type="submit"
-                                        className="px-4 py-2 bg-gradient-to-r from-christian-accent to-hindu-secondary text-white rounded-lg hover:opacity-90 transition-opacity"
+                                        className="px-4 py-2 bg-christian-accent text-white rounded-lg hover:opacity-90 transition-opacity"
                                     >
                                         {editingGift ? 'Update Gift' : 'Add Gift'}
                                     </button>

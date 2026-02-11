@@ -73,7 +73,7 @@ const GiftCard = memo(({ gift, onClick }) => {
 
                     <div className="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
                         <motion.div
-                            className="h-full bg-gradient-to-r from-christian-accent to-hindu-secondary rounded-full"
+                            className="h-full bg-christian-accent rounded-full"
                             initial={{ width: 0 }}
                             animate={{ width: `${progressPercentage}%` }}
                             transition={{ duration: 1, ease: 'easeOut' }}
@@ -117,7 +117,7 @@ const GiftCard = memo(({ gift, onClick }) => {
 
                 {!isFullyFunded && (
                     <button
-                        className="w-full mt-4 py-2 bg-gradient-to-r from-christian-accent to-hindu-secondary text-white rounded-lg hover:opacity-90 transition-opacity"
+                        className="w-full mt-4 py-2 bg-christian-accent text-white rounded-lg hover:opacity-90 transition-opacity"
                         onClick={(e) => {
                             e.stopPropagation();
                             onClick(gift);

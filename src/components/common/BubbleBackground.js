@@ -15,7 +15,7 @@ import {
 
 const BubbleBackground = memo(({
                               count = BUBBLE_DEFAULT_COUNT,
-                              colors = ['#d4b08c', '#f0b429', '#d93f0b'],
+                              colors = ['#1a3a5c', '#d4af37', '#e8d48b'],
                               size = { min: BUBBLE_MIN_SIZE, max: BUBBLE_MAX_SIZE },
                               duration = { min: BUBBLE_MIN_DURATION / 1000, max: BUBBLE_MAX_DURATION / 1000 },
                               opacity = { min: BUBBLE_MIN_OPACITY, max: BUBBLE_MAX_OPACITY },

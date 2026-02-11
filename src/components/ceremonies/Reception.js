@@ -105,15 +105,15 @@ const Reception = () => {
     const receptionLocation = t('reception.location.address1') + ', ' + t('reception.location.address2');
 
     return (
-        <section className="pt-24 pb-16 bg-gradient-to-br from-purple-50 via-pink-50 to-amber-50 relative overflow-hidden">
-            {/* Decorative elements for a blend of both themes */}
-            <div className="hidden md:block absolute top-24 left-6 w-32 h-32 bg-wedding-love/10 rounded-full blur-lg"></div>
-            <div className="hidden md:block absolute bottom-24 right-6 w-32 h-32 bg-amber-500/10 rounded-full blur-lg"></div>
+        <section className="pt-24 pb-16 bg-gradient-to-br from-white via-white to-christian-accent/5 relative overflow-hidden">
+            {/* Decorative elements */}
+            <div className="hidden md:block absolute top-24 left-6 w-32 h-32 bg-christian-accent/5 rounded-full blur-lg"></div>
+            <div className="hidden md:block absolute bottom-24 right-6 w-32 h-32 bg-wedding-gold/10 rounded-full blur-lg"></div>
 
             <div className="container mx-auto px-4 max-w-6xl relative z-10">
                 <h2 className="text-3xl md:text-4xl text-center mb-12 relative pb-4 font-bold text-gray-800">
                     {t('reception.title')}
-                    <span className="absolute bottom-0 left-1/2 w-20 h-1 -translate-x-1/2 bg-gradient-to-r from-christian-accent via-wedding-love to-hindu-secondary"></span>
+                    <span className="absolute bottom-0 left-1/2 w-20 h-1 -translate-x-1/2 bg-christian-accent"></span>
                 </h2>
 
                 <div className="flex flex-col md:flex-row items-center mb-16 gap-8">
@@ -124,7 +124,7 @@ const Reception = () => {
                         animate={textInView ? "visible" : "hidden"}
                         variants={fadeIn}
                     >
-                        <h3 className="text-2xl md:text-3xl font-bold mb-6 bg-gradient-to-r from-christian-accent via-wedding-love to-hindu-secondary bg-clip-text text-transparent">
+                        <h3 className="text-2xl md:text-3xl font-bold mb-6 text-christian-accent">
                             {cmsContent?.headline || t('reception.headline')}
                         </h3>
                         <p className="text-gray-700 mb-4">
@@ -135,7 +135,7 @@ const Reception = () => {
                         </p>
                         <Link
                             to="/rsvp?ceremony=reception"
-                            className="inline-block py-3 px-6 rounded-full font-semibold transition-all duration-300 relative overflow-hidden z-10 bg-gradient-to-r from-christian-accent via-wedding-love to-hindu-secondary text-white hover:shadow-md"
+                            className="inline-block py-3 px-6 rounded-full font-semibold transition-all duration-300 relative overflow-hidden z-10 bg-christian-accent text-white hover:shadow-md"
                         >
                             {t('reception.rsvpButton')}
                             <span className="absolute bottom-0 left-0 w-full h-0 bg-white/20 transition-all duration-300 -z-10 group-hover:h-full"></span>

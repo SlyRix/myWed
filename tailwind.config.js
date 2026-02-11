@@ -5,29 +5,29 @@ module.exports = {
     theme: {
         extend: {
             colors: {
-                // Christian theme - elegant soft palette with sufficient contrast
+                // Christian theme - navy blue & gold palette
                 'christian': {
-                    primary: '#f9f7f5',       // Soft cream background
-                    secondary: '#e8e6e1',     // Light taupe secondary
-                    accent: '#b08968',        // Rich golden brown with good contrast
-                    accent2: '#d4c1a9',       // Secondary accent - warm beige
-                    text: '#3d3d3d',          // Dark gray text (not pure black)
+                    primary: '#faf9f6',       // Warm white background
+                    secondary: '#d4af37',     // Classic gold
+                    accent: '#1a3a5c',        // Royal navy (main color)
+                    accent2: '#e8d48b',       // Champagne gold
+                    text: '#0f1c2e',          // Deep navy text
                 },
-                // Hindu theme - vibrant celebratory colors with good contrast
+                // Hindu theme - navy blue & gold palette
                 'hindu': {
-                    primary: '#fff9e6',       // Warm light gold background
-                    secondary: '#bc863c',     // Soft pastel orange
-                    accent: '#d93f0b',        // Deep vermilion red - traditional wedding color
-                    accent2: '#f0b429',       // Rich gold accent
-                    text: '#3d3d3d',          // Dark gray text
+                    primary: '#faf9f6',       // Warm white background
+                    secondary: '#d4af37',     // Classic gold
+                    accent: '#1a3a5c',        // Royal navy (main color)
+                    accent2: '#e8d48b',       // Champagne gold
+                    text: '#0f1c2e',          // Deep navy text
                 },
                 // Shared colors
                 'wedding': {
-                    background: '#f9f7f7',    // Near-white background
-                    love: '#d8315b',          // Love/heart color (deep pink)
-                    gold: '#c19a5b',          // Gold for decorative elements
-                    cream: '#fff8e7',         // Cream color for sections
-                    gray: '#6b7280',          // Neutral gray
+                    background: '#faf9f6',    // Warm white background
+                    love: '#d4af37',          // Classic gold
+                    gold: '#e8d48b',          // Champagne gold for decorative elements
+                    cream: '#faf9f6',         // Warm white for sections
+                    gray: '#0f1c2e',          // Deep navy
                 },
             },
             fontFamily: {
