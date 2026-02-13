@@ -483,6 +483,16 @@
     "enter": "Enter"
   },
 
+  "codeGate": {
+    "title": "Personal Invitation Required",
+    "message": "This wedding website is only accessible via a personal invitation link or QR code.",
+    "understood": "Understood",
+    "enterCode": "Enter Invitation Code",
+    "placeholder": "Your code...",
+    "submit": "Check Access",
+    "invalidCode": "Invalid code. Please check your invitation link."
+  },
+
   "ceremony": {
     "access": {
       "title": "Access Required",

@@ -5,8 +5,9 @@ import Header from './components/common/Header';
 import Footer from './components/common/Footer';
 import LoadingSpinner from './components/common/LoadingSpinner';
 import ErrorBoundary from './components/common/ErrorBoundary';
+import CodeGate from './components/common/CodeGate';
 import { ThemeProvider } from './contexts/ThemeContext';
-import { GuestProvider } from './contexts/GuestContext';
+import { GuestProvider, useGuest } from './contexts/GuestContext';
 import WelcomeSplash from './components/welcome/WelcomeSplash';
 import './styles/global.css';
 import { validateAccessCode } from './api/guestApi';
@@ -36,6 +37,93 @@ const ConditionalFooter = () => {
         return null;
     }
     return <Footer />;
+};
+
+// Loading fallback component with wedding-themed design
+const PageLoader = () => (
+    <div className="min-h-screen flex flex-col items-center justify-center bg-white">
+        <LoadingSpinner />
+        <p className="mt-4 text-gray-600 animate-pulse">Loading our love story...</p>
+    </div>
+);
+
+// Inner app content that uses GuestContext and Router
+const AppContent = ({ showSplash, onSplashComplete }) => {
+    const location = useLocation();
+    const { isLoading, isValidated } = useGuest();
+    const isAdminRoute = location.pathname.startsWith('/admin');
+
+    // Show splash screen first
+    if (showSplash) {
+        return <WelcomeSplash onComplete={onSplashComplete} />;
+    }
+
+    // Show loading while GuestContext validates
+    if (isLoading) {
+        return <PageLoader />;
+    }
+
+    // Admin routes are always accessible (no gate)
+    if (isAdminRoute) {
+        return (
+            <Suspense fallback={<PageLoader />}>
+                <Routes>
+                    <Route path="/admin" element={<AdminLogin />} />
+                    <Route
+                        path="/admin/dashboard"
+                        element={
+                            <AdminRoute>
+                                <AdminDashboard />
+                            </AdminRoute>
+                        }
+                    />
+                    <Route path="*" element={<Navigate to="/admin" replace />} />
+                </Routes>
+            </Suspense>
+        );
+    }
+
+    // Not validated → show CodeGate
+    if (!isValidated) {
+        return <CodeGate />;
+    }
+
+    // Validated → show full app
+    return (
+        <>
+            <Header />
+            <main>
+                <Suspense fallback={<PageLoader />}>
+                    <Routes>
+                        <Route path="/" element={<HomePage />} />
+                        <Route path="/christian-ceremony" element={<ChristianCeremony />} />
+                        <Route path="/hindu-ceremony" element={<HinduCeremony />} />
+                        <Route path="/reception" element={<Reception />} />
+                        <Route path="/our-story" element={<OurStory />} />
+                        <Route path="/gifts" element={<GiftRegistry />} />
+                        <Route path="/gallery" element={<PhotoGallery />} />
+                        <Route path="/rsvp" element={<RSVPPage />} />
+                        <Route path="/guestbook" element={<GuestbookPage />} />
+                        <Route path="/accommodations" element={<AccommodationsPage />} />
+
+                        {/* Admin routes (also accessible when validated) */}
+                        <Route path="/admin" element={<AdminLogin />} />
+                        <Route
+                            path="/admin/dashboard"
+                            element={
+                                <AdminRoute>
+                                    <AdminDashboard />
+                                </AdminRoute>
+                            }
+                        />
+
+                        <Route path="*" element={<Navigate to="/" replace />} />
+                    </Routes>
+                </Suspense>
+            </main>
+            <ConditionalFooter />
+        </>
+    );
 };
 
 function App() {
@@ -86,14 +174,6 @@ function App() {
         localStorage.setItem('hasSeenSplash', 'true');
     };
 
-    // Loading fallback component with wedding-themed design
-    const PageLoader = () => (
-        <div className="min-h-screen flex flex-col items-center justify-center bg-white">
-            <LoadingSpinner />
-            <p className="mt-4 text-gray-600 animate-pulse">Loading our love story...</p>
-        </div>
-    );
-
     // If checking invitation code, show a loading indicator
     if (isCheckingCode) {
         return (
@@ -112,43 +192,10 @@ function App() {
             <ThemeProvider>
                 <GuestProvider>
                     <Router>
-                    {showSplash ? (
-                        <WelcomeSplash onComplete={handleSplashComplete} />
-                    ) : (
-                        <>
-                            <Header />
-                            <main>
-                                <Suspense fallback={<PageLoader />}>
-                                    <Routes>
-                                        <Route path="/" element={<HomePage />} />
-                                        <Route path="/christian-ceremony" element={<ChristianCeremony />} />
-                                        <Route path="/hindu-ceremony" element={<HinduCeremony />} />
-                                        <Route path="/reception" element={<Reception />} />
-                                        <Route path="/our-story" element={<OurStory />} />
-                                        <Route path="/gifts" element={<GiftRegistry />} />
-                                        <Route path="/gallery" element={<PhotoGallery />} />
-                                        <Route path="/rsvp" element={<RSVPPage />} />
-                                        <Route path="/guestbook" element={<GuestbookPage />} />
-                                        <Route path="/accommodations" element={<AccommodationsPage />} />
-
-                                        {/* Admin routes */}
-                                        <Route path="/admin" element={<AdminLogin />} />
-                                        <Route
-                                            path="/admin/dashboard"
-                                            element={
-                                                <AdminRoute>
-                                                    <AdminDashboard />
-                                                </AdminRoute>
-                                            }
-                                        />
-
-                                        <Route path="*" element={<Navigate to="/" replace />} />
-                                    </Routes>
-                                </Suspense>
-                            </main>
-                            <ConditionalFooter />
-                        </>
-                    )}
+                        <AppContent
+                            showSplash={showSplash}
+                            onSplashComplete={handleSplashComplete}
+                        />
                     </Router>
                 </GuestProvider>
             </ThemeProvider>

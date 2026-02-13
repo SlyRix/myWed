@@ -15,8 +15,8 @@ const Header = () => {
     const location = useLocation();
     const isHomePage = location.pathname === '/';
 
-    // Use GuestContext to get ceremony access
-    const { ceremonies: accessibleCeremonies } = useGuest();
+    // Use GuestContext to get ceremony access and validation state
+    const { ceremonies: accessibleCeremonies, isValidated } = useGuest();
 
     // Handle scroll effect
     useEffect(() => {
@@ -63,7 +63,7 @@ const Header = () => {
         { path: '/reception', label: t('header.reception') },
         { path: '/our-story', label: t('header.ourStory') },
         { path: '/accommodations', label: t('header.accommodations') },
-        { path: '/gifts', label: t('header.gifts') },
+        // { path: '/gifts', label: t('header.gifts') },
         { path: '/gallery', label: t('header.gallery') },
         { path: '/rsvp', label: t('header.rsvp'), requiresAccess: true }
     ];
@@ -71,15 +71,21 @@ const Header = () => {
     // Filter links based on access - memoized to avoid recomputation
     const filteredNavLinks = useMemo(() =>
         navLinks.filter(link => {
+            // Ceremony links: only if guest has access to that ceremony
             if (link.ceremonyType) {
-                return accessibleCeremonies.includes(link.ceremonyType);
+                return isValidated && accessibleCeremonies.includes(link.ceremonyType);
             }
+            // RSVP and other access-gated links: only if validated
             if (link.requiresAccess) {
-                return accessibleCeremonies.length > 0;
+                return isValidated && accessibleCeremonies.length > 0;
+            }
+            // All other non-home links: only if validated
+            if (link.path !== '/') {
+                return isValidated;
             }
             return true;
         }),
-        [accessibleCeremonies, t]
+        [accessibleCeremonies, isValidated, t]
     );
 
     // Toggle mobile menu

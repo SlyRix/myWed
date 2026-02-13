@@ -13,12 +13,16 @@ const PhotoGallery = () => {
 
     // In a real app, you'd fetch photos from storage
     useEffect(() => {
-        // Example placeholder photos
-        const placeholderPhotos = Array(6).fill().map((_, i) => ({
-            id: i,
-            src: '/images/placeholder.jpg',
-            alt: `Gallery Image ${i + 1}`
-        }));
+        // Wedding-themed preview photos
+        const weddingPhotos = [
+            { id: 0, src: 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=600&h=400&fit=crop&q=80', alt: 'Wedding Couple' },
+            { id: 1, src: 'https://images.unsplash.com/photo-1522673607200-164d1b6ce486?w=600&h=400&fit=crop&q=80', alt: 'Wedding Flowers' },
+            { id: 2, src: 'https://images.unsplash.com/photo-1606800052052-a08af7148866?w=600&h=400&fit=crop&q=80', alt: 'Wedding Rings' },
+            { id: 3, src: 'https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?w=600&h=400&fit=crop&q=80', alt: 'Wedding Venue' },
+            { id: 4, src: 'https://images.unsplash.com/photo-1535254973040-607b474cb50d?w=600&h=400&fit=crop&q=80', alt: 'Wedding Cake' },
+            { id: 5, src: 'https://images.unsplash.com/photo-1460978812857-470ed1c77af0?w=600&h=400&fit=crop&q=80', alt: 'Wedding Details' }
+        ];
+        const placeholderPhotos = weddingPhotos;
 
         setPhotos(placeholderPhotos);
     }, []);

@@ -86,7 +86,7 @@ const Reception = () => {
     ];
 
     // Hero image from CMS
-    const heroImage = cmsContent?.images?.hero || '/images/placeholder.jpg';
+    const heroImage = cmsContent?.images?.hero || `${process.env.PUBLIC_URL}/images/reception/recetion-2.jpeg`;
 
     // Animation for content sections
     const fadeIn = {

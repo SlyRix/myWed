@@ -77,7 +77,7 @@ const ChristianCeremony = () => {
     ];
 
     // Hero image from CMS
-    const heroImage = cmsContent?.images?.hero || '/images/placeholder.jpg';
+    const heroImage = cmsContent?.images?.hero || `${process.env.PUBLIC_URL}/images/christian-ceremony/christanphoto.jpeg`;
 
     // Animation for content sections
     const fadeIn = {

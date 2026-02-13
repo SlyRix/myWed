@@ -482,6 +482,16 @@
     "enter": "Eintreten"
   },
 
+  "codeGate": {
+    "title": "Persönliche Einladung erforderlich",
+    "message": "Diese Hochzeitswebseite ist nur über einen persönlichen Einladungslink oder QR-Code erreichbar.",
+    "understood": "Verstanden",
+    "enterCode": "Einladungscode eingeben",
+    "placeholder": "Dein Code...",
+    "submit": "Zugang prüfen",
+    "invalidCode": "Ungültiger Code. Bitte prüfe deinen Einladungslink."
+  },
+
   "ceremony": {
     "access": {
       "title": "Zugang erforderlich",
