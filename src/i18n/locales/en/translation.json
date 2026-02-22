@@ -12,19 +12,19 @@
     "accommodations": "Accommodations"
   },
   "home": {
-    "title": "Rushel & Sivani are getting married",
+    "title": "Rushel Weds Sivani",
     "date": "Summer 2026",
     "welcomeTitle": "Welcome to Our Wedding",
-    "welcomeText": "We are thrilled to celebrate our special day with our beloved family and friends. Our wedding will be a beautiful blend of Christian and Hindu traditions, reflecting our unique journey and shared love.",
+    "welcomeText": "We are so excited to celebrate this special day with you!",
     "christianEvent": {
       "title": "Christian Ceremony",
-      "date": "July 4, 2026",
+      "date": "May 30, 2026",
       "location": "Kirche Altendorf",
       "description": "Join us for a beautiful celebration of marriage with traditional Christian customs."
     },
     "hinduEvent": {
       "title": "Hindu Ceremony",
-      "date": "July 5, 2026",
+      "date": "May 29, 2026",
       "location": "Shed15 events&more",
       "description": "Experience a vibrant Hindu wedding ceremony full of color and tradition."
     },
@@ -39,8 +39,8 @@
   "christian": {
     "title": "Christian Ceremony",
     "headline": "Join Us for Our Christian Wedding Ceremony",
-    "description": "We are delighted to invite you to our Christian wedding ceremony. This sacred occasion will be a celebration of our love and commitment to each other, guided by Christian traditions and values.",
-    "description2": "The ceremony will take place in a beautiful church setting, where we will exchange vows and rings before God and our loved ones. We would be honored to have you witness this special moment in our lives.",
+    "description": "We are so happy to celebrate our wedding with you in Kirche Altendorf – the church in Rushel's hometown, where he grew up. Together with the people we love most, we want to say 'yes' to each other before God.",
+    "description2": "Having you there to witness our vows would mean so much to us – this is a moment we truly want to share with all of you.",
     "rsvpButton": "RSVP Now",
     "videoUrl": "",
     "videoType": "youtube",
@@ -52,8 +52,8 @@
     },
     "dateTime": {
       "title": "Date & Time",
-      "date": "July 4, 2026",
-      "time": "2:00 PM - 4:00 PM"
+      "date": "May 30, 2026",
+      "time": "9:00 AM"
     },
     "dress": {
       "title": "Dress Code",
@@ -99,8 +99,8 @@
   "hindu": {
     "title": "Hindu Ceremony",
     "headline": "Celebrate Our Hindu Wedding Ceremony",
-    "description": "We warmly invite you to our traditional Hindu wedding ceremony. This vibrant celebration will honor ancient customs and rituals that symbolize the sacred union of two souls.",
-    "description2": "The ceremony will take place in a beautifully decorated mandap, where we will perform various rituals guided by a Hindu priest. Your presence would make this auspicious occasion even more special.",
+    "description": "We warmly invite you to join us for our traditional Hindu wedding ceremony! This vibrant celebration is filled with color, music, and meaningful rituals that bring our two families together.",
+    "description2": "Your presence at the Mandap as we perform our sacred rituals would make this beautiful and auspicious day even more special for us.",
     "rsvpButton": "RSVP Now",
     "videoUrl": "",
     "videoType": "youtube",
@@ -112,8 +112,8 @@
     },
     "dateTime": {
       "title": "Date & Time",
-      "date": "July 5, 2026",
-      "time": "10:00 AM - 2:00 PM"
+      "date": "May 29, 2026",
+      "time": "10:30 AM – 12:36 PM"
     },
     "dress": {
       "title": "Dress Code",
@@ -187,8 +187,8 @@
   "reception": {
     "title": "Wedding Reception",
     "headline": "Celebrate With Us at Our Wedding Reception",
-    "description": "After our ceremonies, we invite you to join us for an evening of celebration, food, music, and dancing. This will be a wonderful opportunity to come together with family and friends in a relaxed and joyful atmosphere.",
-    "description2": "The reception will feature a delicious dinner, heartfelt speeches, our first dance as a married couple, and plenty of time to dance the night away. We can't wait to celebrate this special day with all of you!",
+    "description": "After our ceremonies, we can't wait to keep celebrating with you! Join us for an evening filled with good food, heartfelt speeches, our first dance as a married couple, and lots of dancing.",
+    "description2": "It will be our first night as husband and wife, and we want to share every moment of it with you – our family and friends who mean the world to us!",
     "rsvpButton": "RSVP Now",
     "location": {
       "title": "Location",
@@ -197,8 +197,8 @@
     },
     "dateTime": {
       "title": "Date & Time",
-      "date": "July 5, 2026",
-      "time": "6:00 PM - 2:00 AM"
+      "date": "May 30, 2026",
+      "time": "5:00 PM"
     },
     "dress": {
       "title": "Dress Code",
@@ -316,7 +316,7 @@
   },
   "gallery": {
     "title": "Photo Gallery",
-    "description": "Share in our joy by viewing photos from our special day. After the wedding, this section will be filled with cherished moments from both ceremonies. We also invite you to share your own photos here.",
+    "description": "Upload your photos directly on our wedding day! Capture the best moments from your perspective and help us create a guest photo album together – so we can look back on our special day through your eyes.",
     "uploadButton": "Upload Your Photos"
   },
   "rsvp": {
@@ -330,8 +330,8 @@
       "no": "Sorry, I can't make it",
       "guests": "Number of Additional Guests",
       "ceremonies": "Which ceremonies will you attend?",
-      "christianCeremony": "Christian Ceremony (July 4)",
-      "hinduCeremony": "Hindu Ceremony (July 5)",
+      "christianCeremony": "Christian Ceremony (May 30)",
+      "hinduCeremony": "Hindu Ceremony (May 29)",
       "reception": "Wedding Reception",
       "dietary": "Dietary Restrictions",
       "dietaryPlaceholder": "Any food allergies or preferences we should know about?",
@@ -377,7 +377,9 @@
     "days": "Days",
     "hours": "Hours",
     "minutes": "Minutes",
-    "seconds": "Seconds"
+    "seconds": "Seconds",
+    "hinduLabel": "Hindu Ceremony",
+    "christianLabel": "Christian Ceremony & Reception"
   },
   "common": {
     "loading": "Loading our love story...",

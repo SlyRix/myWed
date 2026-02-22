@@ -3,7 +3,7 @@
     "home": "Startseite",
     "christianCeremony": "Christlich",
     "hinduCeremony": "Hinduistisch",
-    "reception": "Empfang",
+    "reception": "Reception",
     "ourStory": "Unsere Geschichte",
     "gifts": "Geschenke",
     "gallery": "Galerie",
@@ -12,19 +12,19 @@
     "accommodations": "Unterkünfte"
   },
   "home": {
-    "title": "Rushel & Sivani Heiraten",
+    "title": "Rushel Weds Sivani",
     "date": "Sommer 2026",
     "welcomeTitle": "Willkommen zu unserer Hochzeit",
-    "welcomeText": "Wir freuen uns, unseren besonderen Tag mit unseren geliebten Familien und Freunden zu feiern. Unsere Hochzeit wird eine wunderschöne Mischung aus christlichen und hinduistischen Traditionen sein, die unsere einzigartige Reise und gemeinsame Liebe widerspiegelt.",
+    "welcomeText": "Wir freuen uns riesig, diesen besonderen Tag mit euch zu feiern!",
     "christianEvent": {
       "title": "Christliche Zeremonie",
-      "date": "4. Juli 2026",
+      "date": "30. Mai 2026",
       "location": "Kirche Altendorf",
       "description": "Nehmen Sie teil an einer wunderschönen Feier der Ehe mit traditionellen christlichen Bräuchen."
     },
     "hinduEvent": {
       "title": "Hinduistische Zeremonie",
-      "date": "5. Juli 2026",
+      "date": "29. Mai 2026",
       "location": "Shed15 events&more",
       "description": "Erleben Sie eine lebendige hinduistische Hochzeitszeremonie voller Farben und Tradition."
     },
@@ -38,9 +38,9 @@
   },
   "christian": {
     "title": "Christliche Zeremonie",
-    "headline": "Nehmen Sie an unserer christlichen Hochzeitszeremonie teil",
-    "description": "Wir freuen uns, Sie zu unserer christlichen Hochzeitszeremonie einzuladen. Diese heilige Gelegenheit wird eine Feier unserer Liebe und Verpflichtung zueinander sein, geleitet von christlichen Traditionen und Werten.",
-    "description2": "Die Zeremonie findet in einer wunderschönen Kirchenumgebung statt, wo wir Gelübde und Ringe vor Gott und unseren Lieben austauschen werden. Wir wären geehrt, wenn Sie diesen besonderen Moment in unserem Leben miterleben würden.",
+    "headline": "Kommt zu unserer Trauung in Altendorf",
+    "description": "Wir freuen uns riesig, euch zu unserer Trauung in der Kirche Altendorf einzuladen – Rushels Heimatkirche in dem Dorf, in dem er aufgewachsen ist. Hier, umgeben von euch allen, möchten wir vor Gott und unseren Liebsten Ja zueinander sagen.",
+    "description2": "Es würde uns so viel bedeuten, wenn ihr dabei seid, wenn wir unsere Eheversprechen ablegen und diesen besonderen Moment gemeinsam erleben.",
     "rsvpButton": "Jetzt zusagen",
     "videoUrl": "",
     "videoType": "youtube",
@@ -52,8 +52,8 @@
     },
     "dateTime": {
       "title": "Datum & Uhrzeit",
-      "date": "4. Juli 2026",
-      "time": "14:00 - 16:00 Uhr"
+      "date": "30. Mai 2026",
+      "time": "9:00 Uhr"
     },
     "dress": {
       "title": "Dresscode",
@@ -98,9 +98,9 @@
   },
   "hindu": {
     "title": "Hinduistische Zeremonie",
-    "headline": "Feiern Sie unsere hinduistische Hochzeitszeremonie",
-    "description": "Wir laden Sie herzlich zu unserer traditionellen hinduistischen Hochzeitszeremonie ein. Diese lebendige Feier wird alte Bräuche und Rituale ehren, die die heilige Vereinigung zweier Seelen symbolisieren.",
-    "description2": "Die Zeremonie findet in einem wunderschön dekorierten Mandap statt, wo wir verschiedene Rituale unter der Anleitung eines hinduistischen Priesters durchführen werden. Ihre Anwesenheit würde diesen glückverheissenden Anlass noch besonderer machen.",
+    "headline": "Feiert mit uns unsere hinduistische Hochzeitszeremonie",
+    "description": "Wir laden euch herzlich ein, unsere hinduistische Hochzeitszeremonie mit uns zu feiern! Seid dabei, wenn wir im Rahmen farbenprächter alter Traditionen und Rituale unsere zwei Familien zu einer vereinen.",
+    "description2": "Eure Anwesenheit im Mandap macht diesen feierlichen und farbenfrohen Tag für uns noch unvergesslicher – wir freuen uns so sehr, ihn mit euch zu erleben.",
     "rsvpButton": "Jetzt zusagen",
     "videoUrl": "",
     "videoType": "youtube",
@@ -112,8 +112,8 @@
     },
     "dateTime": {
       "title": "Datum & Uhrzeit",
-      "date": "5. Juli 2026",
-      "time": "10:00 - 14:00 Uhr"
+      "date": "29. Mai 2026",
+      "time": "10:30 – 12:36 Uhr"
     },
     "dress": {
       "title": "Dresscode",
@@ -185,10 +185,10 @@
     }
   },
   "reception": {
-    "title": "Hochzeitsempfang",
-    "headline": "Feiert mit uns beim Hochzeitsempfang",
-    "description": "Nach unseren Zeremonien laden wir euch zu einem Abend voller Feiern, Essen, Musik und Tanz ein. Dies wird eine wunderbare Gelegenheit sein, mit Familie und Freunden in entspannter und fröhlicher Atmosphäre zusammenzukommen.",
-    "description2": "Der Empfang bietet ein köstliches Abendessen, herzliche Reden, unseren ersten Tanz als Ehepaar und viel Zeit zum Tanzen bis spät in die Nacht. Wir können es kaum erwarten, diesen besonderen Tag mit euch allen zu feiern!",
+    "title": "Reception",
+    "headline": "Feiert mit uns bei der Reception",
+    "description": "Nach unseren Zeremonien können wir es kaum erwarten, mit euch weiter zu feiern! Verbringt den Abend mit uns bei einem köstlichen Essen, herzlichen Reden, unserem ersten Tanz und natürlich ganz viel Musik und Tanz.",
+    "description2": "Es wird unsere erste Nacht als Ehepaar sein – und wir möchten sie genau so erleben: mit euch zusammen, bei Lachen, Tränen der Freude und unvergesslichen Momenten.",
     "rsvpButton": "Jetzt zusagen",
     "location": {
       "title": "Ort",
@@ -197,8 +197,8 @@
     },
     "dateTime": {
       "title": "Datum & Zeit",
-      "date": "5. Juli 2026",
-      "time": "18:00 - 02:00 Uhr"
+      "date": "30. Mai 2026",
+      "time": "17:00 Uhr"
     },
     "dress": {
       "title": "Kleiderordnung",
@@ -206,7 +206,7 @@
       "code2": "Schick und festlich"
     },
     "schedule": {
-      "title": "Empfangs-Zeitplan",
+      "title": "Zeitplan der Reception",
       "events": {
         "arrival": {
           "time": "18:00",
@@ -221,7 +221,7 @@
         "entrance": {
           "time": "19:30",
           "title": "Grosser Einzug",
-          "description": "Das Brautpaar macht seinen grossen Einzug in den Empfangssaal."
+          "description": "Das Brautpaar macht seinen grossen Einzug in die Reception."
         },
         "dinner": {
           "time": "20:00",
@@ -316,7 +316,7 @@
   },
   "gallery": {
     "title": "Fotogalerie",
-    "description": "Teilen Sie unsere Freude, indem Sie Fotos von unserem besonderen Tag ansehen. Nach der Hochzeit wird dieser Bereich mit kostbaren Momenten von beiden Zeremonien gefüllt sein. Wir laden Sie auch ein, Ihre eigenen Fotos hier zu teilen.",
+    "description": "Ladet eure Fotos direkt am Hochzeitstag hier hoch! Haltet die schönsten Momente aus eurer Perspektive fest – so entsteht gemeinsam ein Gäste-Fotoalbum, das unseren besonderen Tag durch eure Augen zeigt.",
     "uploadButton": "Laden Sie Ihre Fotos hoch"
   },
   "rsvp": {
@@ -330,9 +330,9 @@
       "no": "Es tut mir leid, ich kann nicht kommen",
       "guests": "Anzahl zusätzlicher Gäste",
       "ceremonies": "An welchen Zeremonien werden Sie teilnehmen?",
-      "christianCeremony": "Christliche Zeremonie (4. Juli)",
-      "hinduCeremony": "Hinduistische Zeremonie (5. Juli)",
-      "reception": "Hochzeitsempfang",
+      "christianCeremony": "Christliche Zeremonie (30. Mai)",
+      "hinduCeremony": "Hinduistische Zeremonie (29. Mai)",
+      "reception": "Reception",
       "dietary": "Ernährungseinschränkungen",
       "dietaryPlaceholder": "Gibt es Nahrungsmittelallergien oder Vorlieben, die wir wissen sollten?",
       "message": "Nachricht an das Paar",
@@ -377,7 +377,9 @@
     "days": "Tage",
     "hours": "Stunden",
     "minutes": "Minuten",
-    "seconds": "Sekunden"
+    "seconds": "Sekunden",
+    "hinduLabel": "Hinduistische Zeremonie",
+    "christianLabel": "Christliche Zeremonie & Reception"
   },
   "common": {
     "loading": "Unsere Liebesgeschichte wird geladen...",
@@ -395,7 +397,7 @@
       "title": "Reiseinformationen",
       "christianVenue": "Ort der christlichen Zeremonie",
       "hinduVenue": "Ort der hinduistischen Zeremonie",
-      "receptionVenue": "Ort des Empfangs",
+      "receptionVenue": "Ort der Reception",
       "venue": "Ort",
       "address": "Adresse",
       "nearestAirport": "Nächster Flughafen",
@@ -426,7 +428,7 @@
       "amenities": "Annehmlichkeiten",
       "christianVenue": "Christlicher Veranstaltungsort",
       "hinduVenue": "Hinduistischer Veranstaltungsort",
-      "receptionVenue": "Empfang",
+      "receptionVenue": "Reception",
       "coupleHome": "Zuhause des Paares (Rapperswil)",
       "bookNow": "Jetzt buchen",
       "varies": "Variiert je nach Unterkunft"

@@ -7,6 +7,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 This is a bilingual (Christian & Hindu) wedding website built with React. The project features a dual-ceremony design with password-protected access, allowing different guests to access different ceremony sections based on their invitation codes. Supports three languages: English, German, and Tamil.
 
 **Production**: Deployed on Cloudflare (Pages for frontend, Workers + D1 for backend)
+**Domains**: rushelwedsivani.com, wed.rushel.me
 **Development**: React dev server + Express.js API or Cloudflare Workers dev mode
 
 ## Development Commands
@@ -51,20 +52,34 @@ wrangler d1 execute wedding-db --command="DELETE FROM guests WHERE code='TEST'"
 
 ### Deployment
 
-```bash
-# Automated deployment (recommended)
-./build.sh              # Build React app
-./deploy.sh             # Interactive deployment (backend/frontend/both)
+**Tokens**: Stored in `.env` at project root (gitignored). Read tokens from there before deploying:
+- `CLOUDFLARE_API_TOKEN` — for Cloudflare Pages/Workers deployment
+- `GITHUB_PAT` — for pushing to GitHub
 
-# Manual deployment
-cd workers/api && wrangler deploy --env production  # Backend
-cd ../.. && wrangler pages deploy build --project-name=wedding-website  # Frontend
+```bash
+# Quick deploy (read tokens from .env first):
+# 1. Build
+npm run build
+
+# 2. Deploy frontend to Cloudflare Pages
+export CLOUDFLARE_API_TOKEN=<from .env> && npx wrangler pages deploy build --project-name=wedding-website --commit-dirty=true
+
+# 3. Push to GitHub
+git push https://SlyRix:<GITHUB_PAT from .env>@github.com/SlyRix/myWed.git master
+
+# Deploy backend (Cloudflare Worker)
+cd workers/api && export CLOUDFLARE_API_TOKEN=<from .env> && wrangler deploy --env production
 
 # Monitoring
 cd workers/api && wrangler tail --env production  # View production logs
 ```
 
-**Important**: The `deploy.sh` script is interactive and will prompt you to choose what to deploy (backend, frontend, or both). Build scripts are bash scripts and require execution permissions (`chmod +x build.sh deploy.sh`).
+**Cloudflare Pages project**: `wedding-website`
+**GitHub repo**: `SlyRix/myWed` (branch: master)
+
+**Legacy scripts** (bash, require chmod +x):
+- `./build.sh` — Build React app
+- `./deploy.sh` — Interactive deployment (backend/frontend/both)
 
 ## Architecture Overview
 
@@ -194,6 +209,8 @@ REACT_APP_API_URL=http://localhost:3001/api
 
 See `.env.example` for full template.
 
+**Important**: The `.env` file also contains `CLOUDFLARE_API_TOKEN` and `GITHUB_PAT` for deployment. Always read tokens from `.env` — never hardcode them.
+
 ### Cloudflare Worker Secrets
 
 Set via `wrangler secret put <KEY>` (from workers/api directory):
@@ -215,11 +232,13 @@ wrangler secret put ADMIN_PASSWORD_HASH --env production
 
 ### Current Production (Cloudflare)
 
-- **Frontend**: Cloudflare Pages at https://rushel.me (primary domain)
+- **Frontend**: Cloudflare Pages (`wedding-website` project)
+  - Primary domains: rushelwedsivani.com, wed.rushel.me
+  - Pages URL: wedding-website-2sw.pages.dev
 - **Backend**: Cloudflare Worker at https://api.rushel.me/api
 - **Database**: Cloudflare D1 (wedding-db)
   - Database ID: `71f98b31-6ee3-47cf-84e0-33be1a805975`
-- **Domain**: rushel.me (configured in Cloudflare DNS)
+- **DNS**: Configured in Cloudflare
 
 **Deployment process**: See DEPLOYMENT.md, QUICKSTART.md, or CLOUDFLARE_SETUP_SUMMARY.md for complete guides.
 
@@ -267,14 +286,17 @@ curl https://api.rushel.me/api/validate/TEST
 
 ### Important File Locations
 
+- **Deployment tokens**: `.env` (gitignored — contains `CLOUDFLARE_API_TOKEN`, `GITHUB_PAT`)
 - **Frontend API client**: `src/api/guestApi.js` (configured with REACT_APP_API_URL)
+- **Splash screen**: `src/components/welcome/WelcomeSplash.js` (fullscreen swipe-to-open with `public/images/splash.jpg`)
 - **Guest access validation**: Happens in `src/App.js` on mount via URL param `?code=XXXX`
 - **Admin dashboard**: `src/components/admin/AdminDashboard.js`
 - **Theme switching**: `src/contexts/ThemeContext.js` (Christian/Hindu color schemes)
+- **Constants**: `src/constants/index.js` (breakpoints, limits, splash timing, colors, etc.)
 - **Translations**: `src/i18n/locales/{en,de,ta}/translation.json`
 - **Database schema**: `workers/api/schema.sql`
 - **Worker configuration**: `workers/api/wrangler.toml`
-- **Deployment scripts**: `build.sh`, `deploy.sh` (bash scripts)
+- **Deployment scripts**: `build.sh`, `deploy.sh` (bash scripts, legacy)
 
 ## Working with the D1 Database
 
@@ -561,3 +583,17 @@ Watch for:
 - Rate limit hits (potential DDoS)
 - Database errors
 - CORS errors (misconfigured frontend)
+
+## Development Environment Notes
+
+### Windows-specific
+- The dev machine runs Windows with `prefers-reduced-motion: reduce` enabled
+- **NEVER** gate interactive features (swipe, tap, drag gestures) behind `prefers-reduced-motion` checks — only skip auto-playing animations
+- npm scripts already use `set NODE_OPTIONS=...` (Windows syntax)
+- Dev server runs on port 3000
+
+### Splash Screen
+- `hasSeenSplash` localStorage key controls splash visibility — clear it to re-test
+- Splash image: `public/images/splash.jpg` (fullscreen, swipe-up to enter site)
+- Uses framer-motion `useMotionValue`/`useTransform` for gesture-driven animation
+- `process.env.PUBLIC_URL` resolves to homepage URL in production builds

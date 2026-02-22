@@ -10,7 +10,8 @@ import CountdownTimer from '../common/CountdownTimer';
 import BubbleBackground from '../common/BubbleBackground';
 
 import { getPageContent } from '../../api/contentApi';
-import { COUNTDOWN_DATE } from '../../config/wedding';
+import { COUNTDOWN_DATE, HINDU_CEREMONY_DATE } from '../../config/wedding';
+import { useGuest } from '../../contexts/GuestContext';
 
 // Fallback SVG pattern - only used if external SVG isn't available
 const FloralPatternSVG = () => (
@@ -104,9 +105,15 @@ const ParallaxElements = () => {
 const Hero = ({ backgroundImage: propBackgroundImage = null, patternImage: propPatternImage = "/images/floral-pattern.svg" }) => {
     const { t } = useTranslation();
     const [cmsContent, setCmsContent] = useState(null);
+    const { hasAccessTo } = useGuest();
 
-    // Wedding date from centralized config
-    const weddingDate = COUNTDOWN_DATE.getTime();
+    // Wedding dates from centralized config
+    const christianDate = COUNTDOWN_DATE.getTime();
+    const hinduDate = HINDU_CEREMONY_DATE.getTime();
+    // Show Hindu date for Hindu guests until it passes, then switch to Christian date
+    const now = Date.now();
+    const activeDate = (hasAccessTo('hindu') && now < hinduDate) ? hinduDate : christianDate;
+    const activeLabel = (hasAccessTo('hindu') && now < hinduDate) ? t('countdown.hinduLabel') : t('countdown.christianLabel');
 
     // Load CMS content on mount
     useEffect(() => {
@@ -206,7 +213,10 @@ const Hero = ({ backgroundImage: propBackgroundImage = null, patternImage: propP
                 </div>
 
                 <div className="mb-10">
-                    <CountdownTimer targetDate={weddingDate} />
+                    <p className="text-center text-white/70 text-xs uppercase tracking-widest mb-2">
+                        {activeLabel}
+                    </p>
+                    <CountdownTimer targetDate={activeDate} />
                 </div>
 
                 {/* Gold ornamental divider */}

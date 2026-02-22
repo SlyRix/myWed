@@ -6,15 +6,21 @@
 
 /**
  * Wedding date and time
- * Christian Ceremony: July 4, 2026 at 2:00 PM
+ * Christian Ceremony & Reception: May 30, 2026
  * @constant
  * @type {Date}
  */
-export const WEDDING_DATE = new Date('July 4, 2026 14:00:00');
+export const WEDDING_DATE = new Date('May 30, 2026 09:00:00');
 
 /**
- * Alternative representation for countdown (May 9, 2026 is shown in Hero but July 4 is actual date)
- * Using July 4 as primary date based on translation files
+ * Hindu ceremony date
+ * @constant
+ * @type {Date}
+ */
+export const HINDU_CEREMONY_DATE = new Date('May 29, 2026 10:30:00');
+
+/**
+ * Countdown target date (Christian ceremony / Reception)
  */
 export const COUNTDOWN_DATE = WEDDING_DATE;
 
@@ -53,8 +59,8 @@ export const VENUES = {
             lat: 47.1747,
             lng: 8.8642
         },
-        date: 'July 4, 2026',
-        time: '2:00 PM - 4:00 PM',
+        date: 'May 30, 2026',
+        time: '9:00 AM',
         mapsUrl: 'https://maps.google.com/?q=Kirche+Altendorf+Dorfpl.+5+8852+Altendorf'
     },
     hindu: {
@@ -68,8 +74,8 @@ export const VENUES = {
             lat: 47.3352,
             lng: 8.7822
         },
-        date: 'July 5, 2026',
-        time: '10:00 AM - 2:00 PM',
+        date: 'May 29, 2026',
+        time: '10:30 AM – 12:36 PM',
         mapsUrl: 'https://maps.google.com/?q=Shed15+events+more+Zürichstrasse+15-17+8607+Seegräben'
     },
     reception: {
@@ -83,8 +89,8 @@ export const VENUES = {
             lat: 47.3967,
             lng: 8.4448
         },
-        date: 'July 5, 2026',
-        time: '6:00 PM - 2:00 AM',
+        date: 'May 30, 2026',
+        time: '5:00 PM',
         mapsUrl: 'https://maps.google.com/?q=Sporthalle+Unterrohr+Unterrohrstrasse+2+8952+Schlieren'
     }
 };
