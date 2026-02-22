@@ -1,12 +1,10 @@
 // src/components/accommodations/Accommodations.js
 // Created for wedding guests coming from foreign countries who need accommodations
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
-import { mdiMapMarker, mdiBed, mdiCurrencyEur, mdiStar, mdiWifi, mdiFridge, mdiParking, mdiCar, mdiSnowflake, mdiClockOutline, mdiSpa, mdiWeightLifter , mdiFoodForkDrink } from '@mdi/js';
+import { mdiMapMarker, mdiBed, mdiStar, mdiWifi, mdiFridge, mdiParking, mdiSnowflake, mdiClockOutline, mdiSpa, mdiWeightLifter, mdiFoodForkDrink, mdiCar } from '@mdi/js';
 import Icon from '@mdi/react';
 import { useTranslation } from 'react-i18next';
 import AnimatedSection from '../common/AnimatedSection';
-import MiniMap from '../map/MiniMap';
 
 const Accommodations = () => {
     const { t } = useTranslation();
@@ -520,11 +518,10 @@ const Accommodations = () => {
                             </div>
                         ) : (
                             <div className="grid md:grid-cols-2 gap-6">
-                                {filteredAccommodations.map((accommodation, index) => (
-                                    <AnimatedSection
+                                {filteredAccommodations.map((accommodation) => (
+                                    <div
                                         key={accommodation.id}
                                         className="bg-white border border-gray-200 rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow"
-                                        delay={index * 0.1}
                                     >
                                         <div className="h-48 overflow-hidden">
                                             <img
@@ -591,18 +588,7 @@ const Accommodations = () => {
                                                 {renderAmenityIcons(accommodation.amenities)}
                                             </div>
 
-                                            {accommodation.coordinates && (
-                                                <div className="mb-4 h-40">
-                                                    <MiniMap
-                                                        lat={accommodation.coordinates.lat}
-                                                        lng={accommodation.coordinates.lng}
-                                                        title={accommodation.name}
-                                                        address={accommodation.address}
-                                                    />
-                                                </div>
-                                            )}
-
-                                            <div className="mt-4">
+                                            <div className="mt-4 flex flex-wrap gap-3">
                                                 <a
                                                     href={accommodation.bookingUrl}
                                                     target="_blank"
@@ -611,9 +597,20 @@ const Accommodations = () => {
                                                 >
                                                     {t('accommodations.hotelCard.bookNow')}
                                                 </a>
+                                                {accommodation.coordinates && (
+                                                    <a
+                                                        href={`https://maps.google.com/?q=${accommodation.coordinates.lat},${accommodation.coordinates.lng}`}
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        className="inline-flex items-center gap-1 py-2 px-4 border border-gray-300 text-gray-700 rounded-full font-medium hover:bg-gray-50 transition-colors text-sm"
+                                                    >
+                                                        <Icon path={mdiMapMarker} size={0.7} />
+                                                        Karte
+                                                    </a>
+                                                )}
                                             </div>
                                         </div>
-                                    </AnimatedSection>
+                                    </div>
                                 ))}
                             </div>
                         )}
