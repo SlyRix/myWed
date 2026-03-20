@@ -23,6 +23,7 @@ bucket_name = "wedding-images"
 # Environment variables
 [vars]
 FRONTEND_URL = "https://rushelwedsivani.com"
+N8N_WEBHOOK_URL = "https://n8n.rushel.me/webhook/8c933f37-7a58-404c-96d8-c3c7a2ea641b"
 
 # Secrets (set these using: wrangler secret put <KEY>)
 # ADMIN_PASSWORD_HASH = "your_password_hash_here"
@@ -36,11 +37,13 @@ FRONTEND_URL = "https://rushelwedsivani.com"
 [env.production]
 name = "wedding-api"
 routes = [
+    { pattern = "api.rushel.me/*", zone_name = "rushel.me" },
     { pattern = "api.rushelwedsivani.com/*", zone_name = "rushelwedsivani.com" }
 ]
 
 [env.production.vars]
 FRONTEND_URL = "https://rushelwedsivani.com"
+N8N_WEBHOOK_URL = "https://n8n.rushel.me/webhook/8c933f37-7a58-404c-96d8-c3c7a2ea641b"
 
 [[env.production.d1_databases]]
 binding = "DB"

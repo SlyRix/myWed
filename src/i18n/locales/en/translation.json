@@ -64,34 +64,39 @@
       "title": "Ceremony Schedule",
       "events": {
         "arrival": {
-          "time": "1:30 PM",
+          "time": "8:45 AM",
           "title": "Guest Arrival",
-          "description": "Please arrive at the church 30 minutes before the ceremony begins."
+          "description": "Please arrive before the ceremony begins. Doors open from 8:30 AM – find your seats and enjoy the welcoming atmosphere."
         },
         "begins": {
-          "time": "2:00 PM",
-          "title": "Ceremony Begins",
-          "description": "The bride walks down the aisle, accompanied by her father."
+          "time": "9:00 AM",
+          "title": "Processional",
+          "description": "The ceremony begins as the bride walks down the aisle accompanied by her father, to the sound of the organ."
         },
         "vows": {
-          "time": "2:45 PM",
-          "title": "Exchange of Vows",
-          "description": "The couple exchange their vows and rings."
+          "time": "9:10 AM",
+          "title": "Welcome & Opening Prayer",
+          "description": "The pastor welcomes all guests and opens the ceremony with a prayer."
         },
         "pronouncement": {
-          "time": "3:15 PM",
-          "title": "Pronouncement",
-          "description": "The couple is pronounced husband and wife."
+          "time": "9:20 AM",
+          "title": "Scripture Readings & Sermon",
+          "description": "Bible readings and a heartfelt reflection on love and marriage by the pastor."
         },
         "recessional": {
-          "time": "3:30 PM",
-          "title": "Recessional",
-          "description": "The newlyweds exit the church, followed by the wedding party."
+          "time": "9:40 AM",
+          "title": "Exchange of Vows & Rings",
+          "description": "The couple exchange their heartfelt vows and wedding rings before God and all their loved ones."
         },
         "photos": {
-          "time": "3:45 PM",
-          "title": "Photos",
-          "description": "Group photos outside the church."
+          "time": "9:55 AM",
+          "title": "Pronouncement & Recessional",
+          "description": "Declared husband and wife, the newlyweds exit the church together for the first time as a married couple."
+        },
+        "apero": {
+          "time": "~10:15 AM",
+          "title": "Apero",
+          "description": "Join us outside the church for a celebratory Apero with drinks and light snacks to toast the newlyweds."
         }
       }
     }

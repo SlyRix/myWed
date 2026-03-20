@@ -5,7 +5,7 @@ import { useInView } from 'react-intersection-observer';
 import { mdiMapMarker, mdiCalendar, mdiTshirtCrew } from '@mdi/js';
 import Icon from '@mdi/react';
 import { useTranslation } from 'react-i18next';
-import CeremonyTimeline from './CeremonyTimeline';
+// import CeremonyTimeline from './CeremonyTimeline'; // TODO: uncomment when schedule is ready
 import MiniMap from '../map/MiniMap';
 import AddToCalendarButton from '../common/AddToCalendarButton';
 import { Link } from 'react-router-dom';
@@ -41,49 +41,17 @@ const Reception = () => {
         loadContent();
     }, [i18n.language]); // Re-load when language changes
 
-    // Timeline events - use CMS content if available, otherwise use translations
-    const timelineEvents = cmsContent?.timeline || [
-        {
-            time: t('reception.schedule.events.arrival.time'),
-            title: t('reception.schedule.events.arrival.title'),
-            description: t('reception.schedule.events.arrival.description')
-        },
-        {
-            time: t('reception.schedule.events.cocktail.time'),
-            title: t('reception.schedule.events.cocktail.title'),
-            description: t('reception.schedule.events.cocktail.description')
-        },
-        {
-            time: t('reception.schedule.events.entrance.time'),
-            title: t('reception.schedule.events.entrance.title'),
-            description: t('reception.schedule.events.entrance.description')
-        },
-        {
-            time: t('reception.schedule.events.dinner.time'),
-            title: t('reception.schedule.events.dinner.title'),
-            description: t('reception.schedule.events.dinner.description')
-        },
-        {
-            time: t('reception.schedule.events.speeches.time'),
-            title: t('reception.schedule.events.speeches.title'),
-            description: t('reception.schedule.events.speeches.description')
-        },
-        {
-            time: t('reception.schedule.events.firstDance.time'),
-            title: t('reception.schedule.events.firstDance.title'),
-            description: t('reception.schedule.events.firstDance.description')
-        },
-        {
-            time: t('reception.schedule.events.cake.time'),
-            title: t('reception.schedule.events.cake.title'),
-            description: t('reception.schedule.events.cake.description')
-        },
-        {
-            time: t('reception.schedule.events.party.time'),
-            title: t('reception.schedule.events.party.title'),
-            description: t('reception.schedule.events.party.description')
-        }
-    ];
+    // TODO: uncomment when schedule is ready
+    // const timelineEvents = cmsContent?.timeline || [
+    //     { time: t('reception.schedule.events.arrival.time'), title: t('reception.schedule.events.arrival.title'), description: t('reception.schedule.events.arrival.description') },
+    //     { time: t('reception.schedule.events.cocktail.time'), title: t('reception.schedule.events.cocktail.title'), description: t('reception.schedule.events.cocktail.description') },
+    //     { time: t('reception.schedule.events.entrance.time'), title: t('reception.schedule.events.entrance.title'), description: t('reception.schedule.events.entrance.description') },
+    //     { time: t('reception.schedule.events.dinner.time'), title: t('reception.schedule.events.dinner.title'), description: t('reception.schedule.events.dinner.description') },
+    //     { time: t('reception.schedule.events.speeches.time'), title: t('reception.schedule.events.speeches.title'), description: t('reception.schedule.events.speeches.description') },
+    //     { time: t('reception.schedule.events.firstDance.time'), title: t('reception.schedule.events.firstDance.title'), description: t('reception.schedule.events.firstDance.description') },
+    //     { time: t('reception.schedule.events.cake.time'), title: t('reception.schedule.events.cake.title'), description: t('reception.schedule.events.cake.description') },
+    //     { time: t('reception.schedule.events.party.time'), title: t('reception.schedule.events.party.title'), description: t('reception.schedule.events.party.description') },
+    // ];
 
     // Hero image from CMS
     const heroImage = cmsContent?.images?.hero || `${process.env.PUBLIC_URL}/images/reception/recetion-2.jpeg`;
@@ -218,14 +186,23 @@ const Reception = () => {
                     animate={timelineInView ? "visible" : "hidden"}
                     variants={fadeIn}
                 >
-                    <h2 className="text-2xl font-bold mb-10 text-center text-gray-800">
-                        {cmsContent?.scheduleTitle || t('reception.schedule.title')}
-                    </h2>
-                    {/* Timeline - using christian theme as default for reception */}
+                    <div className="flex items-center justify-center gap-3 mb-10">
+                        <h2 className="text-2xl font-bold text-center text-gray-800">
+                            {cmsContent?.scheduleTitle || t('reception.schedule.title')}
+                        </h2>
+                        <span className="inline-block bg-christian-accent text-white text-xs font-bold px-3 py-1 rounded-full tracking-wide uppercase">
+                            Coming Soon
+                        </span>
+                    </div>
+                    <div className="text-center py-12 px-6 bg-christian-accent/5 rounded-xl border-2 border-dashed border-christian-accent/30">
+                        <p className="text-gray-500 text-lg">The detailed schedule will be announced closer to the date.</p>
+                    </div>
+                    {/* TODO: uncomment when schedule is ready (also uncomment import + timelineEvents above)
                     <CeremonyTimeline
                         events={timelineEvents}
                         theme="christian"
                     />
+                    */}
                 </motion.div>
             </div>
         </section>

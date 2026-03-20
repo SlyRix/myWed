@@ -9,6 +9,8 @@ const getAllowedOrigins = (env) => {
         'https://wed.rushel.me',
         'https://rushelwedsivani.com',
         'https://www.rushelwedsivani.com',
+        'https://rsvp.rushelwedsivani.com',
+        'https://rsvp-dashboard-36i.pages.dev',
         'http://localhost:3000',
         'http://localhost:3001',
         'http://127.0.0.1:3000',
@@ -249,6 +251,40 @@ async function handleAdminLogin(env, request, rateLimiter, requestOrigin) {
 }
 
 // Get all guests (admin only) - DEPRECATED
+/**
+ * Returns all RSVP submissions with aggregate stats (admin only)
+ */
+async function handleGetRsvps(env, requestOrigin) {
+    try {
+        const { results } = await env.DB.prepare(
+            'SELECT * FROM rsvp ORDER BY submitted_at DESC'
+        ).all();
+
+        const attending = results.filter(r => r.attending === 'yes');
+        const stats = {
+            total: results.length,
+            attending: attending.length,
+            notAttending: results.length - attending.length,
+            christianGuests: results.reduce((s, r) => s + (r.christian_guests || 0), 0),
+            hinduGuests: results.reduce((s, r) => s + (r.hindu_guests || 0), 0),
+            receptionGuests: results.reduce((s, r) => s + (r.reception_guests || 0), 0),
+            totalGuests: results.reduce((s, r) => s + (r.total_guests || 0), 0),
+            vegetarian: results.filter(r => r.is_vegetarian === 1).length,
+        };
+
+        return new Response(
+            JSON.stringify({ success: true, stats, rsvps: results }),
+            { status: 200, headers: getAllHeaders(env, requestOrigin) }
+        );
+    } catch (error) {
+        console.error('handleGetRsvps error:', error);
+        return new Response(
+            JSON.stringify({ error: 'Failed to fetch RSVPs' }),
+            { status: 500, headers: getAllHeaders(env, requestOrigin) }
+        );
+    }
+}
+
 async function handleGetGuests(env, requestOrigin) {
     // Return empty guest list for backward compatibility
     return new Response(
@@ -1215,6 +1251,100 @@ async function handleMarkPurchased(env, giftId, request, rateLimiter, requestOri
 }
 
 // Router
+/**
+ * Handles RSVP submission: saves to D1, then fires n8n webhook for email notifications
+ * @param {Object} env - Worker environment bindings
+ * @param {Request} request - Incoming request
+ * @param {string} requestOrigin - Request origin for CORS
+ * @returns {Promise<Response>}
+ */
+async function handleRsvp(env, request, requestOrigin) {
+    let body;
+    try {
+        body = await request.json();
+    } catch {
+        return new Response(
+            JSON.stringify({ error: 'Invalid JSON body' }),
+            { status: 400, headers: getAllHeaders(env, requestOrigin) }
+        );
+    }
+
+    const { firstName, lastName, email, attending } = body;
+
+    // Validate required fields
+    if (!firstName || typeof firstName !== 'string' || firstName.trim().length === 0) {
+        return new Response(JSON.stringify({ error: 'First name is required' }), { status: 400, headers: getAllHeaders(env, requestOrigin) });
+    }
+    if (!lastName || typeof lastName !== 'string' || lastName.trim().length === 0) {
+        return new Response(JSON.stringify({ error: 'Last name is required' }), { status: 400, headers: getAllHeaders(env, requestOrigin) });
+    }
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        return new Response(JSON.stringify({ error: 'Valid email is required' }), { status: 400, headers: getAllHeaders(env, requestOrigin) });
+    }
+    if (attending !== 'yes' && attending !== 'no') {
+        return new Response(JSON.stringify({ error: 'Attending must be yes or no' }), { status: 400, headers: getAllHeaders(env, requestOrigin) });
+    }
+
+    const now = Date.now();
+    const fullName = `${firstName.trim()} ${lastName.trim()}`.trim();
+
+    try {
+        // Save to D1
+        await env.DB.prepare(`
+            INSERT INTO rsvp (
+                submitted_at, first_name, last_name, full_name, email, phone,
+                attending, christian_guests, hindu_guests, reception_guests, total_guests,
+                is_vegetarian, message, source
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        `).bind(
+            now,
+            firstName.trim().slice(0, 100),
+            lastName.trim().slice(0, 100),
+            fullName.slice(0, 200),
+            email.toLowerCase().slice(0, 255),
+            (body.phone || '').slice(0, 50),
+            attending,
+            parseInt(body.christianGuests) || 0,
+            parseInt(body.hinduGuests) || 0,
+            parseInt(body.receptionGuests) || 0,
+            parseInt(body.totalGuests) || 0,
+            body.isVegetarian ? 1 : 0,
+            (body.message || '').slice(0, 1000),
+            (body.source || 'direct').slice(0, 50)
+        ).run();
+
+        // Trigger n8n webhook for email notifications (non-blocking, ignore failure)
+        if (env.N8N_WEBHOOK_URL) {
+            try {
+                await fetch(env.N8N_WEBHOOK_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        ...body,
+                        fullName,
+                        submittedAt: new Date(now).toISOString(),
+                        timestamp: now
+                    })
+                });
+            } catch (webhookError) {
+                // RSVP is saved — email failure is non-fatal
+                console.error('n8n webhook error:', webhookError.message);
+            }
+        }
+
+        return new Response(
+            JSON.stringify({ success: true, message: 'RSVP submitted successfully' }),
+            { status: 200, headers: getAllHeaders(env, requestOrigin) }
+        );
+    } catch (error) {
+        console.error('RSVP save error:', error);
+        return new Response(
+            JSON.stringify({ error: 'Failed to save RSVP' }),
+            { status: 500, headers: getAllHeaders(env, requestOrigin) }
+        );
+    }
+}
+
 async function handleRequest(request, env) {
     const url = new URL(request.url);
     const path = url.pathname;
@@ -1259,6 +1389,11 @@ async function handleRequest(request, env) {
             return await handleValidateCode(env, code, requestOrigin);
         }
 
+        // RSVP submission - public
+        if (path === '/api/rsvp' && method === 'POST') {
+            return await handleRsvp(env, request, requestOrigin);
+        }
+
         // Gift endpoints - public
         if (path === '/api/gifts' && method === 'GET') {
             return await handleGetGifts(env, requestOrigin);
@@ -1287,6 +1422,10 @@ async function handleRequest(request, env) {
         // Protected routes (require admin authentication)
         const authError = await requireAdmin(env, request, requestOrigin);
         if (authError) return authError;
+
+        if (path === '/api/rsvp' && method === 'GET') {
+            return await handleGetRsvps(env, requestOrigin);
+        }
 
         if (path === '/api/guests' && method === 'GET') {
             return await handleGetGuests(env, requestOrigin);

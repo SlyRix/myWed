@@ -48,6 +48,28 @@ CREATE INDEX IF NOT EXISTS idx_page_content_updated ON page_content(updated_at);
 CREATE INDEX IF NOT EXISTS idx_page_content_page_id ON page_content(page_id);
 CREATE INDEX IF NOT EXISTS idx_page_content_language ON page_content(language);
 
+-- RSVP submissions table
+CREATE TABLE IF NOT EXISTS rsvp (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    submitted_at INTEGER NOT NULL,       -- Unix timestamp in milliseconds
+    first_name TEXT NOT NULL,
+    last_name TEXT NOT NULL,
+    full_name TEXT NOT NULL,
+    email TEXT NOT NULL,
+    phone TEXT DEFAULT '',
+    attending TEXT NOT NULL,             -- 'yes' or 'no'
+    christian_guests INTEGER DEFAULT 0,
+    hindu_guests INTEGER DEFAULT 0,
+    reception_guests INTEGER DEFAULT 0,
+    total_guests INTEGER DEFAULT 0,
+    is_vegetarian INTEGER DEFAULT 0,     -- 0 or 1
+    message TEXT DEFAULT '',
+    source TEXT DEFAULT 'direct'
+);
+
+CREATE INDEX IF NOT EXISTS idx_rsvp_submitted_at ON rsvp(submitted_at);
+CREATE INDEX IF NOT EXISTS idx_rsvp_email ON rsvp(email);
+
 -- Cleanup query for expired sessions (run periodically)
 -- DELETE FROM sessions WHERE expires_at < unixepoch('now') * 1000;
 

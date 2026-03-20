@@ -4,7 +4,6 @@ import React, { useState } from 'react';
 import { mdiMapMarker, mdiBed, mdiStar, mdiWifi, mdiFridge, mdiParking, mdiSnowflake, mdiClockOutline, mdiSpa, mdiWeightLifter, mdiFoodForkDrink, mdiCar } from '@mdi/js';
 import Icon from '@mdi/react';
 import { useTranslation } from 'react-i18next';
-import AnimatedSection from '../common/AnimatedSection';
 
 const Accommodations = () => {
     const { t } = useTranslation();
@@ -376,14 +375,14 @@ const Accommodations = () => {
     return (
         <section className="pt-24 pb-20 bg-gradient-to-br from-white via-white to-christian-accent/5 overflow-hidden">
             <div className="container mx-auto max-w-6xl px-4">
-                <AnimatedSection className="text-center mb-12">
+                <div className="text-center mb-12">
                     <h1 className="text-4xl font-bold mb-6">{t('accommodations.title')}</h1>
                     <p className="text-gray-700 max-w-2xl mx-auto">
                     {t('accommodations.description')}
                     </p>
-                </AnimatedSection>
+                </div>
 
-                <AnimatedSection className="mb-12">
+                <div className="mb-12">
                     <div className="max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-md">
                         <h2 className="text-2xl font-bold mb-4 text-center">{t('accommodations.travelInfo.title')}</h2>
                         <div className="grid md:grid-cols-3 gap-6">
@@ -422,9 +421,9 @@ const Accommodations = () => {
                             </ul>
                         </div>
                     </div>
-                </AnimatedSection>
+                </div>
 
-                <AnimatedSection className="mb-8">
+                <div className="mb-8">
                     <div className="bg-white rounded-lg shadow-md p-6">
                         <h2 className="text-2xl font-bold mb-6 text-center">{t('accommodations.filter.title')}</h2>
 
@@ -615,9 +614,9 @@ const Accommodations = () => {
                             </div>
                         )}
                     </div>
-                </AnimatedSection>
+                </div>
 
-                <AnimatedSection className="text-center">
+                <div className="text-center">
                     <div className="bg-white p-6 rounded-lg shadow-md max-w-2xl mx-auto">
                         <h2 className="text-xl font-bold mb-4">{t('accommodations.help.title')}</h2>
                         <p className="text-gray-700 mb-4">
@@ -633,7 +632,7 @@ const Accommodations = () => {
                             {t('accommodations.help.contactButton')}
                         </a>
                     </div>
-                </AnimatedSection>
+                </div>
             </div>
         </section>
     );

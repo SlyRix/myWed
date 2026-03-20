@@ -73,6 +73,11 @@ const ChristianCeremony = () => {
             time: t('christian.schedule.events.photos.time'),
             title: t('christian.schedule.events.photos.title'),
             description: t('christian.schedule.events.photos.description')
+        },
+        {
+            time: t('christian.schedule.events.apero.time'),
+            title: t('christian.schedule.events.apero.title'),
+            description: t('christian.schedule.events.apero.description')
         }
     ];
 

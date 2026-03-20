@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import {mdiMapMarker, mdiCalendar, mdiTshirtCrew} from '@mdi/js';
 import Icon from '@mdi/react';
 import {useTranslation} from 'react-i18next';
-import CeremonyTimeline from './CeremonyTimeline';
+// import CeremonyTimeline from './CeremonyTimeline'; // TODO: uncomment when schedule is ready
 import MiniMap from '../map/MiniMap';
 import AddToCalendarButton from '../common/AddToCalendarButton';
 import AnimatedSection from '../common/AnimatedSection';
@@ -41,49 +41,17 @@ const HinduCeremony = () => {
         loadContent();
     }, [i18n.language]); // Re-load when language changes
 
-    // Timeline events - use CMS content if available, otherwise use translations
-    const timelineEvents = cmsContent?.timeline || [
-        {
-            time: t('hindu.schedule.events.baraat.time'),
-            title: t('hindu.schedule.events.baraat.title'),
-            description: t('hindu.schedule.events.baraat.description')
-        },
-        {
-            time: t('hindu.schedule.events.milni.time'),
-            title: t('hindu.schedule.events.milni.title'),
-            description: t('hindu.schedule.events.milni.description')
-        },
-        {
-            time: t('hindu.schedule.events.ganeshPuja.time'),
-            title: t('hindu.schedule.events.ganeshPuja.title'),
-            description: t('hindu.schedule.events.ganeshPuja.description')
-        },
-        {
-            time: t('hindu.schedule.events.mandap.time'),
-            title: t('hindu.schedule.events.mandap.title'),
-            description: t('hindu.schedule.events.mandap.description')
-        },
-        {
-            time: t('hindu.schedule.events.saptapadi.time'),
-            title: t('hindu.schedule.events.saptapadi.title'),
-            description: t('hindu.schedule.events.saptapadi.description')
-        },
-        {
-            time: t('hindu.schedule.events.mangalsutra.time'),
-            title: t('hindu.schedule.events.mangalsutra.title'),
-            description: t('hindu.schedule.events.mangalsutra.description')
-        },
-        {
-            time: t('hindu.schedule.events.ashirwad.time'),
-            title: t('hindu.schedule.events.ashirwad.title'),
-            description: t('hindu.schedule.events.ashirwad.description')
-        },
-        {
-            time: t('hindu.schedule.events.lunch.time'),
-            title: t('hindu.schedule.events.lunch.title'),
-            description: t('hindu.schedule.events.lunch.description')
-        }
-    ];
+    // TODO: uncomment when schedule is ready
+    // const timelineEvents = cmsContent?.timeline || [
+    //     { time: t('hindu.schedule.events.baraat.time'), title: t('hindu.schedule.events.baraat.title'), description: t('hindu.schedule.events.baraat.description') },
+    //     { time: t('hindu.schedule.events.milni.time'), title: t('hindu.schedule.events.milni.title'), description: t('hindu.schedule.events.milni.description') },
+    //     { time: t('hindu.schedule.events.ganeshPuja.time'), title: t('hindu.schedule.events.ganeshPuja.title'), description: t('hindu.schedule.events.ganeshPuja.description') },
+    //     { time: t('hindu.schedule.events.mandap.time'), title: t('hindu.schedule.events.mandap.title'), description: t('hindu.schedule.events.mandap.description') },
+    //     { time: t('hindu.schedule.events.saptapadi.time'), title: t('hindu.schedule.events.saptapadi.title'), description: t('hindu.schedule.events.saptapadi.description') },
+    //     { time: t('hindu.schedule.events.mangalsutra.time'), title: t('hindu.schedule.events.mangalsutra.title'), description: t('hindu.schedule.events.mangalsutra.description') },
+    //     { time: t('hindu.schedule.events.ashirwad.time'), title: t('hindu.schedule.events.ashirwad.title'), description: t('hindu.schedule.events.ashirwad.description') },
+    //     { time: t('hindu.schedule.events.lunch.time'), title: t('hindu.schedule.events.lunch.title'), description: t('hindu.schedule.events.lunch.description') },
+    // ];
 
     // Rituals - use CMS content if available, otherwise use translations
     const ritualsList = cmsContent?.rituals || [
@@ -212,14 +180,23 @@ const HinduCeremony = () => {
                     </AnimatedSection>
 
                     <AnimatedSection className="mt-20" delay={0.4}>
-                        <h2 className="text-2xl font-bold mb-10 text-center text-hindu-secondary">
-                            {cmsContent?.scheduleTitle || t('hindu.schedule.title')}
-                        </h2>
-                        {/* Timeline with Ceremony Schedule */}
+                        <div className="flex items-center justify-center gap-3 mb-10">
+                            <h2 className="text-2xl font-bold text-center text-hindu-secondary">
+                                {cmsContent?.scheduleTitle || t('hindu.schedule.title')}
+                            </h2>
+                            <span className="inline-block bg-hindu-secondary text-white text-xs font-bold px-3 py-1 rounded-full tracking-wide uppercase">
+                                Coming Soon
+                            </span>
+                        </div>
+                        <div className="text-center py-12 px-6 bg-hindu-secondary/5 rounded-xl border-2 border-dashed border-hindu-secondary/30">
+                            <p className="text-gray-500 text-lg">The detailed schedule will be announced closer to the date.</p>
+                        </div>
+                        {/* TODO: uncomment when schedule is ready (also uncomment import + timelineEvents above)
                         <CeremonyTimeline
                             events={timelineEvents}
                             theme="hindu"
                         />
+                        */}
                     </AnimatedSection>
 
                     <AnimatedSection className="mt-16 text-center" delay={0.5}>

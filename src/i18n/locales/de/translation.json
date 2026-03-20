@@ -64,34 +64,39 @@
       "title": "Zeitplan der Zeremonie",
       "events": {
         "arrival": {
-          "time": "13:30 Uhr",
+          "time": "8:45 Uhr",
           "title": "Ankunft der Gäste",
-          "description": "Bitte kommen Sie 30 Minuten vor Beginn der Zeremonie in der Kirche an."
+          "description": "Bitte kommt vor Beginn der Zeremonie und nehmt eure Plätze ein. Einlass ab 8:30 Uhr."
         },
         "begins": {
-          "time": "14:00 Uhr",
-          "title": "Beginn der Zeremonie",
-          "description": "Die Braut geht den Gang entlang, begleitet von ihrem Vater."
+          "time": "9:00 Uhr",
+          "title": "Einzug",
+          "description": "Die Zeremonie beginnt – die Braut schreitet den Gang entlang, begleitet von ihrem Vater und feierlicher Orgelmusik."
         },
         "vows": {
-          "time": "14:45 Uhr",
-          "title": "Austausch der Gelübde",
-          "description": "Das Paar tauscht seine Gelübde und Ringe aus."
+          "time": "9:10 Uhr",
+          "title": "Begrüßung & Gebet",
+          "description": "Der Pfarrer begrüßt alle Gäste und eröffnet die Zeremonie mit einem Gebet."
         },
         "pronouncement": {
-          "time": "15:15 Uhr",
-          "title": "Verkündung",
-          "description": "Das Paar wird zu Mann und Frau erklärt."
+          "time": "9:20 Uhr",
+          "title": "Bibellesung & Predigt",
+          "description": "Bibellesungen und eine kurze, herzliche Besinnung über Liebe und Ehe vom Pfarrer."
         },
         "recessional": {
-          "time": "15:30 Uhr",
-          "title": "Auszug",
-          "description": "Die Frischvermählten verlassen die Kirche, gefolgt von der Hochzeitsgesellschaft."
+          "time": "9:40 Uhr",
+          "title": "Eheversprechen & Ringwechsel",
+          "description": "Das Paar tauscht seine Eheversprechen und Trauringe vor Gott und allen Liebsten aus."
         },
         "photos": {
-          "time": "15:45 Uhr",
-          "title": "Fotos",
-          "description": "Gruppenfotos vor der Kirche."
+          "time": "9:55 Uhr",
+          "title": "Verkündung & Auszug",
+          "description": "Als Mann und Frau erklärt, verlassen die Frischvermählten gemeinsam zum ersten Mal als Ehepaar die Kirche."
+        },
+        "apero": {
+          "time": "~10:15 Uhr",
+          "title": "Apero",
+          "description": "Anschließend laden wir zum Apero vor der Kirche ein – mit Getränken und kleinen Häppchen, um auf das Brautpaar anzustossen."
         }
       }
     }
