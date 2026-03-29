@@ -17,6 +17,16 @@ const RSVPPage = () => {
     // Use GuestContext to get ceremony access
     const { ceremonies: accessibleCeremonies, isLoading } = useGuest();
 
+    // Swap favicon to RSVP logo on this page
+    useEffect(() => {
+        const link = document.querySelector("link[rel='icon']");
+        const prevHref = link ? link.href : null;
+        if (link) link.href = process.env.PUBLIC_URL + '/rsvp_logo.ico';
+        return () => {
+            if (link && prevHref) link.href = prevHref;
+        };
+    }, []);
+
     // If they don't have access to any ceremonies, redirect to home
     useEffect(() => {
         if (!isLoading && accessibleCeremonies.length === 0) {
