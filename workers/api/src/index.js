@@ -1336,6 +1336,12 @@ async function handleRsvp(env, request, requestOrigin) {
             }
         }
 
+        // Send Web Push notification to all subscribers (non-blocking)
+        sendWebPushToAll(env, {
+            title: '🎉 Neue RSVP-Anmeldung!',
+            body: `${fullName} hat ${attending === 'yes' ? 'zugesagt' : 'abgesagt'}.`
+        }).catch(() => {});
+
         return new Response(
             JSON.stringify({ success: true, message: 'RSVP submitted successfully' }),
             { status: 200, headers: getAllHeaders(env, requestOrigin) }
@@ -1396,6 +1402,14 @@ async function handleRequest(request, env) {
         // RSVP submission - public
         if (path === '/api/rsvp' && method === 'POST') {
             return await handleRsvp(env, request, requestOrigin);
+        }
+
+        // VAPID public key - public (needed by frontend to subscribe)
+        if (path === '/api/push/vapid-public-key' && method === 'GET') {
+            return new Response(
+                JSON.stringify({ publicKey: env.VAPID_PUBLIC_KEY || null }),
+                { status: 200, headers: getAllHeaders(env, requestOrigin) }
+            );
         }
 
         // Gift endpoints - public
@@ -1491,6 +1505,24 @@ async function handleRequest(request, env) {
             return await handleImageUpload(env, request, requestOrigin);
         }
 
+        // RSVP edit / delete — admin only
+        if (path.startsWith('/api/rsvp/') && method === 'PUT') {
+            const id = parseInt(path.split('/').pop());
+            return await handleUpdateRsvp(env, id, request, requestOrigin);
+        }
+        if (path.startsWith('/api/rsvp/') && method === 'DELETE') {
+            const id = parseInt(path.split('/').pop());
+            return await handleDeleteRsvp(env, id, requestOrigin);
+        }
+
+        // Push subscription management — admin only
+        if (path === '/api/push/subscribe' && method === 'POST') {
+            return await handleSubscribePush(env, request, requestOrigin);
+        }
+        if (path === '/api/push/unsubscribe' && method === 'DELETE') {
+            return await handleUnsubscribePush(env, request, requestOrigin);
+        }
+
         // 404 - Not found
         return new Response(
             JSON.stringify({ error: 'Not found' }),
@@ -1502,6 +1534,209 @@ async function handleRequest(request, env) {
             JSON.stringify({ error: 'Internal server error' }),
             { status: 500, headers: getAllHeaders(env, requestOrigin) }
         );
+    }
+}
+
+// ─── RSVP EDIT / DELETE ─────────────────────────────────────────────────────
+
+async function handleUpdateRsvp(env, id, request, requestOrigin) {
+    let body;
+    try { body = await request.json(); } catch {
+        return new Response(JSON.stringify({ error: 'Invalid JSON' }), { status: 400, headers: getAllHeaders(env, requestOrigin) });
+    }
+
+    const { first_name, last_name, email, phone, attending, christian_guests, hindu_guests, reception_guests, total_guests, is_vegetarian, message } = body;
+    if (!first_name || !last_name || !email || !['yes', 'no'].includes(attending)) {
+        return new Response(JSON.stringify({ error: 'Missing required fields' }), { status: 400, headers: getAllHeaders(env, requestOrigin) });
+    }
+
+    const full_name = `${first_name.trim()} ${last_name.trim()}`;
+    const chr = parseInt(christian_guests) || 0;
+    const hin = parseInt(hindu_guests) || 0;
+    const rec = parseInt(reception_guests) || 0;
+    const tot = parseInt(total_guests) || (chr + hin + rec);
+
+    try {
+        await env.DB.prepare(`
+            UPDATE rsvp SET
+                first_name=?, last_name=?, full_name=?, email=?, phone=?,
+                attending=?, christian_guests=?, hindu_guests=?, reception_guests=?,
+                total_guests=?, is_vegetarian=?, message=?
+            WHERE id=?
+        `).bind(
+            first_name.trim(), last_name.trim(), full_name,
+            email.trim(), (phone || '').trim(), attending,
+            chr, hin, rec, tot, is_vegetarian ? 1 : 0,
+            (message || '').trim(), id
+        ).run();
+        return new Response(JSON.stringify({ success: true }), { status: 200, headers: getAllHeaders(env, requestOrigin) });
+    } catch (error) {
+        return new Response(JSON.stringify({ error: 'Update failed' }), { status: 500, headers: getAllHeaders(env, requestOrigin) });
+    }
+}
+
+async function handleDeleteRsvp(env, id, requestOrigin) {
+    try {
+        await env.DB.prepare('DELETE FROM rsvp WHERE id=?').bind(id).run();
+        return new Response(JSON.stringify({ success: true }), { status: 200, headers: getAllHeaders(env, requestOrigin) });
+    } catch (error) {
+        return new Response(JSON.stringify({ error: 'Delete failed' }), { status: 500, headers: getAllHeaders(env, requestOrigin) });
+    }
+}
+
+// ─── PUSH SUBSCRIPTIONS ─────────────────────────────────────────────────────
+
+async function handleSubscribePush(env, request, requestOrigin) {
+    let body;
+    try { body = await request.json(); } catch {
+        return new Response(JSON.stringify({ error: 'Invalid JSON' }), { status: 400, headers: getAllHeaders(env, requestOrigin) });
+    }
+    const { endpoint, keys } = body;
+    if (!endpoint || !keys?.p256dh || !keys?.auth) {
+        return new Response(JSON.stringify({ error: 'Invalid subscription object' }), { status: 400, headers: getAllHeaders(env, requestOrigin) });
+    }
+    try {
+        await env.DB.prepare(
+            'INSERT OR REPLACE INTO push_subscriptions (endpoint, p256dh, auth, created_at) VALUES (?,?,?,?)'
+        ).bind(endpoint, keys.p256dh, keys.auth, Date.now()).run();
+        return new Response(JSON.stringify({ success: true }), { status: 201, headers: getAllHeaders(env, requestOrigin) });
+    } catch (error) {
+        return new Response(JSON.stringify({ error: 'Failed to save subscription' }), { status: 500, headers: getAllHeaders(env, requestOrigin) });
+    }
+}
+
+async function handleUnsubscribePush(env, request, requestOrigin) {
+    let body;
+    try { body = await request.json(); } catch { body = {}; }
+    if (body.endpoint) {
+        await env.DB.prepare('DELETE FROM push_subscriptions WHERE endpoint=?').bind(body.endpoint).run();
+    }
+    return new Response(JSON.stringify({ success: true }), { status: 200, headers: getAllHeaders(env, requestOrigin) });
+}
+
+// ─── VAPID / WEB PUSH ───────────────────────────────────────────────────────
+
+function _b64u(buf) {
+    const bytes = buf instanceof Uint8Array ? buf : new Uint8Array(buf);
+    let s = '';
+    bytes.forEach(b => s += String.fromCharCode(b));
+    return btoa(s).replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
+}
+
+function _db64u(str) {
+    const b64 = str.replace(/-/g, '+').replace(/_/g, '/') + '==='.slice((str.length + 3) % 4);
+    const bin = atob(b64);
+    return Uint8Array.from(bin, c => c.charCodeAt(0));
+}
+
+function _concat(...arrays) {
+    const total = arrays.reduce((n, a) => n + a.length, 0);
+    const out = new Uint8Array(total);
+    let off = 0;
+    for (const a of arrays) { out.set(a, off); off += a.length; }
+    return out;
+}
+
+async function _signVapidJwt(audience, vapidPublicKeyB64, vapidPrivateKeyJwk) {
+    const exp = Math.floor(Date.now() / 1000) + 43200;
+    const enc = s => _b64u(new TextEncoder().encode(s));
+    const hdr = enc(JSON.stringify({ typ: 'JWT', alg: 'ES256' }));
+    const pld = enc(JSON.stringify({ aud: audience, exp, sub: 'mailto:admin@rushelwedsivani.com' }));
+    const input = `${hdr}.${pld}`;
+
+    const key = await crypto.subtle.importKey(
+        'jwk', vapidPrivateKeyJwk,
+        { name: 'ECDSA', namedCurve: 'P-256' }, false, ['sign']
+    );
+    const sig = await crypto.subtle.sign(
+        { name: 'ECDSA', hash: 'SHA-256' }, key, new TextEncoder().encode(input)
+    );
+    return `${input}.${_b64u(new Uint8Array(sig))}`;
+}
+
+async function _encryptWebPush(plaintext, p256dhB64, authB64) {
+    const uaPub = _db64u(p256dhB64);
+    const authSecret = _db64u(authB64);
+
+    // Ephemeral server ECDH key pair
+    const serverKP = await crypto.subtle.generateKey({ name: 'ECDH', namedCurve: 'P-256' }, true, ['deriveBits']);
+    const serverPub = new Uint8Array(await crypto.subtle.exportKey('raw', serverKP.publicKey));
+
+    // ECDH shared secret
+    const uaKey = await crypto.subtle.importKey('raw', uaPub, { name: 'ECDH', namedCurve: 'P-256' }, false, []);
+    const ecdhSecret = new Uint8Array(await crypto.subtle.deriveBits({ name: 'ECDH', public: uaKey }, serverKP.privateKey, 256));
+
+    // RFC 8291: IKM = HKDF(salt=auth, IKM=ecdh_secret, info="WebPush: info\0" + ua_pub + server_pub, 32)
+    const ecdhKey = await crypto.subtle.importKey('raw', ecdhSecret, 'HKDF', false, ['deriveBits']);
+    const wpInfo = _concat(new TextEncoder().encode('WebPush: info\x00'), uaPub, serverPub);
+    const ikm = new Uint8Array(await crypto.subtle.deriveBits(
+        { name: 'HKDF', hash: 'SHA-256', salt: authSecret, info: wpInfo }, ecdhKey, 256
+    ));
+
+    // Random salt for content encoding
+    const salt = crypto.getRandomValues(new Uint8Array(16));
+
+    // RFC 8188: CEK (128 bit) and NONCE (96 bit)
+    const ikmKey = await crypto.subtle.importKey('raw', ikm, 'HKDF', false, ['deriveBits']);
+    const cek = new Uint8Array(await crypto.subtle.deriveBits(
+        { name: 'HKDF', hash: 'SHA-256', salt, info: new TextEncoder().encode('Content-Encoding: aes128gcm\x00') }, ikmKey, 128
+    ));
+    const nonce = new Uint8Array(await crypto.subtle.deriveBits(
+        { name: 'HKDF', hash: 'SHA-256', salt, info: new TextEncoder().encode('Content-Encoding: nonce\x00') }, ikmKey, 96
+    ));
+
+    // AES-128-GCM encrypt
+    const aesKey = await crypto.subtle.importKey('raw', cek, { name: 'AES-GCM' }, false, ['encrypt']);
+    const padded = _concat(new TextEncoder().encode(typeof plaintext === 'string' ? plaintext : JSON.stringify(plaintext)), new Uint8Array([2]));
+    const ciphertext = new Uint8Array(await crypto.subtle.encrypt({ name: 'AES-GCM', iv: nonce }, aesKey, padded));
+
+    // aes128gcm record header: salt(16) + rs(4 BE) + idlen(1) + keyid(65)
+    const header = new Uint8Array(21 + serverPub.length);
+    header.set(salt, 0);
+    new DataView(header.buffer).setUint32(16, 4096, false);
+    header[20] = serverPub.length;
+    header.set(serverPub, 21);
+
+    return _concat(header, ciphertext);
+}
+
+async function sendWebPushToAll(env, notification) {
+    if (!env.VAPID_PUBLIC_KEY || !env.VAPID_PRIVATE_KEY) return;
+
+    let privateKeyJwk;
+    try { privateKeyJwk = JSON.parse(env.VAPID_PRIVATE_KEY); } catch { return; }
+
+    const { results } = await env.DB.prepare('SELECT endpoint, p256dh, auth FROM push_subscriptions').all();
+    if (!results?.length) return;
+
+    const payload = JSON.stringify(notification);
+    const deadEndpoints = [];
+
+    for (const sub of results) {
+        try {
+            const audience = new URL(sub.endpoint).origin;
+            const jwt = await _signVapidJwt(audience, env.VAPID_PUBLIC_KEY, privateKeyJwk);
+            const encrypted = await _encryptWebPush(payload, sub.p256dh, sub.auth);
+
+            const res = await fetch(sub.endpoint, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `vapid t=${jwt},k=${env.VAPID_PUBLIC_KEY}`,
+                    'Content-Encoding': 'aes128gcm',
+                    'Content-Type': 'application/octet-stream',
+                    'TTL': '86400',
+                },
+                body: encrypted
+            });
+
+            // 410 Gone = subscription expired, remove it
+            if (res.status === 410) deadEndpoints.push(sub.endpoint);
+        } catch { /* ignore individual failures */ }
+    }
+
+    // Clean up dead subscriptions
+    for (const ep of deadEndpoints) {
+        await env.DB.prepare('DELETE FROM push_subscriptions WHERE endpoint=?').bind(ep).run();
     }
 }
 

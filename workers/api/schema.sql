@@ -74,6 +74,16 @@ CREATE TABLE IF NOT EXISTS rsvp (
 CREATE INDEX IF NOT EXISTS idx_rsvp_submitted_at ON rsvp(submitted_at);
 CREATE INDEX IF NOT EXISTS idx_rsvp_email ON rsvp(email);
 
+-- Push notification subscriptions table (Web Push / VAPID)
+CREATE TABLE IF NOT EXISTS push_subscriptions (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    endpoint TEXT NOT NULL UNIQUE,
+    p256dh TEXT NOT NULL,
+    auth TEXT NOT NULL,
+    created_at INTEGER NOT NULL
+);
+CREATE INDEX IF NOT EXISTS idx_push_subscriptions_endpoint ON push_subscriptions(endpoint);
+
 -- Cleanup query for expired sessions (run periodically)
 -- DELETE FROM sessions WHERE expires_at < unixepoch('now') * 1000;
 

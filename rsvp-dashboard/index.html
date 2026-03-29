@@ -4,1132 +4,1013 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>RSVP · Rushel & Sivani</title>
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="theme-color" content="#070b18" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="RSVP" />
+  <link rel="apple-touch-icon" href="/icon.svg" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Crimson+Pro:wght@300;400;600&family=JetBrains+Mono:wght@300;400;600&display=swap" rel="stylesheet" />
+
+  <script type="importmap">
+  {
+    "imports": {
+      "preact": "https://esm.sh/preact@10.24.3",
+      "preact/hooks": "https://esm.sh/preact@10.24.3/hooks",
+      "htm/preact": "https://esm.sh/htm@3.1.1/preact/index.mjs"
+    }
+  }
+  </script>
+
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg:        #070b18;
-      --surface:   #0c1222;
-      --card:      #101828;
-      --card-2:    #141f32;
-      --gold:      #c4923a;
-      --gold-lt:   #e8b96a;
-      --gold-dim:  rgba(196,146,58,.15);
-      --gold-border: rgba(196,146,58,.25);
-      --cream:     #f0ddb8;
-      --text:      #c8bca8;
-      --text-dim:  #5c6880;
-      --green:     #4caf85;
-      --red:       #e05a5a;
-      --blue:      #4a7fc1;
-      --radius:    12px;
+      --bg:           #070b18;
+      --surface:      #0c1222;
+      --card:         #101828;
+      --card-2:       #141f32;
+      --gold:         #c4923a;
+      --gold-lt:      #e8b96a;
+      --gold-dim:     rgba(196,146,58,.15);
+      --gold-border:  rgba(196,146,58,.25);
+      --cream:        #f0ddb8;
+      --text:         #c8bca8;
+      --text-dim:     #5c6880;
+      --green:        #4caf85;
+      --red:          #e05a5a;
+      --blue:         #4a7fc1;
+      --radius:       12px;
     }
 
-    html, body {
-      min-height: 100vh;
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'Crimson Pro', Georgia, serif;
-      font-size: 16px;
-    }
+    html, body { min-height: 100vh; background: var(--bg); color: var(--text); font-family: 'Crimson Pro', Georgia, serif; font-size: 16px; }
 
-    /* ─── DOT GRID BACKGROUND ─── */
     body::before {
       content: '';
-      position: fixed;
-      inset: 0;
+      position: fixed; inset: 0;
       background-image: radial-gradient(rgba(196,146,58,.06) 1px, transparent 1px);
       background-size: 28px 28px;
-      pointer-events: none;
-      z-index: 0;
+      pointer-events: none; z-index: 0;
     }
 
     body > * { position: relative; z-index: 1; }
 
-    /* ─── LOGIN SCREEN ─── */
-    #login-screen {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-      padding: 2rem;
-    }
-
+    /* ── LOGIN ── */
+    .login-wrap { display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 2rem; }
     .login-card {
-      background: var(--card);
-      border: 1px solid var(--gold-border);
-      border-radius: 20px;
-      padding: 3rem 3.5rem;
-      width: 100%;
-      max-width: 420px;
-      text-align: center;
+      background: var(--card); border: 1px solid var(--gold-border); border-radius: 20px;
+      padding: 3rem 3.5rem; width: 100%; max-width: 420px; text-align: center;
       box-shadow: 0 40px 80px rgba(0,0,0,.6), 0 0 0 1px rgba(196,146,58,.08);
       animation: fadeUp .6s ease both;
     }
-
-    .login-monogram {
-      font-family: 'Playfair Display', serif;
-      font-size: 3rem;
-      font-style: italic;
-      color: var(--gold);
-      line-height: 1;
-      margin-bottom: .4rem;
-      letter-spacing: .05em;
-    }
-
-    .login-title {
-      font-family: 'Crimson Pro', serif;
-      font-weight: 300;
-      font-size: 1rem;
-      color: var(--text-dim);
-      letter-spacing: .25em;
-      text-transform: uppercase;
-      margin-bottom: 2.5rem;
-    }
-
-    .login-label {
-      display: block;
-      font-size: .8rem;
-      letter-spacing: .2em;
-      text-transform: uppercase;
-      color: var(--text-dim);
-      margin-bottom: .6rem;
-      text-align: left;
-    }
-
+    .login-monogram { font-family: 'Playfair Display', serif; font-size: 3rem; font-style: italic; color: var(--gold); line-height: 1; margin-bottom: .4rem; letter-spacing: .05em; }
+    .login-title { font-family: 'Crimson Pro', serif; font-weight: 300; font-size: 1rem; color: var(--text-dim); letter-spacing: .25em; text-transform: uppercase; margin-bottom: 2.5rem; }
+    .login-label { display: block; font-size: .8rem; letter-spacing: .2em; text-transform: uppercase; color: var(--text-dim); margin-bottom: .6rem; text-align: left; }
     .login-input {
-      width: 100%;
-      background: var(--surface);
-      border: 1px solid var(--gold-border);
-      border-radius: 8px;
-      color: var(--cream);
-      font-family: 'JetBrains Mono', monospace;
-      font-size: .95rem;
-      padding: .85rem 1.1rem;
-      outline: none;
-      transition: border-color .2s, box-shadow .2s;
-      letter-spacing: .1em;
+      width: 100%; background: var(--surface); border: 1px solid var(--gold-border); border-radius: 8px;
+      color: var(--cream); font-family: 'JetBrains Mono', monospace; font-size: .95rem;
+      padding: .85rem 1.1rem; outline: none; transition: border-color .2s, box-shadow .2s; letter-spacing: .1em;
     }
-
-    .login-input:focus {
-      border-color: var(--gold);
-      box-shadow: 0 0 0 3px var(--gold-dim);
-    }
-
+    .login-input:focus { border-color: var(--gold); box-shadow: 0 0 0 3px var(--gold-dim); }
     .login-btn {
-      margin-top: 1.5rem;
-      width: 100%;
-      padding: .9rem;
+      margin-top: 1.5rem; width: 100%; padding: .9rem;
       background: linear-gradient(135deg, var(--gold) 0%, #a87830 100%);
-      border: none;
-      border-radius: 8px;
-      color: #07090e;
-      font-family: 'Crimson Pro', serif;
-      font-size: 1rem;
-      font-weight: 600;
-      letter-spacing: .15em;
-      text-transform: uppercase;
-      cursor: pointer;
+      border: none; border-radius: 8px; color: #07090e;
+      font-family: 'Crimson Pro', serif; font-size: 1rem; font-weight: 600;
+      letter-spacing: .15em; text-transform: uppercase; cursor: pointer;
       transition: opacity .2s, transform .15s;
     }
-
     .login-btn:hover { opacity: .9; transform: translateY(-1px); }
-    .login-btn:active { transform: translateY(0); }
     .login-btn:disabled { opacity: .5; cursor: not-allowed; transform: none; }
+    .login-error { margin-top: 1rem; font-size: .9rem; color: var(--red); min-height: 1.2em; }
 
-    .login-error {
-      margin-top: 1rem;
-      font-size: .9rem;
-      color: var(--red);
-      min-height: 1.2em;
-    }
-
-    /* ─── DASHBOARD ─── */
-    #dashboard { display: none; min-height: 100vh; }
-
-    /* HEADER */
+    /* ── HEADER ── */
     .header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 1.4rem 2.5rem;
-      border-bottom: 1px solid var(--gold-border);
-      background: rgba(10,14,28,.8);
-      backdrop-filter: blur(12px);
-      position: sticky;
-      top: 0;
-      z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.2rem 2.5rem; border-bottom: 1px solid var(--gold-border);
+      background: rgba(10,14,28,.85); backdrop-filter: blur(12px);
+      position: sticky; top: 0; z-index: 100;
     }
-
-    .header-brand {
-      display: flex;
-      align-items: baseline;
-      gap: .8rem;
-    }
-
-    .header-monogram {
-      font-family: 'Playfair Display', serif;
-      font-style: italic;
-      font-size: 1.6rem;
-      color: var(--gold);
-      letter-spacing: .04em;
-    }
-
-    .header-sub {
-      font-family: 'Crimson Pro', serif;
-      font-weight: 300;
-      font-size: .85rem;
-      color: var(--text-dim);
-      letter-spacing: .25em;
-      text-transform: uppercase;
-    }
-
-    .header-actions { display: flex; gap: .75rem; align-items: center; }
-
-    .last-updated {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: .72rem;
-      color: var(--text-dim);
-    }
-
+    .header-brand { display: flex; align-items: baseline; gap: .8rem; }
+    .header-monogram { font-family: 'Playfair Display', serif; font-style: italic; font-size: 1.6rem; color: var(--gold); }
+    .header-sub { font-family: 'Crimson Pro', serif; font-weight: 300; font-size: .85rem; color: var(--text-dim); letter-spacing: .25em; text-transform: uppercase; }
+    .header-actions { display: flex; gap: .6rem; align-items: center; }
+    .last-updated { font-family: 'JetBrains Mono', monospace; font-size: .72rem; color: var(--text-dim); }
     .btn-ghost {
-      background: transparent;
-      border: 1px solid var(--gold-border);
-      border-radius: 6px;
-      color: var(--text);
-      font-family: 'Crimson Pro', serif;
-      font-size: .85rem;
-      letter-spacing: .1em;
-      padding: .45rem .9rem;
-      cursor: pointer;
-      transition: border-color .2s, color .2s, background .2s;
+      background: transparent; border: 1px solid var(--gold-border); border-radius: 6px;
+      color: var(--text); font-family: 'Crimson Pro', serif; font-size: .85rem;
+      letter-spacing: .1em; padding: .45rem .9rem; cursor: pointer; transition: border-color .2s, color .2s, background .2s;
+    }
+    .btn-ghost:hover { border-color: var(--gold); color: var(--gold); background: var(--gold-dim); }
+    .btn-icon {
+      background: transparent; border: 1px solid var(--gold-border); border-radius: 6px;
+      color: var(--text); width: 36px; height: 36px; cursor: pointer; transition: border-color .2s, color .2s, background .2s;
+      display: flex; align-items: center; justify-content: center; position: relative;
+    }
+    .btn-icon:hover { border-color: var(--gold); color: var(--gold); background: var(--gold-dim); }
+    .btn-icon.active { border-color: var(--green); color: var(--green); }
+    .btn-icon .dot {
+      position: absolute; top: -3px; right: -3px; width: 8px; height: 8px;
+      background: var(--green); border-radius: 50%; border: 1px solid var(--bg);
     }
 
-    .btn-ghost:hover { border-color: var(--gold); color: var(--gold); background: var(--gold-dim); }
-
-    /* MAIN CONTENT */
+    /* ── MAIN ── */
     .main { padding: 2.5rem; max-width: 1400px; margin: 0 auto; }
 
-    /* SECTION TITLE */
+    /* ── SECTION LABEL ── */
     .section-label {
-      font-family: 'Crimson Pro', serif;
-      font-weight: 300;
-      font-size: .75rem;
-      letter-spacing: .35em;
-      text-transform: uppercase;
-      color: var(--gold);
-      margin-bottom: 1.2rem;
-      display: flex;
-      align-items: center;
-      gap: .8rem;
+      font-family: 'Crimson Pro', serif; font-weight: 300; font-size: .75rem;
+      letter-spacing: .35em; text-transform: uppercase; color: var(--gold);
+      margin-bottom: 1.2rem; display: flex; align-items: center; gap: .8rem;
     }
+    .section-label::after { content: ''; flex: 1; height: 1px; background: var(--gold-border); }
 
-    .section-label::after {
-      content: '';
-      flex: 1;
-      height: 1px;
-      background: var(--gold-border);
+    /* ── INSTALL BANNER ── */
+    .install-banner {
+      background: var(--gold-dim); border: 1px solid var(--gold-border); border-radius: var(--radius);
+      padding: .9rem 1.2rem; margin-bottom: 1.5rem;
+      display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+      animation: fadeUp .4s ease both;
     }
-
-    /* STATS GRID */
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-      gap: 1rem;
-      margin-bottom: 2.5rem;
+    .install-text { font-size: .9rem; color: var(--cream); }
+    .btn-install {
+      background: var(--gold); border: none; border-radius: 6px;
+      color: #07090e; font-family: 'Crimson Pro', serif; font-weight: 600;
+      font-size: .85rem; letter-spacing: .1em; padding: .5rem 1.1rem; cursor: pointer;
+      white-space: nowrap; transition: opacity .2s;
     }
+    .btn-install:hover { opacity: .9; }
 
+    /* ── STATS GRID ── */
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 1rem; margin-bottom: 2.5rem; }
     .stat-card {
-      background: var(--card);
-      border: 1px solid var(--gold-border);
-      border-radius: var(--radius);
-      padding: 1.4rem 1.6rem;
-      position: relative;
-      overflow: hidden;
-      transition: transform .2s, box-shadow .2s;
-      animation: fadeUp .5s ease both;
+      background: var(--card); border: 1px solid var(--gold-border); border-radius: var(--radius);
+      padding: 1.4rem 1.6rem; position: relative; overflow: hidden;
+      transition: transform .2s, box-shadow .2s; animation: fadeUp .5s ease both;
     }
-
-    .stat-card:nth-child(1) { animation-delay: .05s; }
-    .stat-card:nth-child(2) { animation-delay: .1s; }
-    .stat-card:nth-child(3) { animation-delay: .15s; }
-    .stat-card:nth-child(4) { animation-delay: .2s; }
-    .stat-card:nth-child(5) { animation-delay: .25s; }
-    .stat-card:nth-child(6) { animation-delay: .3s; }
-    .stat-card:nth-child(7) { animation-delay: .35s; }
-
-    .stat-card::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 2px;
-      background: linear-gradient(90deg, transparent, var(--gold), transparent);
-      opacity: 0;
-      transition: opacity .3s;
-    }
-
+    .stat-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, var(--gold), transparent); opacity: 0; transition: opacity .3s; }
     .stat-card:hover { transform: translateY(-3px); box-shadow: 0 12px 32px rgba(0,0,0,.4); }
     .stat-card:hover::before { opacity: 1; }
-
-    .stat-icon {
-      font-size: 1.2rem;
-      margin-bottom: .6rem;
-      display: block;
-    }
-
-    .stat-value {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 2.2rem;
-      font-weight: 600;
-      color: var(--cream);
-      line-height: 1;
-      margin-bottom: .4rem;
-    }
-
+    .stat-icon { font-size: 1.2rem; margin-bottom: .6rem; display: block; }
+    .stat-value { font-family: 'JetBrains Mono', monospace; font-size: 2.2rem; font-weight: 600; color: var(--cream); line-height: 1; margin-bottom: .4rem; }
     .stat-value.gold { color: var(--gold-lt); }
     .stat-value.green { color: var(--green); }
-    .stat-value.red   { color: var(--red); }
-    .stat-value.blue  { color: #7ab0e8; }
+    .stat-value.red { color: var(--red); }
+    .stat-value.blue { color: #7ab0e8; }
+    .stat-label { font-size: .8rem; color: var(--text-dim); letter-spacing: .1em; text-transform: uppercase; }
 
-    .stat-label {
-      font-size: .8rem;
-      color: var(--text-dim);
-      letter-spacing: .1em;
-      text-transform: uppercase;
-    }
-
-    /* MIDDLE ROW */
-    .mid-row {
-      display: grid;
-      grid-template-columns: 1fr 1.8fr;
-      gap: 1.5rem;
-      margin-bottom: 2.5rem;
-    }
-
+    /* ── MID ROW ── */
+    .mid-row { display: grid; grid-template-columns: 1fr 1.8fr; gap: 1.5rem; margin-bottom: 2.5rem; }
     @media (max-width: 900px) { .mid-row { grid-template-columns: 1fr; } }
+    .panel { background: var(--card); border: 1px solid var(--gold-border); border-radius: var(--radius); padding: 1.6rem; animation: fadeUp .5s ease .3s both; }
+    .panel-title { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: var(--cream); margin-bottom: 1.4rem; }
 
-    .panel {
-      background: var(--card);
-      border: 1px solid var(--gold-border);
-      border-radius: var(--radius);
-      padding: 1.6rem;
-      animation: fadeUp .5s ease .3s both;
-    }
-
-    .panel-title {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.1rem;
-      color: var(--cream);
-      margin-bottom: 1.4rem;
-    }
-
-    /* ATTENDANCE BAR */
+    /* ── ATTENDANCE BARS ── */
     .att-bar-wrap { margin-bottom: 1.4rem; }
+    .att-bar-label { display: flex; justify-content: space-between; font-size: .82rem; color: var(--text-dim); margin-bottom: .5rem; }
+    .att-bar-track { height: 8px; background: var(--surface); border-radius: 99px; overflow: hidden; }
+    .att-bar-fill { height: 100%; border-radius: 99px; transition: width 1.2s cubic-bezier(.16,1,.3,1); }
+    .att-bar-fill.green { background: linear-gradient(90deg, #3a9e70, var(--green)); }
+    .att-bar-fill.red { background: linear-gradient(90deg, #b84040, var(--red)); }
+    .att-bar-fill.gold { background: linear-gradient(90deg, #a07020, var(--gold-lt)); }
+    .att-bar-fill.blue { background: linear-gradient(90deg, #2d5fa0, #7ab0e8); }
 
-    .att-bar-label {
-      display: flex;
-      justify-content: space-between;
-      font-size: .82rem;
-      color: var(--text-dim);
-      margin-bottom: .5rem;
-    }
-
-    .att-bar-track {
-      height: 8px;
-      background: var(--surface);
-      border-radius: 99px;
-      overflow: hidden;
-    }
-
-    .att-bar-fill {
-      height: 100%;
-      border-radius: 99px;
-      transition: width 1.2s cubic-bezier(.16,1,.3,1);
-      width: 0;
-    }
-
-    .att-bar-fill.green  { background: linear-gradient(90deg, #3a9e70, var(--green)); }
-    .att-bar-fill.red    { background: linear-gradient(90deg, #b84040, var(--red)); }
-    .att-bar-fill.gold   { background: linear-gradient(90deg, #a07020, var(--gold-lt)); }
-    .att-bar-fill.blue   { background: linear-gradient(90deg, #2d5fa0, #7ab0e8); }
-
-    .pie-chart-wrap {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 1rem 0;
-    }
-
-    .donut-svg { width: 160px; height: 160px; }
-
-    /* RECENT TABLE (in panel) */
+    /* ── RECENT TABLE ── */
     .recent-table { width: 100%; border-collapse: collapse; font-size: .88rem; }
-
-    .recent-table th {
-      font-family: 'Crimson Pro', serif;
-      font-weight: 300;
-      font-size: .72rem;
-      letter-spacing: .2em;
-      text-transform: uppercase;
-      color: var(--text-dim);
-      padding: .5rem .8rem;
-      text-align: left;
-      border-bottom: 1px solid var(--gold-border);
-    }
-
-    .recent-table td {
-      padding: .65rem .8rem;
-      border-bottom: 1px solid rgba(255,255,255,.04);
-      font-family: 'Crimson Pro', serif;
-      vertical-align: middle;
-    }
-
+    .recent-table th { font-family: 'Crimson Pro', serif; font-weight: 300; font-size: .72rem; letter-spacing: .2em; text-transform: uppercase; color: var(--text-dim); padding: .5rem .8rem; text-align: left; border-bottom: 1px solid var(--gold-border); }
+    .recent-table td { padding: .65rem .8rem; border-bottom: 1px solid rgba(255,255,255,.04); font-family: 'Crimson Pro', serif; vertical-align: middle; }
     .recent-table tr:hover td { background: rgba(196,146,58,.04); }
 
-    /* GUEST TABLE */
+    /* ── GUEST TABLE ── */
     .table-section { animation: fadeUp .5s ease .4s both; }
-
-    .table-controls {
-      display: flex;
-      gap: .8rem;
-      margin-bottom: 1.2rem;
-      flex-wrap: wrap;
-      align-items: center;
-    }
-
-    .search-input {
-      background: var(--card);
-      border: 1px solid var(--gold-border);
-      border-radius: 7px;
-      color: var(--cream);
-      font-family: 'Crimson Pro', serif;
-      font-size: .95rem;
-      padding: .55rem 1rem;
-      outline: none;
-      flex: 1;
-      min-width: 200px;
-      transition: border-color .2s;
-    }
-
+    .table-controls { display: flex; gap: .8rem; margin-bottom: 1.2rem; flex-wrap: wrap; align-items: center; }
+    .search-input { background: var(--card); border: 1px solid var(--gold-border); border-radius: 7px; color: var(--cream); font-family: 'Crimson Pro', serif; font-size: .95rem; padding: .55rem 1rem; outline: none; flex: 1; min-width: 200px; transition: border-color .2s; }
     .search-input:focus { border-color: var(--gold); }
     .search-input::placeholder { color: var(--text-dim); }
-
-    .filter-select {
-      background: var(--card);
-      border: 1px solid var(--gold-border);
-      border-radius: 7px;
-      color: var(--text);
-      font-family: 'Crimson Pro', serif;
-      font-size: .9rem;
-      padding: .55rem .9rem;
-      outline: none;
-      cursor: pointer;
-      transition: border-color .2s;
-    }
-
+    .filter-select { background: var(--card); border: 1px solid var(--gold-border); border-radius: 7px; color: var(--text); font-family: 'Crimson Pro', serif; font-size: .9rem; padding: .55rem .9rem; outline: none; cursor: pointer; transition: border-color .2s; }
     .filter-select:focus { border-color: var(--gold); }
-
-    .btn-export {
-      background: var(--gold-dim);
-      border: 1px solid var(--gold-border);
-      border-radius: 7px;
-      color: var(--gold-lt);
-      font-family: 'Crimson Pro', serif;
-      font-size: .9rem;
-      padding: .55rem 1rem;
-      cursor: pointer;
-      transition: background .2s;
-      letter-spacing: .05em;
-      white-space: nowrap;
-    }
-
+    .btn-export { background: var(--gold-dim); border: 1px solid var(--gold-border); border-radius: 7px; color: var(--gold-lt); font-family: 'Crimson Pro', serif; font-size: .9rem; padding: .55rem 1rem; cursor: pointer; transition: background .2s; letter-spacing: .05em; white-space: nowrap; }
     .btn-export:hover { background: rgba(196,146,58,.25); }
-
-    .table-wrap {
-      background: var(--card);
-      border: 1px solid var(--gold-border);
-      border-radius: var(--radius);
-      overflow: hidden;
-    }
-
+    .table-wrap { background: var(--card); border: 1px solid var(--gold-border); border-radius: var(--radius); overflow: hidden; }
+    .table-scroll { overflow-x: auto; }
     .guest-table { width: 100%; border-collapse: collapse; font-size: .9rem; }
-
-    .guest-table th {
-      background: var(--card-2);
-      font-family: 'Crimson Pro', serif;
-      font-weight: 300;
-      font-size: .72rem;
-      letter-spacing: .2em;
-      text-transform: uppercase;
-      color: var(--text-dim);
-      padding: .9rem 1.1rem;
-      text-align: left;
-      border-bottom: 1px solid var(--gold-border);
-      white-space: nowrap;
-      cursor: pointer;
-      user-select: none;
-      transition: color .2s;
-    }
-
+    .guest-table th { background: var(--card-2); font-family: 'Crimson Pro', serif; font-weight: 300; font-size: .72rem; letter-spacing: .2em; text-transform: uppercase; color: var(--text-dim); padding: .9rem 1.1rem; text-align: left; border-bottom: 1px solid var(--gold-border); white-space: nowrap; cursor: pointer; user-select: none; transition: color .2s; }
     .guest-table th:hover { color: var(--gold); }
     .guest-table th.sorted { color: var(--gold-lt); }
-
-    .guest-table td {
-      padding: .8rem 1.1rem;
-      border-bottom: 1px solid rgba(255,255,255,.04);
-      font-family: 'Crimson Pro', serif;
-      vertical-align: middle;
-    }
-
+    .guest-table td { padding: .75rem 1.1rem; border-bottom: 1px solid rgba(255,255,255,.04); font-family: 'Crimson Pro', serif; vertical-align: middle; }
     .guest-table tr:last-child td { border-bottom: none; }
     .guest-table tbody tr { transition: background .15s; }
     .guest-table tbody tr:hover td { background: rgba(196,146,58,.05); }
-
-    .name-cell {
-      font-weight: 600;
-      color: var(--cream);
-    }
-
-    .email-cell {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: .78rem;
-      color: var(--text-dim);
-    }
-
-    .mono {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: .82rem;
-    }
-
-    .badge {
-      display: inline-block;
-      padding: .2rem .65rem;
-      border-radius: 99px;
-      font-size: .75rem;
-      font-family: 'JetBrains Mono', monospace;
-      font-weight: 600;
-      letter-spacing: .03em;
-    }
-
-    .badge-yes    { background: rgba(76,175,133,.15); color: var(--green); border: 1px solid rgba(76,175,133,.3); }
-    .badge-no     { background: rgba(224,90,90,.12); color: var(--red); border: 1px solid rgba(224,90,90,.25); }
-    .badge-veg    { background: rgba(76,175,133,.1); color: #81c99e; border: 1px solid rgba(76,175,133,.2); font-size: .7rem; }
-    .badge-meat   { background: rgba(200,100,60,.1); color: #c98870; border: 1px solid rgba(200,100,60,.2); font-size: .7rem; }
-    .badge-cer    { background: rgba(196,146,58,.1); color: var(--gold); border: 1px solid var(--gold-border); font-size: .7rem; margin: 1px; }
-
+    .name-cell { font-weight: 600; color: var(--cream); }
+    .email-cell { font-family: 'JetBrains Mono', monospace; font-size: .78rem; color: var(--text-dim); }
+    .mono { font-family: 'JetBrains Mono', monospace; font-size: .82rem; }
     .timestamp { font-family: 'JetBrains Mono', monospace; font-size: .72rem; color: var(--text-dim); }
-
-    .empty-state {
-      text-align: center;
-      padding: 4rem 2rem;
-      color: var(--text-dim);
+    .badge { display: inline-block; padding: .2rem .65rem; border-radius: 99px; font-size: .75rem; font-family: 'JetBrains Mono', monospace; font-weight: 600; letter-spacing: .03em; }
+    .badge-yes { background: rgba(76,175,133,.15); color: var(--green); border: 1px solid rgba(76,175,133,.3); }
+    .badge-no { background: rgba(224,90,90,.12); color: var(--red); border: 1px solid rgba(224,90,90,.25); }
+    .badge-veg { background: rgba(76,175,133,.1); color: #81c99e; border: 1px solid rgba(76,175,133,.2); font-size: .7rem; }
+    .badge-meat { background: rgba(200,100,60,.1); color: #c98870; border: 1px solid rgba(200,100,60,.2); font-size: .7rem; }
+    .badge-cer { background: rgba(196,146,58,.1); color: var(--gold); border: 1px solid var(--gold-border); font-size: .7rem; margin: 1px; }
+    .count-badge { background: var(--gold-dim); border: 1px solid var(--gold-border); border-radius: 99px; color: var(--gold-lt); font-family: 'JetBrains Mono', monospace; font-size: .72rem; padding: .15rem .6rem; margin-left: .5rem; }
+    .btn-row-action {
+      background: transparent; border: none; cursor: pointer; padding: .25rem .45rem;
+      border-radius: 5px; font-size: .8rem; transition: background .15s, color .15s;
+      line-height: 1;
     }
+    .btn-row-edit { color: var(--text-dim); }
+    .btn-row-edit:hover { background: rgba(196,146,58,.15); color: var(--gold); }
+    .btn-row-delete { color: var(--text-dim); }
+    .btn-row-delete:hover { background: rgba(224,90,90,.15); color: var(--red); }
 
+    /* ── LOADING / ERROR ── */
+    .loading-overlay { display: flex; align-items: center; justify-content: center; padding: 6rem; flex-direction: column; gap: 1.2rem; }
+    .spinner { width: 40px; height: 40px; border: 2px solid var(--gold-border); border-top-color: var(--gold); border-radius: 50%; animation: spin .8s linear infinite; }
+    .loading-text { font-family: 'Playfair Display', serif; font-style: italic; color: var(--text-dim); font-size: 1rem; }
+    .error-banner { background: rgba(224,90,90,.12); border: 1px solid rgba(224,90,90,.3); border-radius: 8px; color: var(--red); padding: 1rem 1.4rem; margin-bottom: 1.5rem; font-size: .9rem; }
+    .empty-state { text-align: center; padding: 4rem 2rem; color: var(--text-dim); }
     .empty-state .big { font-size: 3rem; margin-bottom: 1rem; opacity: .3; }
     .empty-state p { font-family: 'Playfair Display', serif; font-style: italic; font-size: 1.1rem; }
 
-    .count-badge {
-      background: var(--gold-dim);
-      border: 1px solid var(--gold-border);
-      border-radius: 99px;
-      color: var(--gold-lt);
-      font-family: 'JetBrains Mono', monospace;
-      font-size: .72rem;
-      padding: .15rem .6rem;
-      margin-left: .5rem;
+    /* ── EDIT MODAL (drawer from right) ── */
+    .modal-backdrop {
+      position: fixed; inset: 0; background: rgba(0,0,0,.7); backdrop-filter: blur(4px);
+      z-index: 500; animation: fadeIn .2s ease both;
     }
-
-    /* LOADING */
-    .loading-overlay {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 6rem;
-      flex-direction: column;
-      gap: 1.2rem;
+    .modal-drawer {
+      position: fixed; top: 0; right: 0; bottom: 0; width: min(520px, 100vw);
+      background: var(--surface); border-left: 1px solid var(--gold-border);
+      z-index: 501; display: flex; flex-direction: column;
+      animation: slideInRight .28s cubic-bezier(.16,1,.3,1) both;
+      overflow: hidden;
     }
-
-    .spinner {
-      width: 40px; height: 40px;
-      border: 2px solid var(--gold-border);
-      border-top-color: var(--gold);
-      border-radius: 50%;
-      animation: spin .8s linear infinite;
+    .modal-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.4rem 1.8rem; border-bottom: 1px solid var(--gold-border);
+      background: var(--card); flex-shrink: 0;
     }
+    .modal-title { font-family: 'Playfair Display', serif; font-size: 1.2rem; color: var(--cream); }
+    .modal-subtitle { font-size: .82rem; color: var(--text-dim); margin-top: .2rem; }
+    .btn-close { background: transparent; border: none; color: var(--text-dim); font-size: 1.3rem; cursor: pointer; padding: .3rem; line-height: 1; transition: color .2s; }
+    .btn-close:hover { color: var(--cream); }
+    .modal-body { flex: 1; overflow-y: auto; padding: 1.8rem; }
+    .modal-footer { padding: 1.2rem 1.8rem; border-top: 1px solid var(--gold-border); background: var(--card); display: flex; gap: .75rem; flex-shrink: 0; }
 
-    .loading-text {
-      font-family: 'Playfair Display', serif;
-      font-style: italic;
-      color: var(--text-dim);
-      font-size: 1rem;
+    /* ── FORM FIELDS ── */
+    .field-group { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.2rem; }
+    .field-full { margin-bottom: 1.2rem; }
+    .field-label { display: block; font-size: .75rem; letter-spacing: .2em; text-transform: uppercase; color: var(--text-dim); margin-bottom: .5rem; }
+    .field-input {
+      width: 100%; background: var(--card); border: 1px solid var(--gold-border); border-radius: 7px;
+      color: var(--cream); font-family: 'Crimson Pro', serif; font-size: 1rem;
+      padding: .6rem .9rem; outline: none; transition: border-color .2s, box-shadow .2s;
     }
-
-    /* ERROR BANNER */
-    .error-banner {
-      background: rgba(224,90,90,.12);
-      border: 1px solid rgba(224,90,90,.3);
-      border-radius: 8px;
-      color: var(--red);
-      padding: 1rem 1.4rem;
-      margin-bottom: 1.5rem;
-      font-size: .9rem;
-      display: none;
+    .field-input:focus { border-color: var(--gold); box-shadow: 0 0 0 2px var(--gold-dim); }
+    .field-textarea { min-height: 80px; resize: vertical; }
+    .field-input.mono-input { font-family: 'JetBrains Mono', monospace; font-size: .9rem; }
+    .attending-toggle { display: flex; gap: .5rem; }
+    .attending-btn {
+      flex: 1; padding: .6rem; border-radius: 7px; border: 1px solid var(--gold-border);
+      background: transparent; color: var(--text-dim); font-family: 'Crimson Pro', serif;
+      font-size: .9rem; cursor: pointer; transition: all .18s;
     }
+    .attending-btn.yes.active { background: rgba(76,175,133,.2); border-color: var(--green); color: var(--green); }
+    .attending-btn.no.active { background: rgba(224,90,90,.15); border-color: var(--red); color: var(--red); }
+    .attending-btn:not(.active):hover { border-color: var(--gold); color: var(--text); }
+    .veg-check { display: flex; align-items: center; gap: .7rem; cursor: pointer; }
+    .veg-check input[type="checkbox"] { width: 16px; height: 16px; accent-color: var(--green); cursor: pointer; }
+    .field-num { font-family: 'JetBrains Mono', monospace; }
+    .guests-row { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: .75rem; margin-bottom: 1.2rem; }
+    @media (max-width: 480px) { .guests-row { grid-template-columns: 1fr 1fr; } .field-group { grid-template-columns: 1fr; } }
 
-    /* SCROLL */
-    .table-scroll { overflow-x: auto; }
-
-    /* ANIMATIONS */
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(14px); }
-      to   { opacity: 1; transform: translateY(0); }
+    /* ── DELETE DIALOG ── */
+    .dialog-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,.7); backdrop-filter: blur(4px); z-index: 600; display: flex; align-items: center; justify-content: center; padding: 1.5rem; animation: fadeIn .15s ease both; }
+    .dialog-box {
+      background: var(--card); border: 1px solid rgba(224,90,90,.3); border-radius: 16px;
+      padding: 2rem 2.5rem; max-width: 400px; width: 100%; text-align: center;
+      animation: fadeUp .2s ease both; box-shadow: 0 30px 60px rgba(0,0,0,.6);
     }
+    .dialog-icon { font-size: 2.5rem; margin-bottom: 1rem; }
+    .dialog-title { font-family: 'Playfair Display', serif; font-size: 1.3rem; color: var(--cream); margin-bottom: .6rem; }
+    .dialog-body { font-size: .95rem; color: var(--text-dim); line-height: 1.5; margin-bottom: 1.8rem; }
+    .dialog-name { color: var(--cream); font-weight: 600; }
+    .dialog-actions { display: flex; gap: .75rem; }
+    .btn-cancel { flex: 1; padding: .8rem; background: transparent; border: 1px solid var(--gold-border); border-radius: 8px; color: var(--text); font-family: 'Crimson Pro', serif; font-size: .95rem; cursor: pointer; transition: background .2s; }
+    .btn-cancel:hover { background: var(--gold-dim); }
+    .btn-delete { flex: 1; padding: .8rem; background: rgba(224,90,90,.85); border: none; border-radius: 8px; color: #fff; font-family: 'Crimson Pro', serif; font-size: .95rem; font-weight: 600; cursor: pointer; transition: background .2s; }
+    .btn-delete:hover { background: var(--red); }
 
-    @keyframes spin { to { transform: rotate(360deg); } }
+    /* ── SAVE BUTTON ── */
+    .btn-save { flex: 1; padding: .8rem 1.5rem; background: linear-gradient(135deg, var(--gold), #a87830); border: none; border-radius: 8px; color: #07090e; font-family: 'Crimson Pro', serif; font-size: .95rem; font-weight: 600; letter-spacing: .1em; cursor: pointer; transition: opacity .2s; }
+    .btn-save:hover { opacity: .9; }
+    .btn-save:disabled { opacity: .5; cursor: not-allowed; }
 
-    /* SCROLLBAR */
+    /* ── TOAST ── */
+    .toast-container { position: fixed; bottom: 1.5rem; left: 50%; transform: translateX(-50%); z-index: 700; pointer-events: none; display: flex; flex-direction: column; align-items: center; gap: .5rem; }
+    .toast {
+      background: var(--card-2); border: 1px solid var(--gold-border); border-radius: 10px;
+      padding: .75rem 1.4rem; font-size: .9rem; color: var(--cream);
+      box-shadow: 0 8px 24px rgba(0,0,0,.5); animation: toastIn .3s ease both;
+      display: flex; align-items: center; gap: .6rem; white-space: nowrap;
+    }
+    .toast.success { border-color: rgba(76,175,133,.4); }
+    .toast.error-toast { border-color: rgba(224,90,90,.4); }
+    .toast.fade-out { animation: toastOut .3s ease both; }
+
+    /* ── SCROLLBAR ── */
     ::-webkit-scrollbar { width: 6px; height: 6px; }
     ::-webkit-scrollbar-track { background: var(--bg); }
     ::-webkit-scrollbar-thumb { background: var(--gold-border); border-radius: 99px; }
     ::-webkit-scrollbar-thumb:hover { background: var(--gold); }
 
-    /* RESPONSIVE */
+    /* ── RESPONSIVE ── */
     @media (max-width: 640px) {
       .header { padding: 1rem 1.2rem; }
-      .main { padding: 1.5rem 1.2rem; }
       .header-sub { display: none; }
+      .main { padding: 1.5rem 1.2rem; }
       .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .last-updated { display: none; }
     }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes slideInRight { from { transform: translateX(100%); } to { transform: translateX(0); } }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @keyframes toastIn { from { opacity: 0; transform: translateY(12px) scale(.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
+    @keyframes toastOut { from { opacity: 1; transform: translateY(0) scale(1); } to { opacity: 0; transform: translateY(8px) scale(.95); } }
   </style>
 </head>
 <body>
+<div id="root"></div>
 
-<!-- ═══════════════════════════════════════════════════════════
-     LOGIN SCREEN
-════════════════════════════════════════════════════════════ -->
-<div id="login-screen">
-  <div class="login-card">
-    <div class="login-monogram">R & S</div>
-    <div class="login-title">RSVP Dashboard</div>
+<script type="module">
+import { h, render } from 'preact';
+import { useState, useEffect, useCallback, useRef } from 'preact/hooks';
+import { html } from 'htm/preact';
 
-    <label class="login-label" for="pw-input">Admin-Passwort</label>
-    <input
-      class="login-input"
-      id="pw-input"
-      type="password"
-      placeholder="••••••••"
-      autocomplete="current-password"
-    />
-
-    <button class="login-btn" id="login-btn" onclick="doLogin()">Anmelden</button>
-    <div class="login-error" id="login-error"></div>
-  </div>
-</div>
-
-<!-- ═══════════════════════════════════════════════════════════
-     DASHBOARD
-════════════════════════════════════════════════════════════ -->
-<div id="dashboard">
-
-  <!-- HEADER -->
-  <header class="header">
-    <div class="header-brand">
-      <span class="header-monogram">Rushel & Sivani</span>
-      <span class="header-sub">RSVP Dashboard</span>
-    </div>
-    <div class="header-actions">
-      <span class="last-updated" id="last-updated"></span>
-      <button class="btn-ghost" onclick="loadData()">↻ Refresh</button>
-      <button class="btn-ghost" onclick="doLogout()">Abmelden</button>
-    </div>
-  </header>
-
-  <!-- MAIN -->
-  <main class="main" id="main-content">
-    <div class="loading-overlay" id="loading">
-      <div class="spinner"></div>
-      <div class="loading-text">Lade RSVP-Daten…</div>
-    </div>
-
-    <div id="data-content" style="display:none">
-
-      <div class="error-banner" id="error-banner"></div>
-
-      <!-- STATS -->
-      <div class="section-label">Übersicht</div>
-      <div class="stats-grid" id="stats-grid">
-        <div class="stat-card">
-          <span class="stat-icon">📋</span>
-          <div class="stat-value gold" id="s-total">0</div>
-          <div class="stat-label">Total RSVPs</div>
-        </div>
-        <div class="stat-card">
-          <span class="stat-icon">✅</span>
-          <div class="stat-value green" id="s-yes">0</div>
-          <div class="stat-label">Zusagen</div>
-        </div>
-        <div class="stat-card">
-          <span class="stat-icon">❌</span>
-          <div class="stat-value red" id="s-no">0</div>
-          <div class="stat-label">Absagen</div>
-        </div>
-        <div class="stat-card">
-          <span class="stat-icon">👥</span>
-          <div class="stat-value" id="s-guests">0</div>
-          <div class="stat-label">Gäste Total</div>
-        </div>
-        <div class="stat-card">
-          <span class="stat-icon">⛪</span>
-          <div class="stat-value blue" id="s-christian">0</div>
-          <div class="stat-label">Christliche Zeremonie</div>
-        </div>
-        <div class="stat-card">
-          <span class="stat-icon">🪔</span>
-          <div class="stat-value blue" id="s-hindu">0</div>
-          <div class="stat-label">Hinduistische Zeremonie</div>
-        </div>
-        <div class="stat-card">
-          <span class="stat-icon">🎉</span>
-          <div class="stat-value blue" id="s-reception">0</div>
-          <div class="stat-label">Empfang / Reception</div>
-        </div>
-        <div class="stat-card">
-          <span class="stat-icon">🥗</span>
-          <div class="stat-value green" id="s-veg">0</div>
-          <div class="stat-label">Vegetarisch</div>
-        </div>
-      </div>
-
-      <!-- MIDDLE ROW -->
-      <div class="mid-row">
-
-        <!-- ATTENDANCE CHART -->
-        <div class="panel">
-          <div class="panel-title">Anwesenheit</div>
-          <div class="att-bar-wrap">
-            <div class="att-bar-label">
-              <span>Zusagen</span>
-              <span id="bar-yes-pct">—</span>
-            </div>
-            <div class="att-bar-track">
-              <div class="att-bar-fill green" id="bar-yes"></div>
-            </div>
-          </div>
-          <div class="att-bar-wrap">
-            <div class="att-bar-label">
-              <span>Absagen</span>
-              <span id="bar-no-pct">—</span>
-            </div>
-            <div class="att-bar-track">
-              <div class="att-bar-fill red" id="bar-no"></div>
-            </div>
-          </div>
-          <div class="att-bar-wrap" style="margin-top:1.5rem">
-            <div class="att-bar-label">
-              <span>⛪ Christliche Zeremonie</span>
-              <span id="bar-chr-pct">—</span>
-            </div>
-            <div class="att-bar-track">
-              <div class="att-bar-fill gold" id="bar-chr"></div>
-            </div>
-          </div>
-          <div class="att-bar-wrap">
-            <div class="att-bar-label">
-              <span>🪔 Hinduistische Zeremonie</span>
-              <span id="bar-hin-pct">—</span>
-            </div>
-            <div class="att-bar-track">
-              <div class="att-bar-fill blue" id="bar-hin"></div>
-            </div>
-          </div>
-          <div class="att-bar-wrap">
-            <div class="att-bar-label">
-              <span>🎉 Empfang / Reception</span>
-              <span id="bar-rec-pct">—</span>
-            </div>
-            <div class="att-bar-track">
-              <div class="att-bar-fill gold" id="bar-rec"></div>
-            </div>
-          </div>
-          <div class="att-bar-wrap">
-            <div class="att-bar-label">
-              <span>🥗 Vegetarisch</span>
-              <span id="bar-veg-pct">—</span>
-            </div>
-            <div class="att-bar-track">
-              <div class="att-bar-fill green" id="bar-veg"></div>
-            </div>
-          </div>
-        </div>
-
-        <!-- RECENT RSVPs -->
-        <div class="panel">
-          <div class="panel-title">Neueste Anmeldungen</div>
-          <div class="table-scroll">
-            <table class="recent-table">
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Status</th>
-                  <th>Zeremonien</th>
-                  <th>Datum</th>
-                </tr>
-              </thead>
-              <tbody id="recent-tbody">
-                <tr><td colspan="4" style="color:var(--text-dim);padding:2rem;text-align:center">Keine Daten</td></tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-
-      <!-- GUEST TABLE -->
-      <div class="table-section">
-        <div class="section-label">
-          Alle Gäste
-          <span class="count-badge" id="table-count">0</span>
-        </div>
-
-        <div class="table-controls">
-          <input
-            class="search-input"
-            id="search-input"
-            type="text"
-            placeholder="Suchen nach Name, E-Mail…"
-            oninput="filterTable()"
-          />
-          <select class="filter-select" id="filter-attending" onchange="filterTable()">
-            <option value="">Alle Status</option>
-            <option value="yes">Zusagen</option>
-            <option value="no">Absagen</option>
-          </select>
-          <select class="filter-select" id="filter-ceremony" onchange="filterTable()">
-            <option value="">Alle Zeremonien</option>
-            <option value="christian">Christlich</option>
-            <option value="hindu">Hinduistisch</option>
-            <option value="reception">Empfang</option>
-          </select>
-          <select class="filter-select" id="filter-diet" onchange="filterTable()">
-            <option value="">Alle Ernährung</option>
-            <option value="veg">Vegetarisch</option>
-            <option value="meat">Nicht-vegetarisch</option>
-          </select>
-          <button class="btn-export" onclick="exportCSV()">↓ CSV Export</button>
-        </div>
-
-        <div class="table-wrap table-scroll">
-          <table class="guest-table" id="guest-table">
-            <thead>
-              <tr>
-                <th onclick="sortBy('full_name')">#  Name</th>
-                <th onclick="sortBy('email')">E-Mail</th>
-                <th onclick="sortBy('attending')">Status</th>
-                <th onclick="sortBy('christian_guests')">⛪</th>
-                <th onclick="sortBy('hindu_guests')">🪔</th>
-                <th onclick="sortBy('reception_guests')">🎉</th>
-                <th onclick="sortBy('total_guests')">Gäste</th>
-                <th onclick="sortBy('is_vegetarian')">Ernährung</th>
-                <th>Telefon</th>
-                <th>Nachricht</th>
-                <th onclick="sortBy('submitted_at')">Eingegangen</th>
-              </tr>
-            </thead>
-            <tbody id="guest-tbody">
-              <tr><td colspan="11">
-                <div class="loading-overlay" style="padding:3rem">
-                  <div class="spinner"></div>
-                </div>
-              </td></tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-    </div><!-- /data-content -->
-  </main>
-</div><!-- /dashboard -->
-
-<script>
 const API = 'https://api.rushel.me/api';
-let allRsvps = [];
-let sortCol = 'submitted_at';
-let sortDir = -1;
 
-// ─── AUTH ───────────────────────────────────────────────────
-async function doLogin() {
-  const pw = document.getElementById('pw-input').value.trim();
-  const btn = document.getElementById('login-btn');
-  const err = document.getElementById('login-error');
-  if (!pw) return;
-
-  btn.disabled = true;
-  btn.textContent = 'Prüfe…';
-  err.textContent = '';
-
-  try {
-    const res = await fetch(`${API}/admin/login`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ password: pw })
-    });
-    const data = await res.json();
-
-    if (!res.ok || !data.token) throw new Error(data.error || 'Falsches Passwort');
-
-    localStorage.setItem('admin_token', data.token);
-    showDashboard();
-  } catch (e) {
-    err.textContent = e.message;
-    btn.disabled = false;
-    btn.textContent = 'Anmelden';
-  }
-}
-
-function doLogout() {
-  localStorage.removeItem('admin_token');
-  document.getElementById('dashboard').style.display = 'none';
-  document.getElementById('login-screen').style.display = 'flex';
-  document.getElementById('pw-input').value = '';
-}
-
-function getToken() { return localStorage.getItem('admin_token'); }
-
-// Enter key on login
-document.getElementById('pw-input').addEventListener('keydown', e => {
-  if (e.key === 'Enter') doLogin();
-});
-
-// ─── INIT ────────────────────────────────────────────────────
-window.addEventListener('DOMContentLoaded', () => {
-  if (getToken()) showDashboard();
-});
-
-function showDashboard() {
-  document.getElementById('login-screen').style.display = 'none';
-  document.getElementById('dashboard').style.display = 'block';
-  loadData();
-}
-
-// ─── LOAD DATA ──────────────────────────────────────────────
-async function loadData() {
-  document.getElementById('loading').style.display = 'flex';
-  document.getElementById('data-content').style.display = 'none';
-  document.getElementById('error-banner').style.display = 'none';
-
-  try {
-    const res = await fetch(`${API}/rsvp`, {
-      headers: { 'Authorization': `Bearer ${getToken()}` }
-    });
-
-    if (res.status === 401) { doLogout(); return; }
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-
-    const { stats, rsvps } = await res.json();
-    allRsvps = rsvps || [];
-
-    renderStats(stats);
-    renderBars(stats);
-    renderRecent(allRsvps);
-    filterTable();
-
-    document.getElementById('last-updated').textContent =
-      'Aktualisiert ' + new Date().toLocaleTimeString('de-CH', { hour: '2-digit', minute: '2-digit' });
-
-    document.getElementById('loading').style.display = 'none';
-    document.getElementById('data-content').style.display = 'block';
-  } catch (e) {
-    document.getElementById('loading').style.display = 'none';
-    document.getElementById('data-content').style.display = 'block';
-    const banner = document.getElementById('error-banner');
-    banner.style.display = 'block';
-    banner.textContent = 'Fehler beim Laden: ' + e.message;
-  }
-}
-
-// ─── STATS ──────────────────────────────────────────────────
-function renderStats(s) {
-  animateCount('s-total',    s.total);
-  animateCount('s-yes',      s.attending);
-  animateCount('s-no',       s.notAttending);
-  animateCount('s-guests',   s.totalGuests);
-  animateCount('s-christian', s.christianGuests);
-  animateCount('s-hindu',     s.hinduGuests);
-  animateCount('s-reception', s.receptionGuests);
-  animateCount('s-veg',       s.vegetarian);
-}
-
-function animateCount(id, target) {
-  const el = document.getElementById(id);
-  const start = performance.now();
-  const duration = 900;
-  const from = 0;
-  function step(now) {
-    const t = Math.min((now - start) / duration, 1);
-    const eased = 1 - Math.pow(1 - t, 3);
-    el.textContent = Math.round(from + (target - from) * eased);
-    if (t < 1) requestAnimationFrame(step);
-    else el.textContent = target;
-  }
-  requestAnimationFrame(step);
-}
-
-// ─── BARS ───────────────────────────────────────────────────
-function renderBars(s) {
-  const t = s.total || 1;
-  const attendingT = s.attending || 1;
-
-  setBar('bar-yes', s.attending, t, id => `${Math.round(s.attending/t*100)}% (${s.attending})`);
-  setBar('bar-no',  s.notAttending, t, () => `${Math.round(s.notAttending/t*100)}% (${s.notAttending})`);
-  setBar('bar-chr', s.christianGuests, s.totalGuests || 1, () => `${s.christianGuests} Gäste`);
-  setBar('bar-hin', s.hinduGuests, s.totalGuests || 1, () => `${s.hinduGuests} Gäste`);
-  setBar('bar-rec', s.receptionGuests, s.totalGuests || 1, () => `${s.receptionGuests} Gäste`);
-  setBar('bar-veg', s.vegetarian, attendingT, () => `${Math.round(s.vegetarian/attendingT*100)}% (${s.vegetarian})`);
-
-  document.getElementById('bar-yes-pct').textContent = `${Math.round(s.attending/t*100)}% (${s.attending})`;
-  document.getElementById('bar-no-pct').textContent  = `${Math.round(s.notAttending/t*100)}% (${s.notAttending})`;
-  document.getElementById('bar-chr-pct').textContent = `${s.christianGuests} Gäste`;
-  document.getElementById('bar-hin-pct').textContent = `${s.hinduGuests} Gäste`;
-  document.getElementById('bar-rec-pct').textContent = `${s.receptionGuests} Gäste`;
-  document.getElementById('bar-veg-pct').textContent = `${s.vegetarian} von ${s.attending}`;
-}
-
-function setBar(id, val, total, labelFn) {
-  const el = document.getElementById(id);
-  const pct = total > 0 ? Math.round(val / total * 100) : 0;
-  setTimeout(() => { el.style.width = pct + '%'; }, 50);
-}
-
-// ─── RECENT ─────────────────────────────────────────────────
-function renderRecent(rsvps) {
-  const tbody = document.getElementById('recent-tbody');
-  const recent = [...rsvps].sort((a,b) => b.submitted_at - a.submitted_at).slice(0, 8);
-
-  if (!recent.length) {
-    tbody.innerHTML = `<tr><td colspan="4" style="color:var(--text-dim);padding:2rem;text-align:center">Noch keine Anmeldungen</td></tr>`;
-    return;
-  }
-
-  tbody.innerHTML = recent.map(r => {
-    const cers = [];
-    if (r.christian_guests > 0) cers.push('⛪ Chr');
-    if (r.hindu_guests > 0) cers.push('🪔 Hin');
-
-    return `<tr>
-      <td class="name-cell">${esc(r.full_name)}</td>
-      <td><span class="badge badge-${r.attending}">${r.attending === 'yes' ? 'Ja' : 'Nein'}</span></td>
-      <td>${cers.map(c => `<span class="badge badge-cer">${c}</span>`).join(' ') || '—'}</td>
-      <td class="timestamp">${fmtDate(r.submitted_at)}</td>
-    </tr>`;
-  }).join('');
-}
-
-// ─── TABLE ──────────────────────────────────────────────────
-function filterTable() {
-  const q      = (document.getElementById('search-input').value || '').toLowerCase();
-  const att    = document.getElementById('filter-attending').value;
-  const cer    = document.getElementById('filter-ceremony').value;
-  const diet   = document.getElementById('filter-diet').value;
-
-  let filtered = allRsvps.filter(r => {
-    if (q && !`${r.full_name} ${r.email} ${r.message}`.toLowerCase().includes(q)) return false;
-    if (att && r.attending !== att) return false;
-    if (cer === 'christian' && !(r.christian_guests > 0)) return false;
-    if (cer === 'hindu' && !(r.hindu_guests > 0)) return false;
-    if (cer === 'reception' && !(r.reception_guests > 0)) return false;
-    if (diet === 'veg' && !r.is_vegetarian) return false;
-    if (diet === 'meat' && r.is_vegetarian) return false;
-    return true;
-  });
-
-  // Sort
-  filtered.sort((a, b) => {
-    let va = a[sortCol], vb = b[sortCol];
-    if (typeof va === 'string') va = va.toLowerCase();
-    if (typeof vb === 'string') vb = vb.toLowerCase();
-    return va < vb ? -sortDir : va > vb ? sortDir : 0;
-  });
-
-  document.getElementById('table-count').textContent = filtered.length;
-  renderTable(filtered);
-}
-
-function renderTable(rsvps) {
-  const tbody = document.getElementById('guest-tbody');
-
-  if (!rsvps.length) {
-    tbody.innerHTML = `<tr><td colspan="11">
-      <div class="empty-state">
-        <div class="big">✉</div>
-        <p>Keine Einträge gefunden</p>
-      </div>
-    </td></tr>`;
-    return;
-  }
-
-  tbody.innerHTML = rsvps.map((r, i) => {
-    const cers = [];
-    if (r.christian_guests > 0) cers.push(`<span class="badge badge-cer">⛪ ${r.christian_guests}</span>`);
-    if (r.hindu_guests > 0)     cers.push(`<span class="badge badge-cer">🪔 ${r.hindu_guests}</span>`);
-    if (r.reception_guests > 0) cers.push(`<span class="badge badge-cer">🎉 ${r.reception_guests}</span>`);
-
-    const msg = r.message ? `<span title="${esc(r.message)}" style="cursor:help;color:var(--text-dim)">💬 ${r.message.slice(0,30)}${r.message.length > 30 ? '…' : ''}</span>` : '<span style="color:var(--text-dim)">—</span>';
-
-    return `<tr>
-      <td><span style="color:var(--text-dim);font-family:'JetBrains Mono',monospace;font-size:.72rem;margin-right:.5rem">${String(i+1).padStart(2,'0')}</span><span class="name-cell">${esc(r.full_name)}</span></td>
-      <td class="email-cell">${esc(r.email)}</td>
-      <td><span class="badge badge-${r.attending}">${r.attending === 'yes' ? '✓ Ja' : '✗ Nein'}</span></td>
-      <td class="mono">${r.christian_guests || '—'}</td>
-      <td class="mono">${r.hindu_guests || '—'}</td>
-      <td class="mono">${r.reception_guests || '—'}</td>
-      <td class="mono">${r.total_guests || '—'}</td>
-      <td><span class="badge ${r.is_vegetarian ? 'badge-veg' : 'badge-meat'}">${r.is_vegetarian ? '🥗 Veg' : '🥩 Normal'}</span></td>
-      <td style="color:var(--text-dim);font-size:.85rem">${r.phone ? esc(r.phone) : '—'}</td>
-      <td>${msg}</td>
-      <td class="timestamp">${fmtDate(r.submitted_at)}</td>
-    </tr>`;
-  }).join('');
-}
-
-function sortBy(col) {
-  if (sortCol === col) sortDir *= -1;
-  else { sortCol = col; sortDir = -1; }
-  document.querySelectorAll('.guest-table th').forEach(th => th.classList.remove('sorted'));
-  filterTable();
-}
-
-// ─── CSV EXPORT ─────────────────────────────────────────────
-function exportCSV() {
-  const headers = ['Name','Email','Telefon','Status','Christlich','Hinduistisch','Empfang','Gäste Total','Vegetarisch','Nachricht','Eingegangen'];
-  const rows = allRsvps.map(r => [
-    r.full_name, r.email, r.phone,
-    r.attending === 'yes' ? 'Ja' : 'Nein',
-    r.christian_guests, r.hindu_guests, r.reception_guests, r.total_guests,
-    r.is_vegetarian ? 'Ja' : 'Nein',
-    r.message,
-    new Date(r.submitted_at).toLocaleString('de-CH')
-  ].map(v => `"${String(v||'').replace(/"/g,'""')}"`));
-
-  const csv = [headers, ...rows].map(r => r.join(',')).join('\n');
-  const a = document.createElement('a');
-  a.href = 'data:text/csv;charset=utf-8,\uFEFF' + encodeURIComponent(csv);
-  a.download = `rsvp-${new Date().toISOString().slice(0,10)}.csv`;
-  a.click();
-}
-
-// ─── UTILS ──────────────────────────────────────────────────
+// ── Utils ──────────────────────────────────────────────────────────────────
 function esc(s) {
-  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
-
 function fmtDate(ts) {
   if (!ts) return '—';
-  return new Date(ts).toLocaleString('de-CH', {
-    day:'2-digit', month:'2-digit', year:'2-digit',
-    hour:'2-digit', minute:'2-digit'
-  });
+  return new Date(ts).toLocaleString('de-CH', { day:'2-digit', month:'2-digit', year:'2-digit', hour:'2-digit', minute:'2-digit' });
 }
+
+// ── Register Service Worker ────────────────────────────────────────────────
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js').catch(() => {});
+}
+
+// ── Toast ──────────────────────────────────────────────────────────────────
+function ToastContainer({ toasts }) {
+  return html`
+    <div class="toast-container">
+      ${toasts.map(t => html`
+        <div key=${t.id} class=${'toast ' + (t.type === 'success' ? 'success' : t.type === 'error' ? 'error-toast' : '')}>
+          ${t.type === 'success' ? '✓' : t.type === 'error' ? '✕' : 'ℹ'} ${t.msg}
+        </div>
+      `)}
+    </div>
+  `;
+}
+
+function useToast() {
+  const [toasts, setToasts] = useState([]);
+  const show = useCallback((msg, type = 'info') => {
+    const id = Date.now();
+    setToasts(prev => [...prev, { id, msg, type }]);
+    setTimeout(() => setToasts(prev => prev.filter(t => t.id !== id)), 3200);
+  }, []);
+  return { toasts, show };
+}
+
+// ── Edit Modal ─────────────────────────────────────────────────────────────
+function EditModal({ rsvp, token, onSaved, onClose, showToast }) {
+  const [form, setForm] = useState({
+    first_name: rsvp.first_name || '',
+    last_name: rsvp.last_name || '',
+    email: rsvp.email || '',
+    phone: rsvp.phone || '',
+    attending: rsvp.attending || 'yes',
+    christian_guests: rsvp.christian_guests ?? 0,
+    hindu_guests: rsvp.hindu_guests ?? 0,
+    reception_guests: rsvp.reception_guests ?? 0,
+    total_guests: rsvp.total_guests ?? 0,
+    is_vegetarian: !!rsvp.is_vegetarian,
+    message: rsvp.message || ''
+  });
+  const [saving, setSaving] = useState(false);
+
+  const set = (k, v) => setForm(f => ({ ...f, [k]: v }));
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setSaving(true);
+    try {
+      const res = await fetch(`${API}/rsvp/${rsvp.id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+        body: JSON.stringify(form)
+      });
+      if (!res.ok) throw new Error('Fehler beim Speichern');
+      showToast('Änderungen gespeichert', 'success');
+      onSaved();
+    } catch (err) {
+      showToast(err.message, 'error');
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  return html`
+    <div class="modal-backdrop" onClick=${onClose} />
+    <div class="modal-drawer">
+      <div class="modal-header">
+        <div>
+          <div class="modal-title">RSVP bearbeiten</div>
+          <div class="modal-subtitle">#${rsvp.id} · ${fmtDate(rsvp.submitted_at)}</div>
+        </div>
+        <button class="btn-close" onClick=${onClose} aria-label="Schließen">✕</button>
+      </div>
+
+      <form class="modal-body" onSubmit=${handleSubmit}>
+        <div class="field-group">
+          <div>
+            <label class="field-label">Vorname</label>
+            <input class="field-input" value=${form.first_name} onInput=${e => set('first_name', e.target.value)} required />
+          </div>
+          <div>
+            <label class="field-label">Nachname</label>
+            <input class="field-input" value=${form.last_name} onInput=${e => set('last_name', e.target.value)} required />
+          </div>
+        </div>
+
+        <div class="field-full">
+          <label class="field-label">E-Mail</label>
+          <input class="field-input mono-input" type="email" value=${form.email} onInput=${e => set('email', e.target.value)} required />
+        </div>
+
+        <div class="field-full">
+          <label class="field-label">Telefon</label>
+          <input class="field-input mono-input" value=${form.phone} onInput=${e => set('phone', e.target.value)} />
+        </div>
+
+        <div class="field-full">
+          <label class="field-label">Status</label>
+          <div class="attending-toggle">
+            <button type="button" class=${'attending-btn yes' + (form.attending === 'yes' ? ' active' : '')} onClick=${() => set('attending', 'yes')}>✓ Zusage</button>
+            <button type="button" class=${'attending-btn no' + (form.attending === 'no' ? ' active' : '')} onClick=${() => set('attending', 'no')}>✕ Absage</button>
+          </div>
+        </div>
+
+        <div class="section-label" style="margin-top:1.4rem">Gästeanzahl</div>
+        <div class="guests-row">
+          <div>
+            <label class="field-label">⛪ Christlich</label>
+            <input class="field-input field-num" type="number" min="0" value=${form.christian_guests} onInput=${e => set('christian_guests', +e.target.value)} />
+          </div>
+          <div>
+            <label class="field-label">🪔 Hinduistisch</label>
+            <input class="field-input field-num" type="number" min="0" value=${form.hindu_guests} onInput=${e => set('hindu_guests', +e.target.value)} />
+          </div>
+          <div>
+            <label class="field-label">🎉 Empfang</label>
+            <input class="field-input field-num" type="number" min="0" value=${form.reception_guests} onInput=${e => set('reception_guests', +e.target.value)} />
+          </div>
+          <div>
+            <label class="field-label">👥 Total</label>
+            <input class="field-input field-num" type="number" min="0" value=${form.total_guests} onInput=${e => set('total_guests', +e.target.value)} />
+          </div>
+        </div>
+
+        <div class="field-full">
+          <label class="veg-check">
+            <input type="checkbox" checked=${form.is_vegetarian} onChange=${e => set('is_vegetarian', e.target.checked)} />
+            <span>🥗 Vegetarisch</span>
+          </label>
+        </div>
+
+        <div class="field-full">
+          <label class="field-label">Nachricht</label>
+          <textarea class="field-input field-textarea" value=${form.message} onInput=${e => set('message', e.target.value)} />
+        </div>
+      </form>
+
+      <div class="modal-footer">
+        <button class="btn-cancel" type="button" onClick=${onClose}>Abbrechen</button>
+        <button class="btn-save" type="submit" disabled=${saving} onClick=${handleSubmit}>
+          ${saving ? 'Speichert…' : 'Speichern'}
+        </button>
+      </div>
+    </div>
+  `;
+}
+
+// ── Delete Dialog ──────────────────────────────────────────────────────────
+function DeleteDialog({ rsvp, token, onDeleted, onClose, showToast }) {
+  const [deleting, setDeleting] = useState(false);
+
+  const confirm = async () => {
+    setDeleting(true);
+    try {
+      const res = await fetch(`${API}/rsvp/${rsvp.id}`, {
+        method: 'DELETE',
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      if (!res.ok) throw new Error('Fehler beim Löschen');
+      showToast('Eintrag gelöscht', 'error');
+      onDeleted();
+    } catch (err) {
+      showToast(err.message, 'error');
+      setDeleting(false);
+    }
+  };
+
+  return html`
+    <div class="dialog-backdrop" onClick=${onClose}>
+      <div class="dialog-box" onClick=${e => e.stopPropagation()}>
+        <div class="dialog-icon">🗑</div>
+        <div class="dialog-title">Eintrag löschen?</div>
+        <div class="dialog-body">
+          <span class="dialog-name">${esc(rsvp.full_name)}</span> wird dauerhaft aus der Datenbank entfernt.
+        </div>
+        <div class="dialog-actions">
+          <button class="btn-cancel" onClick=${onClose}>Abbrechen</button>
+          <button class="btn-delete" onClick=${confirm} disabled=${deleting}>
+            ${deleting ? 'Löscht…' : 'Löschen'}
+          </button>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+// ── Attendance Bar ─────────────────────────────────────────────────────────
+function AttBar({ label, value, total, color, mounted }) {
+  const pct = total > 0 ? Math.round(value / total * 100) : 0;
+  return html`
+    <div class="att-bar-wrap">
+      <div class="att-bar-label"><span>${label}</span><span>${value}</span></div>
+      <div class="att-bar-track">
+        <div class=${'att-bar-fill ' + color} style=${{ width: mounted ? pct + '%' : '0%' }} />
+      </div>
+    </div>
+  `;
+}
+
+// ── Stat Card ──────────────────────────────────────────────────────────────
+function StatCard({ icon, value, label, color, delay }) {
+  return html`
+    <div class="stat-card" style=${{ animationDelay: delay + 's' }}>
+      <span class="stat-icon">${icon}</span>
+      <div class=${'stat-value ' + (color || '')}>${value}</div>
+      <div class="stat-label">${label}</div>
+    </div>
+  `;
+}
+
+// ── Dashboard ─────────────────────────────────────────────────────────────
+function Dashboard({ token, onLogout }) {
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [editRsvp, setEditRsvp] = useState(null);
+  const [deleteRsvp, setDeleteRsvp] = useState(null);
+  const [filter, setFilter] = useState({ q: '', attending: '', ceremony: '', diet: '' });
+  const [sort, setSort] = useState({ col: 'submitted_at', dir: -1 });
+  const [lastUpdated, setLastUpdated] = useState('');
+  const [barsReady, setBarsReady] = useState(false);
+  const [notifState, setNotifState] = useState(Notification?.permission || 'default');
+  const [installPrompt, setInstallPrompt] = useState(null);
+  const prevCount = useRef(null);
+  const { toasts, show: showToast } = useToast();
+
+  // Listen for PWA install prompt
+  useEffect(() => {
+    const handler = e => { e.preventDefault(); setInstallPrompt(e); };
+    window.addEventListener('beforeinstallprompt', handler);
+    return () => window.removeEventListener('beforeinstallprompt', handler);
+  }, []);
+
+  const loadData = useCallback(async (silent = false) => {
+    if (!silent) setLoading(true);
+    setError(null);
+    try {
+      const res = await fetch(`${API}/rsvp`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      if (res.status === 401) { onLogout(); return; }
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const json = await res.json();
+      setData(json);
+      setLastUpdated(new Date().toLocaleTimeString('de-CH', { hour: '2-digit', minute: '2-digit' }));
+      setTimeout(() => setBarsReady(true), 100);
+
+      // Notification on new RSVP
+      const count = json.stats?.total ?? 0;
+      if (prevCount.current !== null && count > prevCount.current) {
+        const diff = count - prevCount.current;
+        showToast(`🎉 ${diff} neue Anmeldung${diff > 1 ? 'en' : ''}!`, 'success');
+        if (Notification?.permission === 'granted') {
+          new Notification('Neue RSVP-Anmeldung! 🎉', {
+            body: `${diff} neue Anmeldung${diff > 1 ? 'en' : ''} eingegangen.`,
+            icon: '/icon.svg'
+          });
+        }
+      }
+      prevCount.current = count;
+    } catch (e) {
+      setError('Fehler beim Laden: ' + e.message);
+    } finally {
+      setLoading(false);
+    }
+  }, [token, onLogout, showToast]);
+
+  useEffect(() => {
+    loadData();
+    const id = setInterval(() => loadData(true), 60000);
+    return () => clearInterval(id);
+  }, [loadData]);
+
+  const requestNotifications = async () => {
+    if (!('Notification' in window)) { showToast('Browser unterstützt keine Benachrichtigungen', 'error'); return; }
+    const perm = await Notification.requestPermission();
+    setNotifState(perm);
+    if (perm !== 'granted') { showToast('Benachrichtigungen abgelehnt', 'error'); return; }
+
+    // Subscribe to push
+    if ('serviceWorker' in navigator && 'PushManager' in window) {
+      try {
+        const sw = await navigator.serviceWorker.ready;
+        const vapidRes = await fetch(`${API}/push/vapid-public-key`);
+        const { publicKey } = await vapidRes.json();
+        if (!publicKey) { showToast('VAPID-Key nicht konfiguriert — nur In-App Benachrichtigungen aktiv', 'info'); return; }
+
+        const sub = await sw.pushManager.subscribe({
+          userVisibleOnly: true,
+          applicationServerKey: publicKey
+        });
+        await fetch(`${API}/push/subscribe`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+          body: JSON.stringify(sub.toJSON())
+        });
+        showToast('Push-Benachrichtigungen aktiviert ✓', 'success');
+      } catch (e) {
+        showToast('Push-Abo fehlgeschlagen: ' + e.message, 'error');
+      }
+    } else {
+      showToast('In-App Benachrichtigungen aktiviert ✓', 'success');
+    }
+  };
+
+  // Sort + filter helper
+  const filtered = (() => {
+    if (!data?.rsvps) return [];
+    const { q, attending, ceremony, diet } = filter;
+    let list = data.rsvps.filter(r => {
+      if (q && !`${r.full_name} ${r.email} ${r.message}`.toLowerCase().includes(q.toLowerCase())) return false;
+      if (attending && r.attending !== attending) return false;
+      if (ceremony === 'christian' && !(r.christian_guests > 0)) return false;
+      if (ceremony === 'hindu' && !(r.hindu_guests > 0)) return false;
+      if (ceremony === 'reception' && !(r.reception_guests > 0)) return false;
+      if (diet === 'veg' && !r.is_vegetarian) return false;
+      if (diet === 'meat' && r.is_vegetarian) return false;
+      return true;
+    });
+    list.sort((a, b) => {
+      let va = a[sort.col], vb = b[sort.col];
+      if (typeof va === 'string') { va = va.toLowerCase(); vb = vb.toLowerCase(); }
+      return va < vb ? -sort.dir : va > vb ? sort.dir : 0;
+    });
+    return list;
+  })();
+
+  const sortBy = col => setSort(s => ({ col, dir: s.col === col ? -s.dir : -1 }));
+
+  const exportCSV = () => {
+    if (!data?.rsvps) return;
+    const headers = ['Name','Email','Telefon','Status','Christlich','Hinduistisch','Empfang','Gäste','Vegetarisch','Nachricht','Eingegangen'];
+    const rows = data.rsvps.map(r => [
+      r.full_name, r.email, r.phone,
+      r.attending === 'yes' ? 'Ja' : 'Nein',
+      r.christian_guests, r.hindu_guests, r.reception_guests, r.total_guests,
+      r.is_vegetarian ? 'Ja' : 'Nein', r.message,
+      new Date(r.submitted_at).toLocaleString('de-CH')
+    ].map(v => `"${String(v||'').replace(/"/g,'""')}"`));
+    const csv = [headers, ...rows].map(r => r.join(',')).join('\n');
+    const a = document.createElement('a');
+    a.href = 'data:text/csv;charset=utf-8,\uFEFF' + encodeURIComponent(csv);
+    a.download = `rsvp-${new Date().toISOString().slice(0,10)}.csv`;
+    a.click();
+  };
+
+  const s = data?.stats || {};
+  const recent = [...(data?.rsvps || [])].sort((a,b) => b.submitted_at - a.submitted_at).slice(0, 8);
+  const totalForBars = s.total || 1;
+  const totalGuests = s.totalGuests || 1;
+
+  return html`
+    <div>
+      <!-- HEADER -->
+      <header class="header">
+        <div class="header-brand">
+          <span class="header-monogram">Rushel & Sivani</span>
+          <span class="header-sub">RSVP Dashboard</span>
+        </div>
+        <div class="header-actions">
+          <span class="last-updated">${lastUpdated ? 'Aktualisiert ' + lastUpdated : ''}</span>
+          <button class="btn-ghost" onClick=${() => loadData()}>↻</button>
+          <button
+            class=${'btn-icon' + (notifState === 'granted' ? ' active' : '')}
+            onClick=${notifState === 'granted' ? undefined : requestNotifications}
+            title=${notifState === 'granted' ? 'Benachrichtigungen aktiv' : 'Benachrichtigungen aktivieren'}
+            aria-label="Benachrichtigungen"
+          >
+            🔔
+            ${notifState === 'granted' && html`<span class="dot" />`}
+          </button>
+          <button class="btn-ghost" onClick=${onLogout}>Abmelden</button>
+        </div>
+      </header>
+
+      <!-- MAIN -->
+      <main class="main">
+
+        <!-- PWA INSTALL BANNER -->
+        ${installPrompt && html`
+          <div class="install-banner">
+            <span class="install-text">📱 Dashboard als App auf dem Homescreen speichern</span>
+            <button class="btn-install" onClick=${async () => {
+              installPrompt.prompt();
+              await installPrompt.userChoice;
+              setInstallPrompt(null);
+            }}>Installieren</button>
+          </div>
+        `}
+
+        ${error && html`<div class="error-banner">${error}</div>`}
+
+        ${loading && !data && html`
+          <div class="loading-overlay">
+            <div class="spinner" />
+            <div class="loading-text">Lade RSVP-Daten…</div>
+          </div>
+        `}
+
+        ${data && html`
+          <!-- STATS -->
+          <div class="section-label">Übersicht</div>
+          <div class="stats-grid">
+            <${StatCard} icon="📋" value=${s.total||0} label="Total RSVPs" color="gold" delay=${0.05} />
+            <${StatCard} icon="✅" value=${s.attending||0} label="Zusagen" color="green" delay=${0.1} />
+            <${StatCard} icon="❌" value=${s.notAttending||0} label="Absagen" color="red" delay=${0.15} />
+            <${StatCard} icon="👥" value=${s.totalGuests||0} label="Gäste Total" color="" delay=${0.2} />
+            <${StatCard} icon="⛪" value=${s.christianGuests||0} label="Christliche Zer." color="blue" delay=${0.25} />
+            <${StatCard} icon="🪔" value=${s.hinduGuests||0} label="Hinduistische Zer." color="blue" delay=${0.3} />
+            <${StatCard} icon="🎉" value=${s.receptionGuests||0} label="Empfang" color="blue" delay=${0.35} />
+            <${StatCard} icon="🥗" value=${s.vegetarian||0} label="Vegetarisch" color="green" delay=${0.4} />
+          </div>
+
+          <!-- MID ROW -->
+          <div class="mid-row">
+            <!-- CHARTS -->
+            <div class="panel">
+              <div class="panel-title">Anwesenheit & Zeremonien</div>
+              <${AttBar} label="✅ Zusagen" value=${s.attending||0} total=${totalForBars} color="green" mounted=${barsReady} />
+              <${AttBar} label="❌ Absagen" value=${s.notAttending||0} total=${totalForBars} color="red" mounted=${barsReady} />
+              <div style="height:.8rem"/>
+              <${AttBar} label="⛪ Christlich" value=${s.christianGuests||0} total=${totalGuests} color="gold" mounted=${barsReady} />
+              <${AttBar} label="🪔 Hinduistisch" value=${s.hinduGuests||0} total=${totalGuests} color="blue" mounted=${barsReady} />
+              <${AttBar} label="🎉 Empfang" value=${s.receptionGuests||0} total=${totalGuests} color="gold" mounted=${barsReady} />
+              <${AttBar} label="🥗 Vegetarisch" value=${s.vegetarian||0} total=${s.attending||1} color="green" mounted=${barsReady} />
+            </div>
+
+            <!-- RECENT -->
+            <div class="panel">
+              <div class="panel-title">Neueste Anmeldungen</div>
+              <div class="table-scroll">
+                <table class="recent-table">
+                  <thead><tr><th>Name</th><th>Status</th><th>Zeremonien</th><th>Datum</th></tr></thead>
+                  <tbody>
+                    ${recent.length === 0 && html`<tr><td colspan="4" style="color:var(--text-dim);padding:2rem;text-align:center">Noch keine Anmeldungen</td></tr>`}
+                    ${recent.map(r => {
+                      const cers = [];
+                      if (r.christian_guests > 0) cers.push('⛪ Chr');
+                      if (r.hindu_guests > 0) cers.push('🪔 Hin');
+                      if (r.reception_guests > 0) cers.push('🎉 Rec');
+                      return html`
+                        <tr key=${r.id}>
+                          <td class="name-cell">${esc(r.full_name)}</td>
+                          <td><span class=${'badge badge-' + r.attending}>${r.attending === 'yes' ? 'Ja' : 'Nein'}</span></td>
+                          <td>${cers.map(c => html`<span class="badge badge-cer">${c}</span> `) || '—'}</td>
+                          <td class="timestamp">${fmtDate(r.submitted_at)}</td>
+                        </tr>
+                      `;
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- GUEST TABLE -->
+          <div class="table-section">
+            <div class="section-label">
+              Alle Gäste
+              <span class="count-badge">${filtered.length}</span>
+            </div>
+
+            <div class="table-controls">
+              <input
+                class="search-input"
+                type="text"
+                placeholder="Suchen nach Name, E-Mail…"
+                value=${filter.q}
+                onInput=${e => setFilter(f => ({ ...f, q: e.target.value }))}
+              />
+              <select class="filter-select" value=${filter.attending} onChange=${e => setFilter(f => ({ ...f, attending: e.target.value }))}>
+                <option value="">Alle Status</option>
+                <option value="yes">Zusagen</option>
+                <option value="no">Absagen</option>
+              </select>
+              <select class="filter-select" value=${filter.ceremony} onChange=${e => setFilter(f => ({ ...f, ceremony: e.target.value }))}>
+                <option value="">Alle Zeremonien</option>
+                <option value="christian">Christlich</option>
+                <option value="hindu">Hinduistisch</option>
+                <option value="reception">Empfang</option>
+              </select>
+              <select class="filter-select" value=${filter.diet} onChange=${e => setFilter(f => ({ ...f, diet: e.target.value }))}>
+                <option value="">Alle Ernährung</option>
+                <option value="veg">Vegetarisch</option>
+                <option value="meat">Nicht-vegetarisch</option>
+              </select>
+              <button class="btn-export" onClick=${exportCSV}>↓ CSV</button>
+            </div>
+
+            <div class="table-wrap table-scroll">
+              <table class="guest-table">
+                <thead>
+                  <tr>
+                    <th onClick=${() => sortBy('full_name')} class=${sort.col === 'full_name' ? 'sorted' : ''}># Name</th>
+                    <th onClick=${() => sortBy('email')} class=${sort.col === 'email' ? 'sorted' : ''}>E-Mail</th>
+                    <th onClick=${() => sortBy('attending')} class=${sort.col === 'attending' ? 'sorted' : ''}>Status</th>
+                    <th onClick=${() => sortBy('christian_guests')} class=${sort.col === 'christian_guests' ? 'sorted' : ''}>⛪</th>
+                    <th onClick=${() => sortBy('hindu_guests')} class=${sort.col === 'hindu_guests' ? 'sorted' : ''}>🪔</th>
+                    <th onClick=${() => sortBy('reception_guests')} class=${sort.col === 'reception_guests' ? 'sorted' : ''}>🎉</th>
+                    <th onClick=${() => sortBy('total_guests')} class=${sort.col === 'total_guests' ? 'sorted' : ''}>Gäste</th>
+                    <th onClick=${() => sortBy('is_vegetarian')} class=${sort.col === 'is_vegetarian' ? 'sorted' : ''}>Ernährung</th>
+                    <th>Tel.</th>
+                    <th>Nachricht</th>
+                    <th onClick=${() => sortBy('submitted_at')} class=${sort.col === 'submitted_at' ? 'sorted' : ''}>Datum</th>
+                    <th style="text-align:center">Aktionen</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${filtered.length === 0 && html`
+                    <tr><td colspan="12">
+                      <div class="empty-state">
+                        <div class="big">✉</div>
+                        <p>Keine Einträge gefunden</p>
+                      </div>
+                    </td></tr>
+                  `}
+                  ${filtered.map((r, i) => {
+                    const cers = [];
+                    if (r.christian_guests > 0) cers.push(html`<span class="badge badge-cer">⛪${r.christian_guests}</span>`);
+                    if (r.hindu_guests > 0) cers.push(html`<span class="badge badge-cer">🪔${r.hindu_guests}</span>`);
+                    if (r.reception_guests > 0) cers.push(html`<span class="badge badge-cer">🎉${r.reception_guests}</span>`);
+                    return html`
+                      <tr key=${r.id}>
+                        <td>
+                          <span style="color:var(--text-dim);font-family:'JetBrains Mono',monospace;font-size:.72rem;margin-right:.5rem">${String(i+1).padStart(2,'0')}</span>
+                          <span class="name-cell">${esc(r.full_name)}</span>
+                        </td>
+                        <td class="email-cell">${esc(r.email)}</td>
+                        <td><span class=${'badge badge-' + r.attending}>${r.attending === 'yes' ? '✓ Ja' : '✗ Nein'}</span></td>
+                        <td class="mono">${r.christian_guests || '—'}</td>
+                        <td class="mono">${r.hindu_guests || '—'}</td>
+                        <td class="mono">${r.reception_guests || '—'}</td>
+                        <td class="mono">${r.total_guests || '—'}</td>
+                        <td><span class=${'badge ' + (r.is_vegetarian ? 'badge-veg' : 'badge-meat')}>${r.is_vegetarian ? '🥗 Veg' : '🥩'}</span></td>
+                        <td style="color:var(--text-dim);font-size:.85rem">${r.phone ? esc(r.phone) : '—'}</td>
+                        <td>
+                          ${r.message
+                            ? html`<span title=${esc(r.message)} style="cursor:help;color:var(--text-dim)">💬 ${r.message.slice(0,25)}${r.message.length > 25 ? '…' : ''}</span>`
+                            : html`<span style="color:var(--text-dim)">—</span>`
+                          }
+                        </td>
+                        <td class="timestamp">${fmtDate(r.submitted_at)}</td>
+                        <td style="text-align:center;white-space:nowrap">
+                          <button class="btn-row-action btn-row-edit" onClick=${() => setEditRsvp(r)} title="Bearbeiten">✏</button>
+                          <button class="btn-row-action btn-row-delete" onClick=${() => setDeleteRsvp(r)} title="Löschen">🗑</button>
+                        </td>
+                      </tr>
+                    `;
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        `}
+      </main>
+
+      <!-- TOAST -->
+      <${ToastContainer} toasts=${toasts} />
+
+      <!-- EDIT MODAL -->
+      ${editRsvp && html`
+        <${EditModal}
+          rsvp=${editRsvp}
+          token=${token}
+          showToast=${showToast}
+          onSaved=${() => { setEditRsvp(null); loadData(true); }}
+          onClose=${() => setEditRsvp(null)}
+        />
+      `}
+
+      <!-- DELETE DIALOG -->
+      ${deleteRsvp && html`
+        <${DeleteDialog}
+          rsvp=${deleteRsvp}
+          token=${token}
+          showToast=${showToast}
+          onDeleted=${() => { setDeleteRsvp(null); loadData(true); }}
+          onClose=${() => setDeleteRsvp(null)}
+        />
+      `}
+    </div>
+  `;
+}
+
+// ── Login Screen ───────────────────────────────────────────────────────────
+function LoginScreen({ onLogin }) {
+  const [pw, setPw] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+
+  const doLogin = async () => {
+    if (!pw.trim()) return;
+    setLoading(true); setError('');
+    try {
+      const res = await fetch(`${API}/admin/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: pw })
+      });
+      const data = await res.json();
+      if (!res.ok || !data.token) throw new Error(data.error || 'Falsches Passwort');
+      localStorage.setItem('admin_token', data.token);
+      onLogin(data.token);
+    } catch (e) {
+      setError(e.message);
+      setLoading(false);
+    }
+  };
+
+  return html`
+    <div class="login-wrap">
+      <div class="login-card">
+        <div class="login-monogram">R & S</div>
+        <div class="login-title">RSVP Dashboard</div>
+        <label class="login-label" for="pw">Admin-Passwort</label>
+        <input
+          id="pw"
+          class="login-input"
+          type="password"
+          placeholder="••••••••"
+          autocomplete="current-password"
+          value=${pw}
+          onInput=${e => setPw(e.target.value)}
+          onKeyDown=${e => e.key === 'Enter' && doLogin()}
+        />
+        <button class="login-btn" disabled=${loading} onClick=${doLogin}>
+          ${loading ? 'Prüfe…' : 'Anmelden'}
+        </button>
+        <div class="login-error">${error}</div>
+      </div>
+    </div>
+  `;
+}
+
+// ── App Root ───────────────────────────────────────────────────────────────
+function App() {
+  const [token, setToken] = useState(() => localStorage.getItem('admin_token'));
+
+  const logout = () => {
+    localStorage.removeItem('admin_token');
+    setToken(null);
+  };
+
+  if (!token) return html`<${LoginScreen} onLogin=${setToken} />`;
+  return html`<${Dashboard} token=${token} onLogout=${logout} />`;
+}
+
+render(html`<${App} />`, document.getElementById('root'));
 </script>
 </body>
 </html>
