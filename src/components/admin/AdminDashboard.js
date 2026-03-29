@@ -1,7 +1,7 @@
 // src/components/admin/AdminDashboard.js
 import React, { useState } from 'react';
 import { QRCodeCanvas } from 'qrcode.react';
-import { mdiCross, mdiTempleHindu, mdiQrcode, mdiAccountMultiple, mdiGift, mdiFileEdit, mdiGlassMartini } from '@mdi/js';
+import { mdiCross, mdiTempleHindu, mdiQrcode, mdiAccountMultiple, mdiGift, mdiFileEdit, mdiGlassCocktail } from '@mdi/js';
 import Icon from '@mdi/react';
 import GiftsManager from './GiftsManager';
 import PageContentEditor from './PageContentEditor';
@@ -177,14 +177,13 @@ const AdminDashboard = () => {
                                 </button>
                             </div>
                         </div>
-                    </div>
 
                         {/* RECEPTION Code Card */}
                         <div className="border-l-4 border-green-500 p-6 bg-green-50 rounded-r-lg">
                             <div className="flex items-start justify-between flex-wrap gap-4">
                                 <div className="flex-grow">
                                     <div className="flex items-center mb-2">
-                                        <Icon path={mdiGlassMartini} size={1.2} className="mr-2 text-green-600" />
+                                        <Icon path={mdiGlassCocktail} size={1.2} className="mr-2 text-green-600" />
                                         <h3 className="text-xl font-bold text-gray-900">RECEPTION</h3>
                                     </div>
                                     <p className="text-gray-700 mb-3">{INVITATION_CODES.RECEPTION.description}</p>
