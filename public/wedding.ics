@@ -1,0 +1,52 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Rushel & Sivani Wedding//Wedding Calendar//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:Rushel & Sivani Wedding
+X-WR-TIMEZONE:Europe/Zurich
+X-WR-CALDESC:Wedding events for Rushel & Sivani – May 2026
+BEGIN:VEVENT
+UID:hindu-ceremony-20260529@rushelwedsivani.com
+DTSTART;TZID=Europe/Zurich:20260529T090000
+DTEND;TZID=Europe/Zurich:20260529T150000
+SUMMARY:💛 Hindu Wedding Ceremony – Rushel & Sivani
+LOCATION:Shed15 events&more\, Zürichstrasse 15-17\, 8607 Seegräben
+DESCRIPTION:Hindu Wedding Ceremony\nDress Code: Traditional Indian Attire
+ \, vibrant colors encouraged\n\nSchedule:\n9:00 AM Baraat\n9:30 AM Milni
+ \n10:00 AM Ganesh Puja\n10:30 AM Mandap Ceremony\n11:30 AM Saptapadi\n
+ 12:30 PM Mangalsutra\n1:00 PM Ashirwad\n1:30 PM Lunch
+URL:https://rushelwedsivani.com
+STATUS:CONFIRMED
+SEQUENCE:0
+END:VEVENT
+BEGIN:VEVENT
+UID:christian-ceremony-20260530@rushelwedsivani.com
+DTSTART;TZID=Europe/Zurich:20260530T090000
+DTEND;TZID=Europe/Zurich:20260530T113000
+SUMMARY:✝️ Christian Wedding Ceremony – Rushel & Sivani
+LOCATION:Kirche Altendorf\, Dorfpl. 5\, 8852 Altendorf
+DESCRIPTION:Christian Wedding Ceremony\nDress Code: Formal Attire\, light
+  colors preferred\n\nSchedule:\n8:45 AM Guest Arrival\n9:00 AM Processio
+ nal\n9:10 AM Welcome & Opening Prayer\n9:20 AM Scripture & Sermon\n9:40
+ AM Exchange of Vows & Rings\n9:55 AM Pronouncement & Recessional\n10:15
+ AM Apero outside the church
+URL:https://rushelwedsivani.com
+STATUS:CONFIRMED
+SEQUENCE:0
+END:VEVENT
+BEGIN:VEVENT
+UID:reception-20260530@rushelwedsivani.com
+DTSTART;TZID=Europe/Zurich:20260530T170000
+DTEND;TZID=Europe/Zurich:20260531T010000
+SUMMARY:🎉 Wedding Reception – Rushel & Sivani
+LOCATION:Sporthalle Unterrohr\, Unterrohrstrasse 2\, 8952 Schlieren
+DESCRIPTION:Wedding Reception\nDress Code: Cocktail Attire\, dressy and f
+ estive\n\nSchedule:\n6:00 PM Guest Arrival\n6:30 PM Cocktail Hour\n7:30
+ PM Grand Entrance\n8:00 PM Dinner\n9:00 PM Speeches & Toasts\n9:45 PM Fi
+ rst Dance\n10:15 PM Cake Cutting\n10:30 PM Dance Party
+URL:https://rushelwedsivani.com
+STATUS:CONFIRMED
+SEQUENCE:0
+END:VEVENT
+END:VCALENDAR

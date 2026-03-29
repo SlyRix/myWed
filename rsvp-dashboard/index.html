@@ -9,7 +9,7 @@
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="RSVP" />
-  <link rel="icon" type="image/png" href="/rsvp-logo.png" />
+  <link rel="icon" href="/icon.ico" />
   <link rel="apple-touch-icon" href="/rsvp-logo.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Crimson+Pro:wght@300;400;600&family=JetBrains+Mono:wght@300;400;600&display=swap" rel="stylesheet" />
@@ -114,8 +114,10 @@
       -webkit-backdrop-filter: blur(16px) saturate(1.8);
       position: sticky; top: 0; z-index: 100;
     }
-    .header-brand { display: flex; align-items: baseline; gap: .6rem; }
+    .header-brand { display: flex; align-items: center; gap: .6rem; }
     .header-monogram { font-family: 'Playfair Display', serif; font-style: italic; font-size: 1.5rem; color: var(--gold); }
+    .brand-logo { width: 38px; height: 38px; border-radius: 8px; object-fit: cover; flex-shrink: 0; }
+    .login-logo { width: 96px; height: 96px; border-radius: 16px; object-fit: cover; display: block; margin: 0 auto 1.2rem; box-shadow: 0 8px 24px rgba(0,0,0,.4); }
     .header-sub { font-family: 'Crimson Pro', serif; font-weight: 300; font-size: .8rem; color: var(--text-dim); letter-spacing: .2em; text-transform: uppercase; }
     .header-actions { display: flex; gap: .5rem; align-items: center; }
     .last-updated { font-family: 'JetBrains Mono', monospace; font-size: .7rem; color: var(--text-dim); }
@@ -317,6 +319,69 @@
       -webkit-appearance: none;
     }
     .btn-card-delete:active { background: rgba(224,90,90,.12); }
+
+    /* ── NOTIFICATION PANEL ── */
+    .notif-backdrop {
+      position: fixed; inset: 0; background: rgba(0,0,0,.55); backdrop-filter: blur(3px);
+      -webkit-backdrop-filter: blur(3px); z-index: 400; animation: fadeIn .2s ease both;
+    }
+    .notif-panel {
+      position: fixed; top: 0; left: 0; bottom: 0; width: min(360px, 100vw);
+      background: var(--surface); border-right: 1px solid var(--gold-border);
+      z-index: 401; display: flex; flex-direction: column; overflow: hidden;
+      animation: slideInLeft .28s cubic-bezier(.16,1,.3,1) both;
+      padding-bottom: var(--safe-bottom);
+    }
+    .notif-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: calc(1rem + var(--safe-top)) 1.2rem 1rem;
+      border-bottom: 1px solid var(--gold-border); background: var(--card); flex-shrink: 0;
+    }
+    .notif-title { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: var(--cream); }
+    .notif-subtitle { font-size: .75rem; color: var(--text-dim); margin-top: .15rem; }
+    .notif-list { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+    .notif-item {
+      display: flex; gap: .85rem; padding: 1rem 1.2rem;
+      border-bottom: 1px solid rgba(255,255,255,.05);
+      transition: background .15s; position: relative; cursor: default;
+    }
+    .notif-item.unread { background: rgba(196,146,58,.05); }
+    .notif-item.unread::before {
+      content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+      background: linear-gradient(180deg, var(--gold), var(--gold-lt));
+    }
+    .notif-avatar {
+      width: 40px; height: 40px; border-radius: 50%; flex-shrink: 0;
+      background: var(--card-2); border: 1px solid var(--gold-border);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Playfair Display', serif; font-size: 1rem; color: var(--gold);
+      font-style: italic; text-transform: uppercase;
+    }
+    .notif-content { flex: 1; min-width: 0; }
+    .notif-name { font-family: 'Crimson Pro', serif; font-weight: 600; color: var(--cream); font-size: .95rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .notif-desc { font-size: .82rem; color: var(--text-dim); margin-top: .2rem; line-height: 1.4; display: flex; flex-wrap: wrap; align-items: center; gap: .3rem; }
+    .notif-msg { font-size: .78rem; color: var(--text-dim); font-style: italic; margin-top: .2rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .notif-time { font-family: 'JetBrains Mono', monospace; font-size: .62rem; color: var(--text-dim); margin-top: .35rem; }
+    .notif-unread-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--gold); flex-shrink: 0; margin-top: .5rem; }
+    .notif-empty { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 4rem 1.5rem; color: var(--text-dim); gap: .75rem; flex: 1; }
+    .notif-empty-icon { font-size: 2.5rem; opacity: .25; }
+    .notif-empty-text { font-family: 'Playfair Display', serif; font-style: italic; font-size: 1rem; }
+    .burger-badge {
+      position: absolute; top: -5px; right: -5px; min-width: 18px; height: 18px;
+      background: var(--red); border-radius: 99px; border: 2px solid var(--bg);
+      color: #fff; font-family: 'JetBrains Mono', monospace; font-size: .58rem; font-weight: 700;
+      display: flex; align-items: center; justify-content: center; padding: 0 3px; line-height: 1;
+    }
+    @keyframes slideInLeft { from { transform: translateX(-100%); } to { transform: translateX(0); } }
+    @media (max-width: 640px) {
+      .notif-panel {
+        top: 0; left: 0; right: 0; bottom: auto; width: 100%; max-height: 88vh;
+        border-right: none; border-bottom: 1px solid var(--gold-border);
+        border-radius: 0 0 20px 20px;
+        animation: slideInDown .3s cubic-bezier(.16,1,.3,1) both;
+      }
+      @keyframes slideInDown { from { transform: translateY(-100%); } to { transform: translateY(0); } }
+    }
 
     /* ── LOADING / ERROR ── */
     .loading-overlay { display: flex; align-items: center; justify-content: center; padding: 6rem 2rem; flex-direction: column; gap: 1.2rem; }
@@ -533,6 +598,19 @@ function fmtDateShort(ts) {
   return new Date(ts).toLocaleString('de-CH', { day:'2-digit', month:'2-digit', hour:'2-digit', minute:'2-digit' });
 }
 
+function timeAgo(ts) {
+  const diff = Date.now() - ts;
+  const m = Math.floor(diff / 60000);
+  const h = Math.floor(diff / 3600000);
+  const d = Math.floor(diff / 86400000);
+  if (m < 1) return 'Gerade eben';
+  if (m < 60) return `vor ${m} Min.`;
+  if (h < 24) return `vor ${h} Std.`;
+  if (d === 1) return 'Gestern';
+  if (d < 7) return `vor ${d} Tagen`;
+  return fmtDate(ts);
+}
+
 function useMobile() {
   const [mobile, setMobile] = useState(() => window.innerWidth <= 640);
   useEffect(() => {
@@ -569,6 +647,60 @@ function useToast() {
     setTimeout(() => setToasts(prev => prev.filter(t => t.id !== id)), 3200);
   }, []);
   return { toasts, show };
+}
+
+// ── Notification Panel ─────────────────────────────────────────────────────
+function NotificationPanel({ rsvps, unreadMark, onClose }) {
+  const sorted = [...rsvps].sort((a, b) => b.submitted_at - a.submitted_at);
+  const unreadCount = sorted.filter(r => r.submitted_at > unreadMark).length;
+
+  return html`
+    <div class="notif-backdrop" onClick=${onClose} />
+    <div class="notif-panel">
+      <div class="notif-header">
+        <div>
+          <div class="notif-title">Benachrichtigungen</div>
+          <div class="notif-subtitle">${unreadCount > 0 ? `${unreadCount} ungelesen` : 'Alle gelesen'}</div>
+        </div>
+        <button class="btn-close" onClick=${onClose} aria-label="Schließen">✕</button>
+      </div>
+
+      <div class="notif-list">
+        ${sorted.length === 0 && html`
+          <div class="notif-empty">
+            <div class="notif-empty-icon">🔔</div>
+            <div class="notif-empty-text">Keine Anmeldungen</div>
+          </div>
+        `}
+        ${sorted.map(r => {
+          const unread = r.submitted_at > unreadMark;
+          const initials = ((r.first_name || '')[0] || '') + ((r.last_name || '')[0] || '');
+          const cers = [];
+          if (r.christian_guests > 0) cers.push('⛪');
+          if (r.hindu_guests > 0) cers.push('🪔');
+          if (r.reception_guests > 0) cers.push('🎉');
+          return html`
+            <div key=${r.id} class=${'notif-item' + (unread ? ' unread' : '')}>
+              <div class="notif-avatar">${initials || '?'}</div>
+              <div class="notif-content">
+                <div class="notif-name">${esc(r.full_name)}</div>
+                <div class="notif-desc">
+                  <span class=${'badge badge-' + r.attending} style="font-size:.68rem">
+                    ${r.attending === 'yes' ? '✓ Zusage' : '✗ Absage'}
+                  </span>
+                  ${cers.length > 0 && html`<span>${cers.join(' ')}</span>`}
+                  ${r.total_guests > 0 && html`<span style="color:var(--text-dim)">· ${r.total_guests} Gäste</span>`}
+                </div>
+                ${r.message && html`<div class="notif-msg">💬 ${r.message.slice(0,55)}${r.message.length > 55 ? '…' : ''}</div>`}
+                <div class="notif-time">${timeAgo(r.submitted_at)}</div>
+              </div>
+              ${unread && html`<div class="notif-unread-dot" />`}
+            </div>
+          `;
+        })}
+      </div>
+    </div>
+  `;
 }
 
 // ── Edit Modal ─────────────────────────────────────────────────────────────
@@ -821,8 +953,21 @@ function Dashboard({ token, onLogout }) {
   const [barsReady, setBarsReady] = useState(false);
   const [notifState, setNotifState] = useState(Notification?.permission || 'default');
   const [installPrompt, setInstallPrompt] = useState(null);
+  const [notifOpen, setNotifOpen] = useState(false);
+  const [lastReadAt, setLastReadAt] = useState(() => parseInt(localStorage.getItem('notif_last_read') || '0', 10));
+  const [panelUnreadMark, setPanelUnreadMark] = useState(lastReadAt);
   const prevCount = useRef(null);
   const { toasts, show: showToast } = useToast();
+
+  const openNotifs = () => {
+    setPanelUnreadMark(lastReadAt);
+    const now = Date.now();
+    localStorage.setItem('notif_last_read', String(now));
+    setLastReadAt(now);
+    setNotifOpen(true);
+  };
+
+  const unreadCount = (data?.rsvps || []).filter(r => r.submitted_at > lastReadAt).length;
 
   useEffect(() => {
     const handler = e => { e.preventDefault(); setInstallPrompt(e); };
@@ -945,9 +1090,15 @@ function Dashboard({ token, onLogout }) {
     <div>
       <!-- HEADER -->
       <header class="header">
-        <div class="header-brand">
-          <span class="header-monogram">R & S</span>
-          <span class="header-sub">RSVP Dashboard</span>
+        <div style="display:flex;align-items:center;gap:.6rem">
+          <button class="btn-icon" onClick=${openNotifs} aria-label="Benachrichtigungen" style="position:relative">
+            ☰
+            ${unreadCount > 0 && html`<span class="burger-badge">${unreadCount > 9 ? '9+' : unreadCount}</span>`}
+          </button>
+          <div class="header-brand">
+            <img src="/rsvp-logo.png" alt="RS" class="brand-logo" />
+            <span class="header-sub">RSVP Dashboard</span>
+          </div>
         </div>
         <div class="header-actions">
           ${!mobile && html`<span class="last-updated">${lastUpdated ? 'Aktualisiert ' + lastUpdated : ''}</span>`}
@@ -1190,6 +1341,15 @@ function Dashboard({ token, onLogout }) {
           onClose=${() => setDeleteRsvp(null)}
         />
       `}
+
+      <!-- NOTIFICATION PANEL -->
+      ${notifOpen && html`
+        <${NotificationPanel}
+          rsvps=${data?.rsvps || []}
+          unreadMark=${panelUnreadMark}
+          onClose=${() => setNotifOpen(false)}
+        />
+      `}
     </div>
   `;
 }
@@ -1222,7 +1382,7 @@ function LoginScreen({ onLogin }) {
   return html`
     <div class="login-wrap">
       <div class="login-card">
-        <div class="login-monogram">R & S</div>
+        <img src="/rsvp-logo.png" alt="RS" class="login-logo" />
         <div class="login-title">RSVP Dashboard</div>
         <label class="login-label" for="pw">Admin-Passwort</label>
         <input

@@ -58,7 +58,7 @@
     "dress": {
       "title": "Dress Code",
       "code1": "Formal Attire",
-      "code2": "Light colors preferred"
+      "code2": ""
     },
     "schedule": {
       "title": "Ceremony Schedule",
@@ -105,7 +105,7 @@
     "title": "Hindu Ceremony",
     "headline": "Celebrate Our Hindu Wedding Ceremony",
     "description": "We warmly invite you to join us for our traditional Hindu wedding ceremony! This vibrant celebration is filled with color, music, and meaningful rituals that bring our two families together.",
-    "description2": "Your presence at the Mandap as we perform our sacred rituals would make this beautiful and auspicious day even more special for us.",
+    "description2": "Your presence, as we perform our sacred rituals would make this beautiful and auspicious day even more special for us.",
     "rsvpButton": "RSVP Now",
     "videoUrl": "",
     "videoType": "youtube",
@@ -123,7 +123,7 @@
     "dress": {
       "title": "Dress Code",
       "code1": "Traditional Indian Attire",
-      "code2": "Vibrant colors encouraged"
+      "code2": ""
     },
     "schedule": {
       "title": "Ceremony Schedule",
@@ -172,19 +172,23 @@
     },
     "rituals": {
       "title": "Important Hindu Wedding Rituals",
-      "description": "Our Hindu wedding ceremony will include several meaningful rituals that symbolize our commitment and the joining of our families.",
+      "description": "Our Hindu wedding ceremony includes several meaningful rituals from the Tamil (Sri Lankan) tradition, symbolizing our union and the coming together of our families.",
       "items": {
-        "mandap": {
-          "title": "Mandap",
-          "description": "A covered structure where the ceremony takes place"
+        "manavarai": {
+          "title": "Manavarai (மணவரை)",
+          "description": "The beautifully decorated ceremonial space where the wedding takes place"
         },
-        "kanyadaan": {
-          "title": "Kanyadaan",
-          "description": "The giving away of the bride by her father"
+        "pennKodukkal": {
+          "title": "Penn Kodukkal (பெண் கொடுக்கல்)",
+          "description": "The symbolic giving away of the bride by her family"
         },
-        "mangalPhera": {
-          "title": "Mangal Phera",
-          "description": "The couple circles the sacred fire four times"
+        "agniPradakshinam": {
+          "title": "Agni Pradakshinam (அக்னி பிரதக்ஷிணம்)",
+          "description": "The couple walks around the sacred fire as part of the ceremony"
+        },
+        "thaali": {
+          "title": "Thaali Kattudhal (தாலி கட்டுதல்)",
+          "description": "The groom ties the sacred necklace around the bride’s neck – the most important ritual of the wedding"
         }
       }
     }
@@ -208,7 +212,7 @@
     "dress": {
       "title": "Dress Code",
       "code1": "Traditional Festive Attire",
-      "code2": "Traditional or festive elegant clothing"
+      "code2": ""
     },
     "schedule": {
       "title": "Reception Schedule",

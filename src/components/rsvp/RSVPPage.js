@@ -21,7 +21,7 @@ const RSVPPage = () => {
     useEffect(() => {
         const link = document.querySelector("link[rel='icon']");
         const prevHref = link ? link.href : null;
-        if (link) link.href = process.env.PUBLIC_URL + '/rsvp_logo.ico';
+        if (link) link.href = '/rsvp_logo.ico';
         return () => {
             if (link && prevHref) link.href = prevHref;
         };

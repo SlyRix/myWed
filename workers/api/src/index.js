@@ -1262,7 +1262,7 @@ async function handleMarkPurchased(env, giftId, request, rateLimiter, requestOri
  * @param {string} requestOrigin - Request origin for CORS
  * @returns {Promise<Response>}
  */
-async function handleRsvp(env, request, requestOrigin) {
+async function handleRsvp(env, request, requestOrigin, ctx) {
     let body;
     try {
         body = await request.json();
@@ -1336,11 +1336,11 @@ async function handleRsvp(env, request, requestOrigin) {
             }
         }
 
-        // Send Web Push notification to all subscribers (non-blocking)
-        sendWebPushToAll(env, {
+        // Send Web Push notification to all subscribers (non-blocking, ctx.waitUntil ensures it completes)
+        ctx.waitUntil(sendWebPushToAll(env, {
             title: '🎉 Neue RSVP-Anmeldung!',
             body: `${fullName} hat ${attending === 'yes' ? 'zugesagt' : 'abgesagt'}.`
-        }).catch(() => {});
+        }).catch(() => {}));
 
         return new Response(
             JSON.stringify({ success: true, message: 'RSVP submitted successfully' }),
@@ -1355,7 +1355,7 @@ async function handleRsvp(env, request, requestOrigin) {
     }
 }
 
-async function handleRequest(request, env) {
+async function handleRequest(request, env, ctx) {
     const url = new URL(request.url);
     const path = url.pathname;
     const method = request.method;
@@ -1401,7 +1401,7 @@ async function handleRequest(request, env) {
 
         // RSVP submission - public
         if (path === '/api/rsvp' && method === 'POST') {
-            return await handleRsvp(env, request, requestOrigin);
+            return await handleRsvp(env, request, requestOrigin, ctx);
         }
 
         // VAPID public key - public (needed by frontend to subscribe)
@@ -1743,6 +1743,6 @@ async function sendWebPushToAll(env, notification) {
 // Worker entry point
 export default {
     async fetch(request, env, ctx) {
-        return await handleRequest(request, env);
+        return await handleRequest(request, env, ctx);
     }
 };

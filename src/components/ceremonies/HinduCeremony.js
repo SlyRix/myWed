@@ -56,16 +56,20 @@ const HinduCeremony = () => {
     // Rituals - use CMS content if available, otherwise use translations
     const ritualsList = cmsContent?.rituals || [
         {
-            title: t('hindu.rituals.items.mandap.title'),
-            description: t('hindu.rituals.items.mandap.description')
+            title: t('hindu.rituals.items.manavarai.title'),
+            description: t('hindu.rituals.items.manavarai.description')
         },
         {
-            title: t('hindu.rituals.items.kanyadaan.title'),
-            description: t('hindu.rituals.items.kanyadaan.description')
+            title: t('hindu.rituals.items.pennKodukkal.title'),
+            description: t('hindu.rituals.items.pennKodukkal.description')
         },
         {
-            title: t('hindu.rituals.items.mangalPhera.title'),
-            description: t('hindu.rituals.items.mangalPhera.description')
+            title: t('hindu.rituals.items.agniPradakshinam.title'),
+            description: t('hindu.rituals.items.agniPradakshinam.description')
+        },
+        {
+            title: t('hindu.rituals.items.thaali.title'),
+            description: t('hindu.rituals.items.thaali.description')
         }
     ];
 
@@ -207,7 +211,7 @@ const HinduCeremony = () => {
                             {cmsContent?.ritualsDescription || t('hindu.rituals.description')}
                         </p>
 
-                        <div className="grid md:grid-cols-3 gap-6">
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
                             {ritualsList.map((ritual, index) => (
                                 <div
                                     key={index}
