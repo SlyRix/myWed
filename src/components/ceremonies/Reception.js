@@ -11,6 +11,7 @@ import AddToCalendarButton from '../common/AddToCalendarButton';
 import { Link } from 'react-router-dom';
 import ResponsiveCeremonyImage from '../common/ResponsiveCeremonyImage';
 import { getPageContent } from '../../api/contentApi';
+import CeremonyAccessCheck from '../common/CeremonyAccessCheck';
 
 const Reception = () => {
     const { t, i18n } = useTranslation();
@@ -74,6 +75,7 @@ const Reception = () => {
 
     return (
         <section className="pt-24 pb-16 bg-gradient-to-br from-white via-white to-christian-accent/5 relative overflow-hidden">
+            <CeremonyAccessCheck ceremony="reception" />
             {/* Decorative elements */}
             <div className="hidden md:block absolute top-24 left-6 w-32 h-32 bg-christian-accent/5 rounded-full blur-lg"></div>
             <div className="hidden md:block absolute bottom-24 right-6 w-32 h-32 bg-wedding-gold/10 rounded-full blur-lg"></div>

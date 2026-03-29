@@ -57,15 +57,19 @@ const getAllHeaders = (env, requestOrigin) => ({
 const CODE_MAPPING = {
     'HINDU': {
         name: 'Hindu Ceremony Guest',
-        ceremonies: ['hindu']
+        ceremonies: ['hindu', 'reception']
     },
     'CHRISTIAN': {
         name: 'Christian Ceremony Guest',
-        ceremonies: ['christian']
+        ceremonies: ['christian', 'reception']
     },
     'ALL': {
         name: 'All Ceremonies Guest',
-        ceremonies: ['christian', 'hindu']
+        ceremonies: ['christian', 'hindu', 'reception']
+    },
+    'RECEPTION': {
+        name: 'Reception Guest',
+        ceremonies: ['reception']
     }
 };
 

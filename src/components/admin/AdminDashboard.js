@@ -1,7 +1,7 @@
 // src/components/admin/AdminDashboard.js
 import React, { useState } from 'react';
 import { QRCodeCanvas } from 'qrcode.react';
-import { mdiCross, mdiTempleHindu, mdiQrcode, mdiAccountMultiple, mdiGift, mdiFileEdit } from '@mdi/js';
+import { mdiCross, mdiTempleHindu, mdiQrcode, mdiAccountMultiple, mdiGift, mdiFileEdit, mdiGlassMartini } from '@mdi/js';
 import Icon from '@mdi/react';
 import GiftsManager from './GiftsManager';
 import PageContentEditor from './PageContentEditor';
@@ -17,18 +17,23 @@ const AdminDashboard = () => {
     const INVITATION_CODES = {
         'HINDU': {
             name: 'Hindu Ceremony Guest',
-            ceremonies: ['hindu'],
-            description: 'Grants access to Hindu ceremony only'
+            ceremonies: ['hindu', 'reception'],
+            description: 'Grants access to Hindu ceremony and reception'
         },
         'CHRISTIAN': {
             name: 'Christian Ceremony Guest',
-            ceremonies: ['christian'],
-            description: 'Grants access to Christian ceremony only'
+            ceremonies: ['christian', 'reception'],
+            description: 'Grants access to Christian ceremony and reception'
         },
         'ALL': {
             name: 'All Ceremonies Guest',
-            ceremonies: ['christian', 'hindu'],
-            description: 'Grants access to both Hindu and Christian ceremonies'
+            ceremonies: ['christian', 'hindu', 'reception'],
+            description: 'Grants access to all ceremonies and reception'
+        },
+        'RECEPTION': {
+            name: 'Reception Guest',
+            ceremonies: ['reception'],
+            description: 'Grants access to the reception only'
         }
     };
 
@@ -174,6 +179,35 @@ const AdminDashboard = () => {
                         </div>
                     </div>
 
+                        {/* RECEPTION Code Card */}
+                        <div className="border-l-4 border-green-500 p-6 bg-green-50 rounded-r-lg">
+                            <div className="flex items-start justify-between flex-wrap gap-4">
+                                <div className="flex-grow">
+                                    <div className="flex items-center mb-2">
+                                        <Icon path={mdiGlassMartini} size={1.2} className="mr-2 text-green-600" />
+                                        <h3 className="text-xl font-bold text-gray-900">RECEPTION</h3>
+                                    </div>
+                                    <p className="text-gray-700 mb-3">{INVITATION_CODES.RECEPTION.description}</p>
+                                    <div className="bg-white p-3 rounded-lg border border-green-200 inline-block">
+                                        <code className="text-sm text-gray-800 font-mono">
+                                            {window.location.origin}?code=RECEPTION
+                                        </code>
+                                    </div>
+                                </div>
+                                <button
+                                    onClick={() => {
+                                        navigator.clipboard.writeText(`${window.location.origin}?code=RECEPTION`)
+                                            .then(() => alert('Link copied to clipboard!'))
+                                            .catch(() => setError('Failed to copy link'));
+                                    }}
+                                    className="px-4 py-2 bg-green-600 text-white rounded-lg hover:opacity-90 transition-opacity whitespace-nowrap"
+                                >
+                                    Copy Link
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
                     {/* Important Notes */}
                     <div className="mt-8 p-6 bg-gray-50 rounded-lg border border-gray-200">
                         <h4 className="font-semibold text-lg mb-3 flex items-center">
@@ -181,7 +215,7 @@ const AdminDashboard = () => {
                             Important Notes
                         </h4>
                         <ul className="list-disc list-inside text-gray-700 space-y-2">
-                            <li>Reception is fully public - no code required</li>
+                            <li>Use RECEPTION code for guests invited to reception only</li>
                             <li>Codes are case-insensitive (HINDU = hindu = Hindu)</li>
                             <li>Share links directly or generate QR codes in the QR Codes tab</li>
                             <li>Each guest only needs one code - choose based on which ceremony they're invited to</li>
@@ -239,6 +273,7 @@ const AdminDashboard = () => {
                             <option value="HINDU">Hindu Ceremony Only</option>
                             <option value="CHRISTIAN">Christian Ceremony Only</option>
                             <option value="ALL">All Ceremonies</option>
+                            <option value="RECEPTION">Reception Only</option>
                         </select>
                     </div>
 
@@ -261,6 +296,7 @@ const AdminDashboard = () => {
                                     {selectedGuest === 'HINDU' && 'Hindu ceremony access'}
                                     {selectedGuest === 'CHRISTIAN' && 'Christian ceremony access'}
                                     {selectedGuest === 'ALL' && 'All ceremonies access'}
+                                    {selectedGuest === 'RECEPTION' && 'Reception only access'}
                                 </p>
 
                                 {/* Direct invitation link section */}

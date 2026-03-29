@@ -32,7 +32,7 @@ export const GuestProvider = ({ children }) => {
                 setGuestData({
                     code: 'ADMIN',
                     name: 'Administrator',
-                    ceremonies: ['christian', 'hindu'],
+                    ceremonies: ['christian', 'hindu', 'reception'],
                     isLoading: false,
                     isValidated: true
                 });

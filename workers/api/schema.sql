@@ -31,7 +31,11 @@ CREATE INDEX IF NOT EXISTS idx_rate_limits_window ON rate_limits(window_start);
 INSERT OR REPLACE INTO guests (code, name, ceremonies) VALUES
     ('SIVA', 'Sivani Family', '["christian","hindu"]'),
     ('RUSH', 'Rushel Family', '["christian"]'),
-    ('TEST', 'Test User', '["hindu"]');
+    ('TEST', 'Test User', '["hindu"]'),
+    ('RECEPTION', 'Reception Guest', '["reception"]'),
+    ('ALL', 'All Ceremonies Guest', '["christian","hindu","reception"]'),
+    ('HINDU', 'Hindu Ceremony Guest', '["hindu","reception"]'),
+    ('CHRISTIAN', 'Christian Ceremony Guest', '["christian","reception"]');
 
 -- Page content table - stores editable page content for CMS with multi-language support
 CREATE TABLE IF NOT EXISTS page_content (

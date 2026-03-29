@@ -44,7 +44,7 @@ const CeremonyAccessCheck = ({ ceremony }) => {
 };
 
 CeremonyAccessCheck.propTypes = {
-    ceremony: PropTypes.oneOf(['christian', 'hindu']).isRequired
+    ceremony: PropTypes.oneOf(['christian', 'hindu', 'reception']).isRequired
 };
 
 export default CeremonyAccessCheck;
