@@ -24,7 +24,7 @@
     },
     "hinduEvent": {
       "title": "Hindu Ceremony",
-      "date": "May 29, 2026",
+      "date": "May 28, 2026",
       "location": "Shed15 events&more",
       "description": "Experience a vibrant Hindu wedding ceremony full of color and tradition."
     },
@@ -117,7 +117,7 @@
     },
     "dateTime": {
       "title": "Date & Time",
-      "date": "May 29, 2026",
+      "date": "May 28, 2026",
       "time": "10:30 AM – 12:36 PM"
     },
     "dress": {
@@ -340,7 +340,7 @@
       "guests": "Number of Additional Guests",
       "ceremonies": "Which ceremonies will you attend?",
       "christianCeremony": "Christian Ceremony (May 30)",
-      "hinduCeremony": "Hindu Ceremony (May 29)",
+      "hinduCeremony": "Hindu Ceremony (May 28)",
       "reception": "Wedding Reception",
       "dietary": "Dietary Restrictions",
       "dietaryPlaceholder": "Any food allergies or preferences we should know about?",

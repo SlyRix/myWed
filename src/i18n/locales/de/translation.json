@@ -24,7 +24,7 @@
     },
     "hinduEvent": {
       "title": "Hinduistische Zeremonie",
-      "date": "29. Mai 2026",
+      "date": "28. Mai 2026",
       "location": "Shed15 events&more",
       "description": "Erleben Sie eine lebendige hinduistische Hochzeitszeremonie voller Farben und Tradition."
     },
@@ -117,7 +117,7 @@
     },
     "dateTime": {
       "title": "Datum & Uhrzeit",
-      "date": "29. Mai 2026",
+      "date": "28. Mai 2026",
       "time": "10:30 – 12:36 Uhr"
     },
     "dress": {
@@ -340,7 +340,7 @@
       "guests": "Anzahl zusätzlicher Gäste",
       "ceremonies": "An welchen Zeremonien werden Sie teilnehmen?",
       "christianCeremony": "Christliche Zeremonie (30. Mai)",
-      "hinduCeremony": "Hinduistische Zeremonie (29. Mai)",
+      "hinduCeremony": "Hinduistische Zeremonie (28. Mai)",
       "reception": "Reception",
       "dietary": "Ernährungseinschränkungen",
       "dietaryPlaceholder": "Gibt es Nahrungsmittelallergien oder Vorlieben, die wir wissen sollten?",

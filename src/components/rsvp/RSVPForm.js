@@ -321,31 +321,6 @@ const RSVPForm = () => {
                             </label>
 
                             <div className="space-y-4">
-                                {accessibleCeremonies.includes('christian') && (
-                                    <div className="p-4 border border-gray-200 rounded-lg bg-christian-primary/20">
-                                        <div className="mb-2">
-                                            <label className="font-medium text-gray-700">
-                                                Christian Ceremony - {t('christian.dateTime.date')}
-                                            </label>
-                                        </div>
-
-                                        <div className="flex items-center gap-3">
-                                            <input
-                                                type="number"
-                                                name="christianGuests"
-                                                min="0"
-                                                max={MAX_GUESTS_PER_CEREMONY}
-                                                value={formData.christianGuests}
-                                                onChange={handleChange}
-                                                disabled={submitted}
-                                                className={`w-20 p-2 border rounded-lg focus:outline-none focus:ring-2 ${errors.christianGuests ? 'border-red-500 focus:ring-red-200' : 'border-gray-300 focus:ring-christian-accent/20'}`}
-                                            />
-                                            <span className="text-sm text-gray-600">people (enter 0 if not attending)</span>
-                                        </div>
-                                        {errors.christianGuests && <p className="text-red-500 text-sm mt-1">{errors.christianGuests}</p>}
-                                    </div>
-                                )}
-
                                 {accessibleCeremonies.includes('hindu') && (
                                     <div className="p-4 border border-gray-200 rounded-lg bg-hindu-primary/20">
                                         <div className="mb-2">
@@ -368,6 +343,31 @@ const RSVPForm = () => {
                                             <span className="text-sm text-gray-600">people (enter 0 if not attending)</span>
                                         </div>
                                         {errors.hinduGuests && <p className="text-red-500 text-sm mt-1">{errors.hinduGuests}</p>}
+                                    </div>
+                                )}
+
+                                {accessibleCeremonies.includes('christian') && (
+                                    <div className="p-4 border border-gray-200 rounded-lg bg-christian-primary/20">
+                                        <div className="mb-2">
+                                            <label className="font-medium text-gray-700">
+                                                Christian Ceremony - {t('christian.dateTime.date')}
+                                            </label>
+                                        </div>
+
+                                        <div className="flex items-center gap-3">
+                                            <input
+                                                type="number"
+                                                name="christianGuests"
+                                                min="0"
+                                                max={MAX_GUESTS_PER_CEREMONY}
+                                                value={formData.christianGuests}
+                                                onChange={handleChange}
+                                                disabled={submitted}
+                                                className={`w-20 p-2 border rounded-lg focus:outline-none focus:ring-2 ${errors.christianGuests ? 'border-red-500 focus:ring-red-200' : 'border-gray-300 focus:ring-christian-accent/20'}`}
+                                            />
+                                            <span className="text-sm text-gray-600">people (enter 0 if not attending)</span>
+                                        </div>
+                                        {errors.christianGuests && <p className="text-red-500 text-sm mt-1">{errors.christianGuests}</p>}
                                     </div>
                                 )}
 
