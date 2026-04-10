@@ -448,6 +448,8 @@
     }
     .attending-btn.yes.active { background: rgba(76,175,133,.2); border-color: var(--green); color: var(--green); }
     .attending-btn.no.active { background: rgba(224,90,90,.15); border-color: var(--red); color: var(--red); }
+    .attending-btn.groom.active { background: rgba(74,127,193,.2); border-color: var(--blue); color: #7aaee8; }
+    .attending-btn.bride.active { background: rgba(196,146,58,.2); border-color: var(--gold); color: var(--gold-lt); }
     .veg-check { display: flex; align-items: center; gap: .7rem; cursor: pointer; padding: .5rem 0; }
     .veg-check input[type="checkbox"] { width: 20px; height: 20px; accent-color: var(--green); cursor: pointer; flex-shrink: 0; }
     .field-num { font-family: 'JetBrains Mono', monospace; }
@@ -717,7 +719,8 @@ function EditModal({ rsvp, token, onSaved, onClose, showToast }) {
     reception_guests: rsvp.reception_guests ?? 0,
     total_guests: rsvp.total_guests ?? 0,
     is_vegetarian: !!rsvp.is_vegetarian,
-    message: rsvp.message || ''
+    message: rsvp.message || '',
+    side: rsvp.side || ''
   });
   const [saving, setSaving] = useState(false);
 
@@ -814,6 +817,14 @@ function EditModal({ rsvp, token, onSaved, onClose, showToast }) {
         </div>
 
         <div class="field-full">
+          <label class="field-label">Familienseite</label>
+          <div class="attending-toggle">
+            <button type="button" class=${'attending-btn groom' + (form.side === 'groom' ? ' active' : '')} onClick=${() => set('side', form.side === 'groom' ? '' : 'groom')}>🤵 Bräutigam</button>
+            <button type="button" class=${'attending-btn bride' + (form.side === 'bride' ? ' active' : '')} onClick=${() => set('side', form.side === 'bride' ? '' : 'bride')}>👰 Braut</button>
+          </div>
+        </div>
+
+        <div class="field-full">
           <label class="field-label">Nachricht</label>
           <textarea class="field-input field-textarea" value=${form.message} onInput=${e => set('message', e.target.value)} />
         </div>
@@ -882,6 +893,29 @@ function AttBar({ label, value, total, color, mounted }) {
   `;
 }
 
+// ── Event Split Bar ────────────────────────────────────────────────────────
+function EventSplitBar({ label, total, groom, bride, mounted }) {
+  const base = total || 1;
+  const groomPct = Math.round(groom / base * 100);
+  const bridePct = Math.round(bride / base * 100);
+  const unknownPct = Math.max(0, 100 - groomPct - bridePct);
+  return html`
+    <div class="att-bar-wrap">
+      <div class="att-bar-label"><span>${label}</span><span>${total}</span></div>
+      <div class="att-bar-track" style="display:flex;gap:1px;overflow:hidden">
+        <div style=${{ width: mounted ? groomPct + '%' : '0%', background: 'var(--blue)', transition: 'width .6s ease', minWidth: groom > 0 && mounted ? '3px' : '0' }} />
+        <div style=${{ width: mounted ? bridePct + '%' : '0%', background: 'var(--gold)', transition: 'width .6s ease', minWidth: bride > 0 && mounted ? '3px' : '0' }} />
+        <div style=${{ width: mounted ? unknownPct + '%' : '0%', background: 'rgba(92,104,128,.3)', transition: 'width .6s ease' }} />
+      </div>
+      <div style="display:flex;gap:.8rem;font-size:.73rem;margin-top:.25rem;color:var(--text-dim)">
+        <span style="color:#7aaee8">🤵 ${groom}</span>
+        <span style="color:var(--gold-lt)">👰 ${bride}</span>
+        ${total - groom - bride > 0 && html`<span>● ${total - groom - bride}</span>`}
+      </div>
+    </div>
+  `;
+}
+
 // ── Stat Card ──────────────────────────────────────────────────────────────
 function StatCard({ icon, value, label, color, delay }) {
   return html`
@@ -915,6 +949,12 @@ function GuestCard({ r, i, onEdit, onDelete }) {
 
       <div class="guest-card-badges">
         ${cers}
+        ${r.side === 'groom'
+          ? html`<span class="badge" style="background:rgba(74,127,193,.15);border:1px solid rgba(74,127,193,.3);color:#7aaee8">🤵 Bräutigam</span>`
+          : r.side === 'bride'
+          ? html`<span class="badge" style="background:rgba(196,146,58,.15);border:1px solid var(--gold-border);color:var(--gold-lt)">👰 Braut</span>`
+          : html`<span class="badge" style="background:rgba(92,104,128,.12);border:1px solid rgba(92,104,128,.2);color:var(--text-dim)">● Unbekannt</span>`
+        }
         <span class=${'badge ' + (r.is_vegetarian ? 'badge-veg' : 'badge-meat')}>
           ${r.is_vegetarian ? '🥗 Veg' : '🥩'}
         </span>
@@ -947,7 +987,7 @@ function Dashboard({ token, onLogout }) {
   const [error, setError] = useState(null);
   const [editRsvp, setEditRsvp] = useState(null);
   const [deleteRsvp, setDeleteRsvp] = useState(null);
-  const [filter, setFilter] = useState({ q: '', attending: '', ceremony: '', diet: '' });
+  const [filter, setFilter] = useState({ q: '', attending: '', ceremony: '', diet: '', side: '' });
   const [sort, setSort] = useState({ col: 'submitted_at', dir: -1 });
   const [lastUpdated, setLastUpdated] = useState('');
   const [barsReady, setBarsReady] = useState(false);
@@ -1043,7 +1083,7 @@ function Dashboard({ token, onLogout }) {
 
   const filtered = (() => {
     if (!data?.rsvps) return [];
-    const { q, attending, ceremony, diet } = filter;
+    const { q, attending, ceremony, diet, side } = filter;
     let list = data.rsvps.filter(r => {
       if (q && !`${r.full_name} ${r.email} ${r.message}`.toLowerCase().includes(q.toLowerCase())) return false;
       if (attending && r.attending !== attending) return false;
@@ -1052,6 +1092,9 @@ function Dashboard({ token, onLogout }) {
       if (ceremony === 'reception' && !(r.reception_guests > 0)) return false;
       if (diet === 'veg' && !r.is_vegetarian) return false;
       if (diet === 'meat' && r.is_vegetarian) return false;
+      if (side === 'groom' && r.side !== 'groom') return false;
+      if (side === 'bride' && r.side !== 'bride') return false;
+      if (side === 'unknown' && r.side) return false;
       return true;
     });
     list.sort((a, b) => {
@@ -1066,10 +1109,11 @@ function Dashboard({ token, onLogout }) {
 
   const exportCSV = () => {
     if (!data?.rsvps) return;
-    const headers = ['Name','Email','Telefon','Status','Christlich','Hinduistisch','Empfang','Gäste','Vegetarisch','Nachricht','Eingegangen'];
+    const headers = ['Name','Email','Telefon','Status','Seite','Christlich','Hinduistisch','Empfang','Gäste','Vegetarisch','Nachricht','Eingegangen'];
     const rows = data.rsvps.map(r => [
       r.full_name, r.email, r.phone,
       r.attending === 'yes' ? 'Ja' : 'Nein',
+      r.side === 'groom' ? 'Bräutigam' : r.side === 'bride' ? 'Braut' : '',
       r.christian_guests, r.hindu_guests, r.reception_guests, r.total_guests,
       r.is_vegetarian ? 'Ja' : 'Nein', r.message,
       new Date(r.submitted_at).toLocaleString('de-CH')
@@ -1084,7 +1128,6 @@ function Dashboard({ token, onLogout }) {
   const s = data?.stats || {};
   const recent = [...(data?.rsvps || [])].sort((a,b) => b.submitted_at - a.submitted_at).slice(0, 8);
   const totalForBars = s.total || 1;
-  const totalGuests = s.totalGuests || 1;
 
   return html`
     <div>
@@ -1144,10 +1187,10 @@ function Dashboard({ token, onLogout }) {
           <!-- STATS -->
           <div class="section-label">Übersicht</div>
           <div class="stats-grid">
-            <${StatCard} icon="📋" value=${s.total||0} label="RSVPs" color="gold" delay=${0.05} />
-            <${StatCard} icon="✅" value=${s.attending||0} label="Zusagen" color="green" delay=${0.1} />
-            <${StatCard} icon="❌" value=${s.notAttending||0} label="Absagen" color="red" delay=${0.15} />
-            <${StatCard} icon="👥" value=${s.totalGuests||0} label="Gäste" color="" delay=${0.2} />
+            <${StatCard} icon="✅" value=${s.attending||0} label="Zusagen" color="green" delay=${0.05} />
+            <${StatCard} icon="❌" value=${s.notAttending||0} label="Absagen" color="red" delay=${0.1} />
+            <${StatCard} icon="🤵" value=${s.groomSide||0} label="Bräutigam" color="blue" delay=${0.15} />
+            <${StatCard} icon="👰" value=${s.brideSide||0} label="Braut" color="gold" delay=${0.2} />
             <${StatCard} icon="⛪" value=${s.christianGuests||0} label="Christl." color="blue" delay=${0.25} />
             <${StatCard} icon="🪔" value=${s.hinduGuests||0} label="Hindu" color="blue" delay=${0.3} />
             <${StatCard} icon="🎉" value=${s.receptionGuests||0} label="Empfang" color="blue" delay=${0.35} />
@@ -1161,9 +1204,10 @@ function Dashboard({ token, onLogout }) {
               <${AttBar} label="✅ Zusagen" value=${s.attending||0} total=${totalForBars} color="green" mounted=${barsReady} />
               <${AttBar} label="❌ Absagen" value=${s.notAttending||0} total=${totalForBars} color="red" mounted=${barsReady} />
               <div style="height:.6rem"/>
-              <${AttBar} label="⛪ Christlich" value=${s.christianGuests||0} total=${totalGuests} color="gold" mounted=${barsReady} />
-              <${AttBar} label="🪔 Hinduistisch" value=${s.hinduGuests||0} total=${totalGuests} color="blue" mounted=${barsReady} />
-              <${AttBar} label="🎉 Empfang" value=${s.receptionGuests||0} total=${totalGuests} color="gold" mounted=${barsReady} />
+              <${EventSplitBar} label="⛪ Christlich" total=${s.christianGuests||0} groom=${s.christianGroom||0} bride=${s.christianBride||0} mounted=${barsReady} />
+              <${EventSplitBar} label="🪔 Hinduistisch" total=${s.hinduGuests||0} groom=${s.hinduGroom||0} bride=${s.hinduBride||0} mounted=${barsReady} />
+              <${EventSplitBar} label="🎉 Empfang" total=${s.receptionGuests||0} groom=${s.receptionGroom||0} bride=${s.receptionBride||0} mounted=${barsReady} />
+              <div style="height:.6rem"/>
               <${AttBar} label="🥗 Vegetarisch" value=${s.vegetarian||0} total=${s.attending||1} color="green" mounted=${barsReady} />
             </div>
 
@@ -1225,6 +1269,12 @@ function Dashboard({ token, onLogout }) {
                 <option value="veg">🥗 Veg</option>
                 <option value="meat">🥩 Fleisch</option>
               </select>
+              <select class="filter-select" value=${filter.side} onChange=${e => setFilter(f => ({ ...f, side: e.target.value }))}>
+                <option value="">Alle Seiten</option>
+                <option value="groom">🤵 Bräutigam</option>
+                <option value="bride">👰 Braut</option>
+                <option value="unknown">● Unbekannt</option>
+              </select>
               <button class="btn-export" onClick=${exportCSV}>↓ CSV</button>
             </div>
 
@@ -1237,6 +1287,7 @@ function Dashboard({ token, onLogout }) {
                       <th onClick=${() => sortBy('full_name')} class=${sort.col === 'full_name' ? 'sorted' : ''}># Name</th>
                       <th onClick=${() => sortBy('email')} class=${sort.col === 'email' ? 'sorted' : ''}>E-Mail</th>
                       <th onClick=${() => sortBy('attending')} class=${sort.col === 'attending' ? 'sorted' : ''}>Status</th>
+                      <th onClick=${() => sortBy('side')} class=${sort.col === 'side' ? 'sorted' : ''} title="Familienseite">Seite</th>
                       <th onClick=${() => sortBy('christian_guests')} class=${sort.col === 'christian_guests' ? 'sorted' : ''}>⛪</th>
                       <th onClick=${() => sortBy('hindu_guests')} class=${sort.col === 'hindu_guests' ? 'sorted' : ''}>🪔</th>
                       <th onClick=${() => sortBy('reception_guests')} class=${sort.col === 'reception_guests' ? 'sorted' : ''}>🎉</th>
@@ -1250,7 +1301,7 @@ function Dashboard({ token, onLogout }) {
                   </thead>
                   <tbody>
                     ${filtered.length === 0 && html`
-                      <tr><td colspan="12">
+                      <tr><td colspan="13">
                         <div class="empty-state">
                           <div class="big">✉</div>
                           <p>Keine Einträge gefunden</p>
@@ -1270,6 +1321,9 @@ function Dashboard({ token, onLogout }) {
                           </td>
                           <td class="email-cell">${esc(r.email)}</td>
                           <td><span class=${'badge badge-' + r.attending}>${r.attending === 'yes' ? '✓ Ja' : '✗ Nein'}</span></td>
+                          <td style="text-align:center;font-size:1.1rem" title=${r.side === 'groom' ? "Bräutigam" : r.side === 'bride' ? "Braut" : "Nicht angegeben"}>
+                            ${r.side === 'groom' ? '🤵' : r.side === 'bride' ? '👰' : html`<span style="color:var(--text-dim);font-size:.7rem">●</span>`}
+                          </td>
                           <td class="mono">${r.christian_guests || '—'}</td>
                           <td class="mono">${r.hindu_guests || '—'}</td>
                           <td class="mono">${r.reception_guests || '—'}</td>

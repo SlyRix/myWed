@@ -265,6 +265,8 @@ async function handleGetRsvps(env, requestOrigin) {
         ).all();
 
         const attending = results.filter(r => r.attending === 'yes');
+        const groomRsvps = results.filter(r => r.side === 'groom');
+        const brideRsvps = results.filter(r => r.side === 'bride');
         const stats = {
             total: results.length,
             attending: attending.length,
@@ -272,8 +274,15 @@ async function handleGetRsvps(env, requestOrigin) {
             christianGuests: results.reduce((s, r) => s + (r.christian_guests || 0), 0),
             hinduGuests: results.reduce((s, r) => s + (r.hindu_guests || 0), 0),
             receptionGuests: results.reduce((s, r) => s + (r.reception_guests || 0), 0),
-            totalGuests: results.reduce((s, r) => s + (r.total_guests || 0), 0),
             vegetarian: results.filter(r => r.is_vegetarian === 1).length,
+            groomSide: groomRsvps.length,
+            brideSide: brideRsvps.length,
+            christianGroom: groomRsvps.reduce((s, r) => s + (r.christian_guests || 0), 0),
+            christianBride: brideRsvps.reduce((s, r) => s + (r.christian_guests || 0), 0),
+            hinduGroom: groomRsvps.reduce((s, r) => s + (r.hindu_guests || 0), 0),
+            hinduBride: brideRsvps.reduce((s, r) => s + (r.hindu_guests || 0), 0),
+            receptionGroom: groomRsvps.reduce((s, r) => s + (r.reception_guests || 0), 0),
+            receptionBride: brideRsvps.reduce((s, r) => s + (r.reception_guests || 0), 0),
         };
 
         return new Response(
@@ -1298,8 +1307,8 @@ async function handleRsvp(env, request, requestOrigin, ctx) {
             INSERT INTO rsvp (
                 submitted_at, first_name, last_name, full_name, email, phone,
                 attending, christian_guests, hindu_guests, reception_guests, total_guests,
-                is_vegetarian, message, source
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                is_vegetarian, message, source, side
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         `).bind(
             now,
             firstName.trim().slice(0, 100),
@@ -1314,7 +1323,8 @@ async function handleRsvp(env, request, requestOrigin, ctx) {
             parseInt(body.totalGuests) || 0,
             body.isVegetarian ? 1 : 0,
             (body.message || '').slice(0, 1000),
-            (body.source || 'direct').slice(0, 50)
+            (body.source || 'direct').slice(0, 50),
+            ['groom', 'bride'].includes(body.side) ? body.side : ''
         ).run();
 
         // Trigger n8n webhook for email notifications (non-blocking, ignore failure)
@@ -1545,7 +1555,7 @@ async function handleUpdateRsvp(env, id, request, requestOrigin) {
         return new Response(JSON.stringify({ error: 'Invalid JSON' }), { status: 400, headers: getAllHeaders(env, requestOrigin) });
     }
 
-    const { first_name, last_name, email, phone, attending, christian_guests, hindu_guests, reception_guests, total_guests, is_vegetarian, message } = body;
+    const { first_name, last_name, email, phone, attending, christian_guests, hindu_guests, reception_guests, total_guests, is_vegetarian, message, side } = body;
     if (!first_name || !last_name || !email || !['yes', 'no'].includes(attending)) {
         return new Response(JSON.stringify({ error: 'Missing required fields' }), { status: 400, headers: getAllHeaders(env, requestOrigin) });
     }
@@ -1555,19 +1565,20 @@ async function handleUpdateRsvp(env, id, request, requestOrigin) {
     const hin = parseInt(hindu_guests) || 0;
     const rec = parseInt(reception_guests) || 0;
     const tot = parseInt(total_guests) || (chr + hin + rec);
+    const sideVal = ['groom', 'bride'].includes(side) ? side : '';
 
     try {
         await env.DB.prepare(`
             UPDATE rsvp SET
                 first_name=?, last_name=?, full_name=?, email=?, phone=?,
                 attending=?, christian_guests=?, hindu_guests=?, reception_guests=?,
-                total_guests=?, is_vegetarian=?, message=?
+                total_guests=?, is_vegetarian=?, message=?, side=?
             WHERE id=?
         `).bind(
             first_name.trim(), last_name.trim(), full_name,
             email.trim(), (phone || '').trim(), attending,
             chr, hin, rec, tot, is_vegetarian ? 1 : 0,
-            (message || '').trim(), id
+            (message || '').trim(), sideVal, id
         ).run();
         return new Response(JSON.stringify({ success: true }), { status: 200, headers: getAllHeaders(env, requestOrigin) });
     } catch (error) {

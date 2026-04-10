@@ -43,6 +43,7 @@ export const sendRSVPEmail = async (formData) => {
             isVegetarian: formData.isVegetarian || false,
             message: formData.message || '',
             source: formData.source || 'direct',
+            side: formData.side || '',
         };
 
         const response = await fetch(`${API_URL}/rsvp`, {

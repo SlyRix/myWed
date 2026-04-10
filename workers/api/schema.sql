@@ -68,7 +68,8 @@ CREATE TABLE IF NOT EXISTS rsvp (
     total_guests INTEGER DEFAULT 0,
     is_vegetarian INTEGER DEFAULT 0,     -- 0 or 1
     message TEXT DEFAULT '',
-    source TEXT DEFAULT 'direct'
+    source TEXT DEFAULT 'direct',
+    side TEXT DEFAULT ''                  -- 'groom', 'bride', or '' (not specified)
 );
 
 CREATE INDEX IF NOT EXISTS idx_rsvp_submitted_at ON rsvp(submitted_at);

@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { mdiCheck, mdiClose } from '@mdi/js';
 import Icon from '@mdi/react';
-import { useLocation, Link } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { sendRSVPEmail } from '../../utils/emailService';
 import { useGuest } from '../../contexts/GuestContext';
@@ -11,6 +11,7 @@ import { MAX_GUESTS_PER_CEREMONY } from '../../constants';
 
 const RSVPForm = () => {
     const { t } = useTranslation();
+    const navigate = useNavigate();
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
     const ceremonySrc = queryParams.get('ceremony');
@@ -32,7 +33,9 @@ const RSVPForm = () => {
         isVegetarian: false,
         message: '',
         // Track which ceremony they came from
-        source: ceremonySrc || 'direct'
+        source: ceremonySrc || 'direct',
+        // Which side of the family
+        side: ''
     });
 
     const [submitted, setSubmitted] = useState(false);
@@ -79,6 +82,10 @@ const RSVPForm = () => {
             if (!emailRegex.test(formData.email)) {
                 newErrors.email = 'Please enter a valid email address';
             }
+        }
+
+        if (!formData.side) {
+            newErrors.side = 'Please select which side of the family you are from';
         }
 
         if (formData.attending === 'yes') {
@@ -141,6 +148,9 @@ const RSVPForm = () => {
                 // Clear any cached form data
                 localStorage.removeItem('weddingRSVPFormData');
                 localStorage.removeItem('rsvpFormData');
+                // Flag home page to show explore hint, then redirect
+                localStorage.setItem('showExploreHint', 'true');
+                setTimeout(() => navigate('/'), 3000);
                 // Clear form state
                 setFormData({
                     firstName: '',
@@ -153,7 +163,8 @@ const RSVPForm = () => {
                     receptionGuests: 0,
                     isVegetarian: false,
                     message: '',
-                    source: ceremonySrc || 'direct'
+                    source: ceremonySrc || 'direct',
+                    side: ''
                 });
             } else {
                 if (process.env.NODE_ENV === 'development') {
@@ -186,12 +197,7 @@ const RSVPForm = () => {
                 <p className="text-gray-700 mb-4">
                     {t('rsvp.thankYou.message')}
                 </p>
-                <Link
-                    to="/"
-                    className="px-6 py-2 bg-christian-accent text-white rounded-full hover:shadow-md transition-shadow inline-block"
-                >
-                    Return to Home
-                </Link>
+                <p className="text-sm text-gray-500">Redirecting you home in a moment…</p>
             </motion.div>
         );
     }
@@ -311,6 +317,41 @@ const RSVPForm = () => {
                             <span className="ml-2">{t('rsvp.form.no')}</span>
                         </label>
                     </div>
+                </div>
+
+                <div className="mb-4">
+                    <label className="block text-gray-700 mb-2">
+                        Which side of the family are you from?*
+                    </label>
+                    <div className="flex gap-3">
+                        <label className={`flex-1 flex items-center justify-center gap-2 p-3 rounded-lg border-2 cursor-pointer transition-all ${formData.side === 'groom' ? 'border-christian-accent bg-christian-primary/20 font-medium' : errors.side ? 'border-red-300 hover:border-red-400' : 'border-gray-200 hover:border-gray-300'}`}>
+                            <input
+                                type="radio"
+                                name="side"
+                                value="groom"
+                                checked={formData.side === 'groom'}
+                                onChange={handleChange}
+                                disabled={submitted}
+                                className="sr-only"
+                            />
+                            <span>🤵</span>
+                            <span className="text-sm">Groom's Side</span>
+                        </label>
+                        <label className={`flex-1 flex items-center justify-center gap-2 p-3 rounded-lg border-2 cursor-pointer transition-all ${formData.side === 'bride' ? 'border-hindu-secondary bg-hindu-primary/20 font-medium' : errors.side ? 'border-red-300 hover:border-red-400' : 'border-gray-200 hover:border-gray-300'}`}>
+                            <input
+                                type="radio"
+                                name="side"
+                                value="bride"
+                                checked={formData.side === 'bride'}
+                                onChange={handleChange}
+                                disabled={submitted}
+                                className="sr-only"
+                            />
+                            <span>👰</span>
+                            <span className="text-sm">Bride's Side</span>
+                        </label>
+                    </div>
+                    {errors.side && <p className="text-red-500 text-sm mt-1">{errors.side}</p>}
                 </div>
 
                 {formData.attending === 'yes' && (
