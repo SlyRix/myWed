@@ -13,7 +13,7 @@ function NoAccess() {
         Please scan the QR code at the venue<br />to access the gallery.
       </p>
       <div className="bg-cream-dark rounded-2xl px-6 py-4 border border-gold/20">
-        <p className="font-body text-brown/40 text-sm">Rushel & Ivani · 2025</p>
+        <p className="font-body text-brown/40 text-sm">Rushel & Sivani · 2025</p>
       </div>
     </div>
   );
@@ -71,7 +71,7 @@ export default function App() {
     <div className="min-h-screen bg-cream flex flex-col">
       {/* Header */}
       <header className="bg-cream/95 backdrop-blur-sm border-b border-gold/10 px-4 py-3 flex-shrink-0">
-        <h1 className="font-display text-xl text-brown text-center tracking-wide">Rushel & Ivani</h1>
+        <h1 className="font-display text-xl text-brown text-center tracking-wide">Rushel & Sivani</h1>
       </header>
 
       {/* Content */}

@@ -9,7 +9,7 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.ico', 'apple-touch-icon.png'],
       manifest: {
-        name: 'Rushel & Ivani — Wedding Gallery',
+        name: 'Rushel & Sivani — Wedding Gallery',
         short_name: 'Wedding Gallery',
         description: 'Share your photos from our wedding day',
         theme_color: '#8B6914',
