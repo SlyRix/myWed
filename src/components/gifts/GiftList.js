@@ -4,8 +4,11 @@ import { useTranslation } from 'react-i18next';
 import { fetchGifts, makeContribution, markPurchased } from '../../api/giftsApi';
 import GiftCard from './GiftCard';
 import ContributionModal from './ContributionModal';
+import TwintModal from './TwintModal';
 import AnimatedSection from '../common/AnimatedSection';
 import LoadingSpinner from '../common/LoadingSpinner';
+
+const N8N_WEBHOOK_URL = process.env.REACT_APP_N8N_WEBHOOK_URL || null;
 
 /**
  * GiftList Component
@@ -23,6 +26,8 @@ const GiftList = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
     const [successMessage, setSuccessMessage] = useState(null);
+    const [isTwintModalOpen, setIsTwintModalOpen] = useState(false);
+    const [twintData, setTwintData] = useState(null);
 
     const categories = [
         { id: 'all', label: { en: 'All Gifts', de: 'Alle Geschenke', ta: 'அனைத்து பரிசுகள்' } },
@@ -69,37 +74,65 @@ const GiftList = () => {
         }
     };
 
+    const notifyN8n = (payload) => {
+        if (!N8N_WEBHOOK_URL) return;
+        fetch(N8N_WEBHOOK_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload),
+        }).catch(() => {});
+    };
+
     const handleContributionSubmit = async (contributionData) => {
+        const giftName = selectedGift.names[currentLanguage] || selectedGift.names.en;
+
         try {
             if (contributionData.contributionType === 'purchased') {
-                // Call mark-purchased endpoint
                 await markPurchased(selectedGift.id, {
                     contributorName: contributionData.contributorName,
                     storeName: contributionData.storeName
                 });
 
-                setSuccessMessage(currentLanguage === 'de'
-                    ? 'Vielen Dank! Das Geschenk wurde als gekauft markiert.'
-                    : currentLanguage === 'ta'
-                        ? 'நன்றி! பரிசு வாங்கப்பட்டதாக குறிக்கப்பட்டது.'
-                        : 'Thank you! The gift has been marked as purchased.');
+                notifyN8n({
+                    type: 'purchased',
+                    giftName,
+                    contributorName: contributionData.contributorName,
+                    storeName: contributionData.storeName || null,
+                    giftPrice: selectedGift.price,
+                    timestamp: new Date().toISOString(),
+                });
+
+                setTwintData({
+                    giftName,
+                    contributorName: contributionData.contributorName,
+                    amount: selectedGift.remainingAmount,
+                    contributionType: 'purchased',
+                });
             } else {
-                // Call regular contribute endpoint
                 await makeContribution(selectedGift.id, {
                     contributorName: contributionData.contributorName,
                     amount: contributionData.amount,
                     message: contributionData.message
                 });
 
-                setSuccessMessage(currentLanguage === 'de'
-                    ? 'Vielen Dank für Ihren Beitrag!'
-                    : currentLanguage === 'ta'
-                        ? 'உங்கள் பங்களிப்புக்கு நன்றி!'
-                        : 'Thank you for your contribution!');
+                notifyN8n({
+                    type: 'contribution',
+                    giftName,
+                    contributorName: contributionData.contributorName,
+                    amount: contributionData.amount,
+                    message: contributionData.message || null,
+                    timestamp: new Date().toISOString(),
+                });
+
+                setTwintData({
+                    giftName,
+                    contributorName: contributionData.contributorName,
+                    amount: contributionData.amount,
+                    contributionType: 'partial',
+                });
             }
 
-            setTimeout(() => setSuccessMessage(null), 5000);
-
+            setIsTwintModalOpen(true);
             await loadGifts();
         } catch (err) {
             throw err;
@@ -210,6 +243,16 @@ const GiftList = () => {
                 }}
                 gift={selectedGift}
                 onSubmit={handleContributionSubmit}
+            />
+
+            <TwintModal
+                isOpen={isTwintModalOpen}
+                onClose={() => {
+                    setIsTwintModalOpen(false);
+                    setTwintData(null);
+                }}
+                data={twintData}
+                language={currentLanguage}
             />
         </div>
     );

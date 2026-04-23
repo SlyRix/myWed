@@ -1,0 +1,13 @@
+services:
+  gallery:
+    build: .
+    container_name: wedding-gallery
+    restart: unless-stopped
+    ports:
+      - "4000:4000"
+    volumes:
+      - /mnt/media/gallery-storage:/gallery-storage
+    env_file:
+      - .env
+    environment:
+      - STORAGE_PATH=/gallery-storage
