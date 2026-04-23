@@ -4,17 +4,50 @@ import UploadView from './components/UploadView';
 import AdminPanel from './components/AdminPanel';
 import InstallPrompt from './components/InstallPrompt';
 
-function NoAccess() {
+function NoAccess({ onUnlock }) {
+  const [input, setInput] = useState('');
+  const [error, setError] = useState(false);
+
+  const tryCode = e => {
+    e.preventDefault();
+    const code = input.trim().toUpperCase();
+    if (code === 'RUSHIVANI2025') {
+      localStorage.setItem('galleryCode', code);
+      onUnlock(code);
+    } else {
+      setError(true);
+      setTimeout(() => setError(false), 1500);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-cream flex flex-col items-center justify-center px-6 text-center">
-      <div className="text-8xl mb-6">📷</div>
-      <h1 className="font-display text-4xl text-brown mb-3">Wedding Gallery</h1>
-      <p className="font-body text-brown/60 mb-8 leading-relaxed">
-        Please scan the QR code at the venue<br />to access the gallery.
-      </p>
-      <div className="bg-cream-dark rounded-2xl px-6 py-4 border border-gold/20">
-        <p className="font-body text-brown/40 text-sm">Rushel & Sivani · 2025</p>
-      </div>
+      <div className="text-7xl mb-5">📷</div>
+      <h1 className="font-display text-4xl text-brown mb-1">Wedding Gallery</h1>
+      <p className="font-body text-brown/50 mb-8 text-sm">Rushel & Sivani · 2025</p>
+
+      <form onSubmit={tryCode} className="w-full max-w-xs space-y-3">
+        <input
+          type="text"
+          value={input}
+          onChange={e => { setInput(e.target.value); setError(false); }}
+          placeholder="Enter gallery code"
+          autoCapitalize="characters"
+          className={`w-full text-center tracking-widest text-lg border-2 rounded-2xl px-4 py-3 font-body bg-white focus:outline-none transition-colors ${
+            error ? 'border-red-400 animate-shake' : 'border-gold/30 focus:border-gold'
+          }`}
+        />
+        {error && <p className="text-red-400 text-sm font-body">Wrong code — try again</p>}
+        <button
+          type="submit"
+          className="w-full bg-gold text-white font-body font-medium py-3 rounded-2xl"
+        >
+          Open Gallery
+        </button>
+        <p className="text-brown/30 text-xs font-body pt-2">
+          Code is on your invitation or the QR card at the venue
+        </p>
+      </form>
     </div>
   );
 }
@@ -60,7 +93,7 @@ export default function App() {
     }
   }, []);
 
-  if (!galleryCode) return <NoAccess />;
+  if (!galleryCode) return <NoAccess onUnlock={setGalleryCode} />;
 
   const handleUploaded = photo => {
     setNewPhoto(photo);

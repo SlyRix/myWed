@@ -16,7 +16,7 @@ export default defineConfig({
         background_color: '#FAF8F5',
         display: 'standalone',
         orientation: 'portrait',
-        start_url: '/',
+        start_url: '/?gallery=RUSHIVANI2025',
         scope: '/',
         icons: [
           { src: 'pwa-192.png', sizes: '192x192', type: 'image/png' },
