@@ -25,3 +25,15 @@ CREATE TABLE IF NOT EXISTS likes (
 CREATE INDEX IF NOT EXISTS idx_photos_public ON photos(is_public, likes DESC, created_at DESC);
 CREATE INDEX IF NOT EXISTS idx_photos_ceremony ON photos(ceremony_tag);
 CREATE INDEX IF NOT EXISTS idx_photos_featured ON photos(is_featured);
+
+CREATE TABLE IF NOT EXISTS comments (
+  id          TEXT PRIMARY KEY,
+  photo_id    TEXT NOT NULL,
+  device_id   TEXT NOT NULL,
+  author_name TEXT NOT NULL DEFAULT 'Guest',
+  text        TEXT NOT NULL,
+  created_at  INTEGER NOT NULL,
+  FOREIGN KEY (photo_id) REFERENCES photos(id) ON DELETE CASCADE
+);
+
+CREATE INDEX IF NOT EXISTS idx_comments_photo ON comments(photo_id, created_at DESC);

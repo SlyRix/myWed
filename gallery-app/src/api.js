@@ -50,6 +50,22 @@ export function uploadPhoto(formData, onProgress) {
   });
 }
 
+export async function fetchComments(photoId) {
+  const res = await fetch(`${API}/api/photos/${photoId}/comments`, { headers: authHeaders() });
+  if (!res.ok) return [];
+  return res.json();
+}
+
+export async function postComment(photoId, { device_id, author_name, text }) {
+  const res = await fetch(`${API}/api/photos/${photoId}/comment`, {
+    method: 'POST',
+    headers: authHeaders({ 'Content-Type': 'application/json' }),
+    body: JSON.stringify({ device_id, author_name, text })
+  });
+  if (!res.ok) throw new Error('Failed to post comment');
+  return res.json();
+}
+
 // Admin
 const adminHeaders = token => ({ Authorization: `Bearer ${token}` });
 

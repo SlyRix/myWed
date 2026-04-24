@@ -77,6 +77,39 @@ router.post('/:id/like', (req, res) => {
   res.json({ liked: true, likes: photo.likes + 1 });
 });
 
+// GET /api/photos/:id/comments
+router.get('/:id/comments', (req, res) => {
+  const { id } = req.params;
+  const rows = getDb()
+    .prepare('SELECT id, author_name, text, created_at FROM comments WHERE photo_id = ? ORDER BY created_at DESC LIMIT 100')
+    .all(id);
+  res.json(rows);
+});
+
+// POST /api/photos/:id/comment
+router.post('/:id/comment', (req, res) => {
+  const { id } = req.params;
+  const { device_id, author_name, text } = req.body;
+
+  if (!device_id || typeof device_id !== 'string' || device_id.length > 64) {
+    return res.status(400).json({ error: 'device_id required' });
+  }
+  if (!text || typeof text !== 'string' || text.trim().length === 0 || text.length > 500) {
+    return res.status(400).json({ error: 'text required (max 500 chars)' });
+  }
+  const name = (author_name || 'Guest').slice(0, 60).trim();
+
+  const photo = getDb().prepare('SELECT id FROM photos WHERE id = ? AND is_public = 1').get(id);
+  if (!photo) return res.status(404).json({ error: 'Photo not found' });
+
+  const commentId = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+  getDb()
+    .prepare('INSERT INTO comments (id, photo_id, device_id, author_name, text, created_at) VALUES (?, ?, ?, ?, ?, ?)')
+    .run(commentId, id, device_id, name, text.trim(), Date.now());
+
+  res.json({ id: commentId, author_name: name, text: text.trim(), created_at: Date.now() });
+});
+
 // GET /api/photos/tags — available AI tags with counts
 router.get('/tags', (req, res) => {
   const photos = getDb()
